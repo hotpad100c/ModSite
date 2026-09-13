@@ -49,6 +49,7 @@ const manageSection = document.querySelector("#manage-section");
 const manageProjectSelect = document.querySelector("#manage-project-select");
 const manageProjectBadge = document.querySelector("#manage-project-badge");
 const manageReleasesList = document.querySelector("#manage-releases-list");
+const btnDeleteProject = document.querySelector("#btn-delete-project");
 
 let projects = [];
 let batchQueue = [];
@@ -279,6 +280,7 @@ function renderManageReleases(slug) {
   manageReleasesList.replaceChildren();
 
   if (!slug) {
+    btnDeleteProject.style.display = "none";
     manageProjectBadge.className = "batch-badge batch-badge--pending";
     manageProjectBadge.textContent = "请选择模组";
     const emptyP = document.createElement("p");
@@ -290,10 +292,40 @@ function renderManageReleases(slug) {
 
   const project = projects.find((p) => p.slug === slug);
   if (!project) {
+    btnDeleteProject.style.display = "none";
     manageProjectBadge.className = "batch-badge batch-badge--error";
     manageProjectBadge.textContent = "未找到模组";
     return;
   }
+
+  btnDeleteProject.style.display = "inline-block";
+  btnDeleteProject.onclick = async () => {
+    const confirmed = window.confirm(
+      `确定要彻底删除模组项目 "${project.name}" (${project.slug}) 吗？\n\n此操作将从发布清单中移除该模组及其所有 ${project.releases.length} 个版本的发布记录！`
+    );
+    if (!confirmed) return;
+
+    btnDeleteProject.disabled = true;
+    btnDeleteProject.textContent = "正在删除…";
+
+    try {
+      const formData = new FormData();
+      formData.append("project", project.slug);
+
+      const res = await fetch("/api/project/delete", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "删除模组失败");
+
+      showResult(true, data.message || "模组已成功删除");
+      manageProjectSelect.value = "";
+      await refreshProjects();
+    } catch (err) {
+      showResult(false, err.message);
+    } finally {
+      btnDeleteProject.disabled = false;
+      btnDeleteProject.textContent = "🗑️ 删除此模组项目";
+    }
+  };
 
   manageProjectBadge.className = "batch-badge batch-badge--success";
   manageProjectBadge.textContent = `${project.name} · ${project.releases.length} 个版本`;
@@ -388,6 +420,78 @@ function renderManageReleases(slug) {
 
     header.append(titleBox, deleteReleaseBtn);
     card.append(header);
+
+    // Minecraft Game Versions Edit Box
+    const gameEditBox = document.createElement("div");
+    gameEditBox.className = "release-game-edit-box";
+
+    const gameLabel = document.createElement("label");
+    gameLabel.innerHTML = `<strong>🎮 适用游戏版本：</strong>`;
+
+    const gameInput = document.createElement("input");
+    gameInput.type = "text";
+    gameInput.className = "release-game-input";
+    gameInput.placeholder = "例如: 1.21.1, 1.21.2, 1.21.3";
+    const currentGames = (release.gameVersions || release.game || []).join(", ");
+    gameInput.value = currentGames;
+
+    const saveGameBtn = document.createElement("button");
+    saveGameBtn.type = "button";
+    saveGameBtn.className = "btn-save-game";
+    saveGameBtn.textContent = "💾 保存游戏版本";
+
+    const gameStatusSpan = document.createElement("span");
+    gameStatusSpan.style.fontSize = "0.78rem";
+    gameStatusSpan.style.fontFamily = "ui-monospace, monospace";
+    gameStatusSpan.style.color = "var(--muted)";
+
+    const performSaveGameVersions = async () => {
+      const newVal = gameInput.value.trim();
+      if (!newVal) {
+        gameStatusSpan.style.color = "#ffb4ab";
+        gameStatusSpan.textContent = "游戏版本不能为空";
+        return;
+      }
+
+      saveGameBtn.disabled = true;
+      gameInput.disabled = true;
+      gameStatusSpan.style.color = "var(--accent)";
+      gameStatusSpan.textContent = "正在保存…";
+
+      try {
+        const formData = new FormData();
+        formData.append("project", project.slug);
+        formData.append("version", release.version);
+        formData.append("gameVersions", newVal);
+
+        const res = await fetch("/api/release/game-versions/update", { method: "POST", body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "更新游戏版本失败");
+
+        gameStatusSpan.style.color = "var(--accent-hover)";
+        gameStatusSpan.textContent = "已保存";
+        showResult(true, data.message || "适用游戏版本已更新");
+        await refreshProjects();
+      } catch (err) {
+        gameStatusSpan.style.color = "#ffb4ab";
+        gameStatusSpan.textContent = `失败: ${err.message}`;
+        showResult(false, err.message);
+        saveGameBtn.disabled = false;
+        gameInput.disabled = false;
+      }
+    };
+
+    saveGameBtn.addEventListener("click", performSaveGameVersions);
+    gameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        performSaveGameVersions();
+      }
+    });
+
+    gameLabel.append(gameInput);
+    gameEditBox.append(gameLabel, saveGameBtn, gameStatusSpan);
+    card.append(gameEditBox);
 
     // Files list
     const filesList = document.createElement("ul");

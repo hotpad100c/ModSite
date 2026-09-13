@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { removeRelease, removeReleaseFile, addReleaseFile } from "../scripts/publish.mjs";
+import { removeRelease, removeReleaseFile, addReleaseFile, removeProject, updateReleaseGameVersions } from "../scripts/publish.mjs";
 
 test("removeRelease: 成功删除指定版本", () => {
   const catalog = {
@@ -84,6 +84,47 @@ test("addReleaseFile: 成功向已有版本追加新文件", () => {
   assert.equal(files.length, 2);
   assert.equal(files[1].name, "lucidity-2.0.2-quilt.jar");
 
-  // 重复添加同名文件应报错
-  assert.throws(() => addReleaseFile(catalog, "lucidity", "2.0.2", newFile), /已存在名为/);
+  // 重复添加同名文件会覆盖而不是报错
+  const updatedFile = { ...newFile, size: 1200 };
+  addReleaseFile(catalog, "lucidity", "2.0.2", updatedFile);
+  assert.equal(catalog.projects[0].releases[0].files.length, 2);
+  assert.equal(catalog.projects[0].releases[0].files[1].size, 1200);
+});
+
+test("removeProject: 成功删除指定模组项目", () => {
+  const catalog = {
+    projects: [
+      { slug: "lucidity", name: "Lucidity", releases: [] },
+      { slug: "zoom-extra", name: "Zoom Extra", releases: [] }
+    ]
+  };
+
+  removeProject(catalog, "zoom-extra");
+  assert.equal(catalog.projects.length, 1);
+  assert.equal(catalog.projects[0].slug, "lucidity");
+
+  // 删除不存在的项目应报错
+  assert.throws(() => removeProject(catalog, "not-found"), /找不到项目/);
+});
+
+test("updateReleaseGameVersions: 成功修改版本的适用游戏版本范围", () => {
+  const catalog = {
+    projects: [
+      {
+        slug: "lucidity",
+        releases: [
+          { version: "2.0.2", gameVersions: ["1.21.1"] }
+        ]
+      }
+    ]
+  };
+
+  updateReleaseGameVersions(catalog, "lucidity", "2.0.2", "1.21.1, 1.21.2, 1.21.3");
+  assert.deepEqual(catalog.projects[0].releases[0].gameVersions, ["1.21.1", "1.21.2", "1.21.3"]);
+
+  updateReleaseGameVersions(catalog, "lucidity", "2.0.2", ["1.21.4", "1.21.5"]);
+  assert.deepEqual(catalog.projects[0].releases[0].gameVersions, ["1.21.4", "1.21.5"]);
+
+  // 空版本应报错
+  assert.throws(() => updateReleaseGameVersions(catalog, "lucidity", "2.0.2", ""), /不能为空/);
 });

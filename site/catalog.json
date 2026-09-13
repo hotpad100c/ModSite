@@ -117,6 +117,39 @@
           ]
         }
       ]
+    },
+    {
+      "slug": "visualdust",
+      "name": "VisualDust",
+      "description": "Bakes redstone dust update order into 3D planes and voxel clouds drawn in the world.",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/visualdust-icon.png",
+      "banner": "",
+      "source": "https://github.com/",
+      "authors": [
+        "Ryan"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-13T14:56:50.631Z",
+          "gameVersions": [
+            "26.2"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "visualdust-1.0.0.jar",
+              "size": 74745,
+              "sha256": "342a9212dac616c9f5dc081b5db699be4351a09b4fc4ec0f7c0480f50d7c53e6",
+              "url": "https://dl.ryan100c.party/releases/visualdust/1.0.0/342a9212dac6-visualdust-1.0.0.jar"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

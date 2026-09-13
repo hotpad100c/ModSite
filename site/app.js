@@ -6,7 +6,7 @@ const tag = (text) => element("span", "tag", text);
 const cardImage = (project) => { if (!project.banner) return element("div", "mod-card__banner placeholder-banner"); const image = element("img", "mod-card__banner"); image.src = project.banner; image.alt = ""; return image; };
 const projectIcon = (project) => { if (!project.icon) return element("span", "project-icon project-icon--fallback", project.name.slice(0, 1)); const image = element("img", "project-icon"); image.src = project.icon; image.alt = ""; return image; };
 const renderProject = (project) => {
-  const link = element("a", "mod-card"); link.href = `/mod.html?project=${encodeURIComponent(project.slug)}`; link.append(cardImage(project));
+  const link = element("a", "mod-card"); link.href = `mod.html?project=${encodeURIComponent(project.slug)}`; link.append(cardImage(project));
   const body = element("div", "mod-card__body"); const heading = element("div", "mod-card__heading"); heading.append(projectIcon(project)); const text = element("div"); text.append(element("h2", "", project.name)); const latest = project.releases[0]; if (latest) text.append(element("p", "mod-card__version", `Latest ${latest.version}`)); heading.append(text); body.append(heading);
   if (project.description) body.append(element("p", "mod-card__description", project.description)); const meta = element("div", "tags"); if (latest) [...latest.gameVersions.map((version) => `Game ${version}`), ...latest.loaders].forEach((value) => meta.append(tag(value))); if (meta.childElementCount) body.append(meta); link.append(body); return link;
 };
@@ -20,7 +20,10 @@ const render = (projects, query = "") => {
   visible.forEach((project) => projectsRoot.append(renderProject(project)));
 };
 try {
-  const [configResponse, catalogResponse] = await Promise.all([fetch("/config.json"), fetch("/catalog.json", { cache: "no-cache" })]);
+  const [configResponse, catalogResponse] = await Promise.all([
+    fetch("./config.json", { cache: "no-store" }),
+    fetch("./catalog.json", { cache: "no-store" })
+  ]);
   if (!configResponse.ok || !catalogResponse.ok) throw new Error("Unable to load site data");
   const [config, catalog] = await Promise.all([configResponse.json(), catalogResponse.json()]);
   document.title = config.siteName;

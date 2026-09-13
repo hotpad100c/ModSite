@@ -5,16 +5,28 @@ import { Readable } from "node:stream";
 import { spawn } from "node:child_process";
 import { tmpdir } from "node:os";
 import { inspectFabricJar } from "./fabric.mjs";
-import { removeRelease, removeReleaseFile, addReleaseFile, fileRecord, upload } from "./publish.mjs";
+import { removeRelease, removeReleaseFile, addReleaseFile, removeProject, updateReleaseGameVersions, fileRecord, upload } from "./publish.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const ADMIN_ROOT = resolve(ROOT, "admin");
+const SITE_ROOT = resolve(ROOT, "site");
 const CONFIG_PATH = resolve(ROOT, "site/config.json");
 const CATALOG_PATH = resolve(ROOT, "site/catalog.json");
 const PORT = 4173;
 const MAX_REQUEST_SIZE = 80 * 1024 * 1024;
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
-const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8" };
+const TYPES = {
+  ".html": "text/html; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".svg": "image/svg+xml"
+};
 
 const json = (response, status, value) => {
   response.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
@@ -212,21 +224,141 @@ async function addReleaseFileHandler(request, response) {
   }
 }
 
-async function serveFile(request, response) {
-  const relative = request.url === "/" ? "index.html" : request.url.slice(1);
-  const path = resolve(ADMIN_ROOT, relative);
-  if (!path.startsWith(ADMIN_ROOT + sep) && path !== join(ADMIN_ROOT, "index.html")) return response.writeHead(404).end();
+async function deleteProjectHandler(request, response) {
   try {
-    const content = await readFile(path);
-    response.writeHead(200, {
-      "Content-Type": TYPES[extname(path)] || "application/octet-stream",
-      "Cache-Control": "no-store",
-      "Content-Security-Policy": "default-src 'self'; connect-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data: blob: https:; base-uri 'none'; frame-ancestors 'none'"
-    });
-    response.end(content);
-  } catch {
-    response.writeHead(404).end("Not found");
+    const webRequest = new Request("http://127.0.0.1" + request.url, { method: "POST", headers: request.headers, body: Readable.toWeb(request), duplex: "half" });
+    const form = await webRequest.formData();
+    const project = form.get("project");
+    if (!project) return json(response, 400, { error: "缺少 project 参数" });
+
+    const catalog = JSON.parse(await readFile(CATALOG_PATH, "utf8"));
+    removeProject(catalog, project);
+
+    const temporaryPath = `${CATALOG_PATH}.tmp`;
+    await writeFile(temporaryPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
+    await rename(temporaryPath, CATALOG_PATH);
+
+    return json(response, 200, { message: `已成功删除模组项目 ${project}` });
+  } catch (error) {
+    return json(response, 400, { error: error.message });
   }
+}
+
+async function updateGameVersionsHandler(request, response) {
+  try {
+    const webRequest = new Request("http://127.0.0.1" + request.url, { method: "POST", headers: request.headers, body: Readable.toWeb(request), duplex: "half" });
+    const form = await webRequest.formData();
+    const project = form.get("project");
+    const version = form.get("version");
+    const gameVersions = form.get("gameVersions");
+    if (!project || !version) return json(response, 400, { error: "缺少 project 或 version 参数" });
+
+    const catalog = JSON.parse(await readFile(CATALOG_PATH, "utf8"));
+    updateReleaseGameVersions(catalog, project, version, gameVersions);
+
+    const temporaryPath = `${CATALOG_PATH}.tmp`;
+    await writeFile(temporaryPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
+    await rename(temporaryPath, CATALOG_PATH);
+
+    const updatedProject = catalog.projects.find((p) => p.slug === project);
+    const updatedRelease = updatedProject?.releases.find((r) => r.version === version);
+
+    return json(response, 200, { message: `已成功更新版本 ${version} 的适用游戏版本范围`, gameVersions: updatedRelease?.gameVersions || [] });
+  } catch (error) {
+    return json(response, 400, { error: error.message });
+  }
+}
+
+async function serveFile(request, response) {
+  const parsedUrl = new URL(request.url, "http://127.0.0.1");
+  const pathname = decodeURIComponent(parsedUrl.pathname);
+
+  // Redirect /site or /preview to trailing slash for proper relative URL resolution
+  if (pathname === "/site" || pathname === "/preview") {
+    response.writeHead(302, { Location: pathname + "/" });
+    return response.end();
+  }
+
+  // If requesting local site preview (/site/* or /preview/*)
+  if (pathname === "/site/" || pathname === "/preview/") {
+    try {
+      const content = await readFile(join(SITE_ROOT, "index.html"));
+      response.writeHead(200, { "Content-Type": TYPES[".html"], "Cache-Control": "no-store" });
+      return response.end(content);
+    } catch {
+      return response.writeHead(404).end("Not found");
+    }
+  }
+
+  if (pathname.startsWith("/site/") || pathname.startsWith("/preview/")) {
+    const relative = pathname.replace(/^\/(?:site|preview)\//, "");
+    const filePath = resolve(SITE_ROOT, relative);
+    if (!filePath.startsWith(SITE_ROOT + sep) && filePath !== join(SITE_ROOT, "index.html")) return response.writeHead(404).end();
+    try {
+      const content = await readFile(filePath);
+      response.writeHead(200, {
+        "Content-Type": TYPES[extname(filePath)] || "application/octet-stream",
+        "Cache-Control": "no-store"
+      });
+      return response.end(content);
+    } catch {
+      return response.writeHead(404).end("Not found");
+    }
+  }
+
+  // If front-end fetches /catalog.json or /config.json directly
+  if (pathname === "/catalog.json") {
+    try {
+      const content = await readFile(CATALOG_PATH);
+      response.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+      return response.end(content);
+    } catch {
+      return response.writeHead(404).end("Not found");
+    }
+  }
+
+  if (pathname === "/config.json") {
+    try {
+      const content = await readFile(CONFIG_PATH);
+      response.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+      return response.end(content);
+    } catch {
+      return response.writeHead(404).end("Not found");
+    }
+  }
+
+  // Default: Check Admin files, fallback to Site files
+  const relative = pathname === "/" ? "index.html" : pathname.slice(1);
+  const adminPath = resolve(ADMIN_ROOT, relative);
+  if (adminPath.startsWith(ADMIN_ROOT + sep) || adminPath === join(ADMIN_ROOT, "index.html")) {
+    try {
+      const content = await readFile(adminPath);
+      response.writeHead(200, {
+        "Content-Type": TYPES[extname(adminPath)] || "application/octet-stream",
+        "Cache-Control": "no-store",
+        "Content-Security-Policy": "default-src 'self' 'unsafe-inline'; connect-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; base-uri 'none'; frame-ancestors 'none'"
+      });
+      return response.end(content);
+    } catch {
+      // If not found in admin, try site fallback below
+    }
+  }
+
+  const sitePath = resolve(SITE_ROOT, relative);
+  if (sitePath.startsWith(SITE_ROOT + sep) || sitePath === join(SITE_ROOT, "index.html")) {
+    try {
+      const content = await readFile(sitePath);
+      response.writeHead(200, {
+        "Content-Type": TYPES[extname(sitePath)] || "application/octet-stream",
+        "Cache-Control": "no-store"
+      });
+      return response.end(content);
+    } catch {
+      // Not in site either
+    }
+  }
+
+  response.writeHead(404).end("Not found");
 }
 
 const server = createServer(async (request, response) => {
@@ -234,9 +366,11 @@ const server = createServer(async (request, response) => {
     if (request.method === "GET" && request.url === "/api/catalog") return json(response, 200, JSON.parse(await readFile(CATALOG_PATH, "utf8")));
     if (request.method === "POST" && request.url === "/api/inspect-jar") return await inspectJar(request, response);
     if (request.method === "POST" && (request.url === "/api/publish" || request.url === "/api/project/update")) return await publish(request, response);
+    if (request.method === "POST" && request.url === "/api/project/delete") return await deleteProjectHandler(request, response);
     if (request.method === "POST" && request.url === "/api/release/delete") return await deleteReleaseHandler(request, response);
     if (request.method === "POST" && request.url === "/api/release/file/delete") return await deleteReleaseFileHandler(request, response);
     if (request.method === "POST" && request.url === "/api/release/file/add") return await addReleaseFileHandler(request, response);
+    if (request.method === "POST" && request.url === "/api/release/game-versions/update") return await updateGameVersionsHandler(request, response);
     if (request.method === "POST" && request.url === "/api/deploy") {
       const wrangler = resolve(ROOT, "node_modules/wrangler/bin/wrangler.js");
       const result = await run(process.execPath, [wrangler, "pages", "deploy", "site", "--project-name", "modsite"]);

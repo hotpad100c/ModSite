@@ -1015,6 +1015,62 @@ dialog form {
   color: #fff;
 }
 
+.release-game-edit-box {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0.65rem 0.85rem;
+  background: #120e1c;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+}
+
+.release-game-edit-box label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  flex-grow: 1;
+}
+
+.release-game-input {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.82rem;
+  font-family: ui-monospace, monospace;
+  flex-grow: 1;
+  min-width: 13rem;
+}
+
+.release-game-input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.btn-save-game {
+  background: #271a3f;
+  color: var(--accent);
+  border: 1px solid rgba(169, 132, 255, 0.4);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.76rem;
+  font-weight: 800;
+  font-family: ui-monospace, monospace;
+  cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+  transition: all 0.15s;
+}
+
+.btn-save-game:hover {
+  background: #392260;
+  border-color: var(--accent-hover);
+  color: #fff;
+}
+
 @media (max-width: 48rem) {
   main {
     grid-template-columns: 1fr;

@@ -100,7 +100,10 @@ const renderProject = (project) => {
 };
 
 try {
-  const [configResponse, catalogResponse] = await Promise.all([fetch("/config.json"), fetch("/catalog.json", { cache: "no-cache" })]);
+  const [configResponse, catalogResponse] = await Promise.all([
+    fetch("./config.json", { cache: "no-store" }),
+    fetch("./catalog.json", { cache: "no-store" })
+  ]);
   if (!configResponse.ok || !catalogResponse.ok) throw new Error("Unable to load site data");
   const [config, catalog] = await Promise.all([configResponse.json(), catalogResponse.json()]);
   document.querySelector("#site-name").textContent = config.siteName;

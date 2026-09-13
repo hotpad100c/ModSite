@@ -169,7 +169,10 @@
                 <option value="">-- 请选择模组 --</option>
               </select>
             </label>
-            <span id="manage-project-badge" class="batch-badge batch-badge--pending">请选择模组</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+              <span id="manage-project-badge" class="batch-badge batch-badge--pending">请选择模组</span>
+              <button type="button" id="btn-delete-project" class="btn-delete-danger" style="display: none;">🗑️ 删除此模组项目</button>
+            </div>
           </div>
 
           <div id="manage-releases-list" class="manage-releases-list">
@@ -182,7 +185,8 @@
         <section class="panel sticky">
           <div class="panel-heading"><span class="step muted">✓</span><div><h2>已有项目</h2><p id="project-count">正在读取…</p></div></div>
           <div id="existing-projects"></div>
-          <button id="deploy" class="secondary" type="button">部署公开网站</button>
+          <a id="btn-preview-site" class="btn-subaction" href="/site/" target="_blank" rel="noopener" style="text-align: center; text-decoration: none; margin-top: 1rem; display: block;">🌐 预览本地前台网站</a>
+          <button id="deploy" class="secondary" type="button" style="margin-top: 0.5rem;">部署公开网站 (Cloudflare)</button>
         </section>
       </aside>
     </main>
