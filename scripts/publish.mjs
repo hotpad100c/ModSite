@@ -189,7 +189,10 @@ export function syncModrinthProject(catalog, modrinthProject, versions = [], opt
   }
 
   if (options.syncVersions !== false && Array.isArray(versions) && versions.length > 0) {
-    const newReleases = versions.map((v) => {
+    const releasesMap = new Map();
+
+    for (const v of versions) {
+      const verNum = v.version_number;
       const loaders = (v.loaders || []).map((l) => l.charAt(0).toUpperCase() + l.slice(1));
       const files = (v.files || []).map((f) => ({
         name: f.filename,
@@ -199,15 +202,45 @@ export function syncModrinthProject(catalog, modrinthProject, versions = [], opt
         url: f.url
       }));
 
-      return {
-        version: v.version_number,
-        publishedAt: v.date_published || new Date().toISOString(),
-        gameVersions: v.game_versions || [],
-        loaders,
-        notes: v.changelog || "",
-        files
-      };
-    });
+      if (!releasesMap.has(verNum)) {
+        releasesMap.set(verNum, {
+          version: verNum,
+          publishedAt: v.date_published || new Date().toISOString(),
+          gameVersions: [...(v.game_versions || [])],
+          loaders: [...loaders],
+          notes: v.changelog || "",
+          files: [...files]
+        });
+      } else {
+        const existing = releasesMap.get(verNum);
+        for (const gv of v.game_versions || []) {
+          if (!existing.gameVersions.includes(gv)) {
+            existing.gameVersions.push(gv);
+          }
+        }
+        for (const ld of loaders) {
+          if (!existing.loaders.includes(ld)) {
+            existing.loaders.push(ld);
+          }
+        }
+        for (const file of files) {
+          const existingFileIdx = existing.files.findIndex((f) => f.name === file.name);
+          if (existingFileIdx >= 0) {
+            existing.files[existingFileIdx] = file;
+          } else {
+            existing.files.push(file);
+          }
+        }
+        if (v.date_published && new Date(v.date_published) > new Date(existing.publishedAt)) {
+          existing.publishedAt = v.date_published;
+        }
+        if (!existing.notes && v.changelog) {
+          existing.notes = v.changelog;
+        }
+      }
+    }
+
+    const newReleases = Array.from(releasesMap.values());
 
     if (options.overwrite) {
       newReleases.forEach((newRel) => {

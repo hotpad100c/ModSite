@@ -108,3 +108,58 @@ test("syncModrinthProject: 更新已有项目元数据并追加新版本", () =>
   assert.equal(p.releases[0].version, "1.1.0");
   assert.equal(p.releases[1].version, "1.0.0");
 });
+
+test("syncModrinthProject: 自动聚合相同 version_number 的多条 Modrinth 发布记录", () => {
+  const catalog = { projects: [] };
+  const modrinthProject = {
+    slug: "carpetgui",
+    title: "CarpetGUI",
+    description: "An easy to use GUI for CarpetMod",
+    body: "# CarpetGUI",
+    gallery: []
+  };
+
+  const versions = [
+    {
+      version_number: "1.3.5-hotfix",
+      date_published: "2024-10-01T12:00:00.000Z",
+      game_versions: ["26.1", "26.1.1"],
+      loaders: ["fabric"],
+      files: [
+        { filename: "carpetgui-1.3.5-hotfix+26.1.jar", size: 300000, url: "https://cdn.modrinth.com/26.1.jar" }
+      ]
+    },
+    {
+      version_number: "1.3.5-hotfix",
+      date_published: "2024-09-01T12:00:00.000Z",
+      game_versions: ["1.21.11"],
+      loaders: ["fabric"],
+      files: [
+        { filename: "carpetgui-1.3.5-hotfix+1.21.11.jar", size: 310000, url: "https://cdn.modrinth.com/1.21.11.jar" }
+      ]
+    },
+    {
+      version_number: "1.3.5-hotfix",
+      date_published: "2024-08-01T12:00:00.000Z",
+      game_versions: ["1.19.4"],
+      loaders: ["fabric"],
+      files: [
+        { filename: "carpetgui-1.3.5-hotfix+1.19.4.jar", size: 290000, url: "https://cdn.modrinth.com/1.19.4.jar" }
+      ]
+    }
+  ];
+
+  const project = syncModrinthProject(catalog, modrinthProject, versions, { syncVersions: true, overwrite: true });
+  assert.equal(project.releases.length, 1);
+  const rel = project.releases[0];
+  assert.equal(rel.version, "1.3.5-hotfix");
+  // All game versions merged
+  assert.deepEqual(rel.gameVersions, ["26.1", "26.1.1", "1.21.11", "1.19.4"]);
+  // All 3 files preserved
+  assert.equal(rel.files.length, 3);
+  assert.equal(rel.files[0].name, "carpetgui-1.3.5-hotfix+26.1.jar");
+  assert.equal(rel.files[1].name, "carpetgui-1.3.5-hotfix+1.21.11.jar");
+  assert.equal(rel.files[2].name, "carpetgui-1.3.5-hotfix+1.19.4.jar");
+  // Newest publishedAt preserved
+  assert.equal(rel.publishedAt, "2024-10-01T12:00:00.000Z");
+});

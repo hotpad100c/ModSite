@@ -8,7 +8,10 @@ const renderFile = (file) => {
   const item = element("li", "download-file");
   const info = element("div");
   info.append(element("strong", "", file.name));
-  info.append(element("span", "download-file__meta", `${formatBytes(file.size)} · SHA-256 ${file.sha256.slice(0, 12)}…`));
+  const hashStr = file.sha256
+    ? ` · SHA-256 ${file.sha256.slice(0, 12)}…`
+    : (file.sha512 ? ` · SHA-512 ${file.sha512.slice(0, 12)}…` : "");
+  info.append(element("span", "download-file__meta", `${formatBytes(file.size)}${hashStr}`));
   const link = element("a", "download", "Download");
   link.href = file.url;
   link.setAttribute("download", "");

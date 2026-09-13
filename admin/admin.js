@@ -550,8 +550,13 @@ function renderManageReleases(slug) {
 
         const fMeta = document.createElement("span");
         fMeta.className = "release-file-meta";
-        const shaShort = file.sha256 ? file.sha256.slice(0, 10) + "..." : "无哈希";
-        fMeta.textContent = `${size(file.size)} · SHA256: ${shaShort} · R2: ${r2Path || "已上传"}`;
+        const shaShort = file.sha256
+          ? `SHA256: ${file.sha256.slice(0, 10)}...`
+          : (file.sha512 ? `SHA512: ${file.sha512.slice(0, 10)}...` : "无哈希");
+        const storageSource = file.url && file.url.includes("cdn.modrinth.com")
+          ? "Modrinth CDN"
+          : (r2Path || "已上传");
+        fMeta.textContent = `${size(file.size)} · ${shaShort} · ${storageSource}`;
 
         info.append(fName, fMeta);
 
