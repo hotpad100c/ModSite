@@ -13,123 +13,6 @@
       ],
       "releases": [
         {
-          "version": "2.0.2-1.21.11",
-          "publishedAt": "2026-09-13T14:08:28.009Z",
-          "gameVersions": [
-            "1.21.11"
-          ],
-          "loaders": [
-            "Fabric"
-          ],
-          "notes": "",
-          "files": [
-            {
-              "name": "lucidity-2.0.2+1.21.11.jar",
-              "size": 690699,
-              "sha256": "092efc594e60c0bab5b0aadc4a1d6e1f7bb96270689bb988bdc3a4487b871752",
-              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2-1.21.11/092efc594e60-lucidity-2.0.2%2B1.21.11.jar"
-            }
-          ]
-        },
-        {
-          "version": "2.0.2-1.21.9",
-          "publishedAt": "2026-09-13T13:46:19.271Z",
-          "gameVersions": [
-            "1.21.9",
-            "1.21.10"
-          ],
-          "loaders": [
-            "Fabric"
-          ],
-          "notes": "",
-          "files": [
-            {
-              "name": "lucidity-2.0.2+1.21.9.jar",
-              "size": 666143,
-              "sha256": "0d179214b2da2b7c2ad0de54480b675c41231e890f3c04bd68ae8d28ca71f350",
-              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2-1.21.9/0d179214b2da-lucidity-2.0.2%2B1.21.9.jar"
-            }
-          ]
-        },
-        {
-          "version": "2.0.2-1.21.6",
-          "publishedAt": "2026-09-13T13:45:55.918Z",
-          "gameVersions": [
-            "1.21.6",
-            "1.21.7",
-            "1.21.8"
-          ],
-          "loaders": [
-            "Fabric"
-          ],
-          "notes": "",
-          "files": [
-            {
-              "name": "lucidity-2.0.2+1.21.6.jar",
-              "size": 669169,
-              "sha256": "63b9d00491ada706c31b368029d7d0ca5cc2bccb92701232c603ca03c2968a30",
-              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2-1.21.6/63b9d00491ad-lucidity-2.0.2%2B1.21.6.jar"
-            }
-          ]
-        },
-        {
-          "version": "2.0.2-1.21.5",
-          "publishedAt": "2026-09-13T13:45:30.171Z",
-          "gameVersions": [
-            "1.21.5"
-          ],
-          "loaders": [
-            "Fabric"
-          ],
-          "notes": "",
-          "files": [
-            {
-              "name": "lucidity-2.0.2+1.21.5.jar",
-              "size": 670319,
-              "sha256": "09c39d9dad864ccd5202dfb25bb0fcb6de856a2bec75a4c73c8cd2ff44054807",
-              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2-1.21.5/09c39d9dad86-lucidity-2.0.2%2B1.21.5.jar"
-            }
-          ]
-        },
-        {
-          "version": "2.0.2-1.21.4",
-          "publishedAt": "2026-09-13T13:45:12.081Z",
-          "gameVersions": [
-            "1.21.4"
-          ],
-          "loaders": [
-            "Fabric"
-          ],
-          "notes": "",
-          "files": [
-            {
-              "name": "lucidity-2.0.2+1.21.4.jar",
-              "size": 666534,
-              "sha256": "92781f66fe4ebe22f718fbb9319c06b0e098dfe959245a43dd1e066e7e1832e1",
-              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2-1.21.4/92781f66fe4e-lucidity-2.0.2%2B1.21.4.jar"
-            }
-          ]
-        },
-        {
-          "version": "2.0.2-1.21.3",
-          "publishedAt": "2026-09-13T13:44:54.310Z",
-          "gameVersions": [
-            "1.21.3"
-          ],
-          "loaders": [
-            "Fabric"
-          ],
-          "notes": "",
-          "files": [
-            {
-              "name": "lucidity-2.0.2+1.21.3.jar",
-              "size": 661544,
-              "sha256": "3af58ecffaf819d52cd7185c1a207c011fbe53abd94ec9503d09b666e84196e9",
-              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2-1.21.3/3af58ecffaf8-lucidity-2.0.2%2B1.21.3.jar"
-            }
-          ]
-        },
-        {
           "version": "2.0.2",
           "publishedAt": "2026-09-13T12:09:04.987Z",
           "gameVersions": [
@@ -146,6 +29,42 @@
               "size": 661424,
               "sha256": "22f9e8512f6eedc40c3228ef5c8e85e6570612837153e45747ecf55a3e5809a0",
               "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2/22f9e8512f6e-lucidity-2.0.2%2B1.21.1.jar"
+            },
+            {
+              "name": "lucidity-2.0.2+1.21.11.jar",
+              "size": 690699,
+              "sha256": "092efc594e60c0bab5b0aadc4a1d6e1f7bb96270689bb988bdc3a4487b871752",
+              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2/092efc594e60-lucidity-2.0.2%2B1.21.11.jar"
+            },
+            {
+              "name": "lucidity-2.0.2+1.21.3.jar",
+              "size": 661544,
+              "sha256": "3af58ecffaf819d52cd7185c1a207c011fbe53abd94ec9503d09b666e84196e9",
+              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2/3af58ecffaf8-lucidity-2.0.2%2B1.21.3.jar"
+            },
+            {
+              "name": "lucidity-2.0.2+1.21.4.jar",
+              "size": 666534,
+              "sha256": "92781f66fe4ebe22f718fbb9319c06b0e098dfe959245a43dd1e066e7e1832e1",
+              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2/92781f66fe4e-lucidity-2.0.2%2B1.21.4.jar"
+            },
+            {
+              "name": "lucidity-2.0.2+1.21.5.jar",
+              "size": 670319,
+              "sha256": "09c39d9dad864ccd5202dfb25bb0fcb6de856a2bec75a4c73c8cd2ff44054807",
+              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2/09c39d9dad86-lucidity-2.0.2%2B1.21.5.jar"
+            },
+            {
+              "name": "lucidity-2.0.2+1.21.6.jar",
+              "size": 669169,
+              "sha256": "63b9d00491ada706c31b368029d7d0ca5cc2bccb92701232c603ca03c2968a30",
+              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2/63b9d00491ad-lucidity-2.0.2%2B1.21.6.jar"
+            },
+            {
+              "name": "lucidity-2.0.2+1.21.9.jar",
+              "size": 666143,
+              "sha256": "0d179214b2da2b7c2ad0de54480b675c41231e890f3c04bd68ae8d28ca71f350",
+              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2/0d179214b2da-lucidity-2.0.2%2B1.21.9.jar"
             }
           ]
         }
