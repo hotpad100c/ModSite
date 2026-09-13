@@ -11,5 +11,24 @@ const renderProject = (project) => {
   if (project.description) body.append(element("p", "mod-card__description", project.description)); const meta = element("div", "tags"); if (latest) [...latest.gameVersions.map((version) => `Game ${version}`), ...latest.loaders].forEach((value) => meta.append(tag(value))); if (meta.childElementCount) body.append(meta); link.append(body); return link;
 };
 const searchableText = (project) => [project.name, project.description, ...project.releases.flatMap((release) => [release.version, ...release.gameVersions, ...release.loaders])].join(" ").toLocaleLowerCase();
-const render = (projects, query = "") => { const needle = query.trim().toLocaleLowerCase(); const visible = needle ? projects.filter((project) => searchableText(project).includes(needle)) : projects; projectsRoot.replaceChildren(); count.textContent = `${visible.length} mods`; if (!visible.length) return projectsRoot.append(element("p", "empty", projects.length ? "No mathing mods." : "Unpublished mod.")); visible.forEach((project) => projectsRoot.append(renderProject(project))); };
-try { const [configResponse, catalogResponse] = await Promise.all([fetch("/config.json"), fetch("/catalog.json", { cache: "no-cache" })]); if (!configResponse.ok || !catalogResponse.ok) throw new Error("Cannot read site data"); const [config, catalog] = await Promise.all([configResponse.json(), catalogResponse.json()]); document.title = config.siteName; document.querySelector("#site-name").textContent = config.siteName; document.querySelector("#page-title").textContent = config.siteName; document.querySelector("#site-description").textContent = config.siteDescription; render(catalog.projects); search.addEventListener("input", () => render(catalog.projects, search.value)); } catch (error) { projectsRoot.replaceChildren(element("p", "error", `${error.message}，please try again later.`)); }
+const render = (projects, query = "") => {
+  const needle = query.trim().toLocaleLowerCase();
+  const visible = needle ? projects.filter((project) => searchableText(project).includes(needle)) : projects;
+  projectsRoot.replaceChildren();
+  count.textContent = visible.length === 1 ? "1 mod" : `${visible.length} mods`;
+  if (!visible.length) return projectsRoot.append(element("p", "empty", projects.length ? "No matching mods found." : "No mods published yet."));
+  visible.forEach((project) => projectsRoot.append(renderProject(project)));
+};
+try {
+  const [configResponse, catalogResponse] = await Promise.all([fetch("/config.json"), fetch("/catalog.json", { cache: "no-cache" })]);
+  if (!configResponse.ok || !catalogResponse.ok) throw new Error("Unable to load site data");
+  const [config, catalog] = await Promise.all([configResponse.json(), catalogResponse.json()]);
+  document.title = config.siteName;
+  document.querySelector("#site-name").textContent = config.siteName;
+  document.querySelector("#page-title").textContent = config.siteName;
+  document.querySelector("#site-description").textContent = config.siteDescription;
+  render(catalog.projects);
+  search.addEventListener("input", () => render(catalog.projects, search.value));
+} catch (error) {
+  projectsRoot.replaceChildren(element("p", "error", `${error.message}. Please try again later.`));
+}
