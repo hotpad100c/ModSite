@@ -811,6 +811,207 @@ dialog form {
   background: rgba(255, 60, 60, 0.1);
 }
 
+/* Release & File Management Styles */
+.manage-project-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  background: var(--surface-2);
+  margin-bottom: 1.25rem;
+}
+
+.manage-project-bar label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.manage-select {
+  background: #0b0d10;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  padding: 0.5rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.88rem;
+  outline: none;
+}
+
+.manage-select:focus {
+  border-color: var(--accent);
+}
+
+.manage-releases-list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.release-manage-card {
+  border: 1px solid var(--line);
+  border-top: 3px solid #3d4f61;
+  background: var(--surface-2);
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  transition: border-top-color 0.15s;
+}
+
+.release-manage-card:hover {
+  border-top-color: var(--accent);
+}
+
+.release-manage-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.75rem;
+}
+
+.release-manage-card__title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.release-manage-card__title strong {
+  font-size: 1.15rem;
+  color: var(--text);
+  font-family: ui-monospace, monospace;
+}
+
+.release-manage-card__date {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-family: ui-monospace, monospace;
+}
+
+.release-manage-card__tags {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.release-files-list {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.release-file-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.85rem;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-left: 3px solid #374654;
+  background: #101419;
+  padding: 0.65rem 0.9rem;
+}
+
+.release-file-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.release-file-name {
+  font-size: 0.88rem;
+  font-weight: 750;
+  word-break: break-all;
+  color: var(--text);
+}
+
+.release-file-meta {
+  font-size: 0.74rem;
+  color: var(--muted);
+  font-family: ui-monospace, monospace;
+}
+
+.release-file-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-delete-danger {
+  background: rgba(255, 75, 75, 0.12);
+  color: #ffb4ab;
+  border: 1px solid rgba(255, 100, 100, 0.3);
+  padding: 0.32rem 0.75rem;
+  font-size: 0.76rem;
+  font-weight: 800;
+  font-family: ui-monospace, monospace;
+  cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
+  transition: all 0.15s;
+}
+
+.btn-delete-danger:hover {
+  background: rgba(255, 75, 75, 0.3);
+  border-color: #ffb4ab;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.release-add-file-box {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  padding-top: 0.85rem;
+  border-top: 1px dashed var(--line);
+  font-size: 0.84rem;
+}
+
+.release-add-file-box label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.release-add-file-input {
+  font-size: 0.8rem;
+  border: none;
+  background: transparent;
+  color: var(--text);
+}
+
+.btn-add-file {
+  background: #1b2e25;
+  color: var(--accent);
+  border: 1px solid rgba(132, 225, 188, 0.35);
+  padding: 0.4rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  font-family: ui-monospace, monospace;
+  cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+  transition: all 0.15s;
+}
+
+.btn-add-file:hover {
+  background: #254235;
+  border-color: var(--accent);
+  color: #fff;
+}
+
 @media (max-width: 48rem) {
   main {
     grid-template-columns: 1fr;

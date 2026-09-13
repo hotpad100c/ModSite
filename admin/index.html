@@ -19,6 +19,7 @@
       <div class="mode-tabs">
         <button type="button" id="tab-single" class="mode-tab active">单模组发布 / 资料编辑</button>
         <button type="button" id="tab-batch" class="mode-tab">⚡ 批量极速解析上传</button>
+        <button type="button" id="tab-manage" class="mode-tab">📦 版本维护与文件管理</button>
       </div>
     </div>
 
@@ -150,6 +151,29 @@
             </div>
 
             <div id="batch-queue-list" class="batch-queue-list"></div>
+          </div>
+        </section>
+
+        <section id="manage-section" class="panel" style="display: none;">
+          <div class="panel-heading">
+            <span class="step">📦</span>
+            <div>
+              <h2>已有版本与文件维护</h2>
+              <p>管理所选模组的历史发布版本。支持移除某个版本、移除版本内的某个文件、或向已有版本追加新文件（自动计算哈希并上传至 R2）。</p>
+            </div>
+          </div>
+
+          <div class="manage-project-bar">
+            <label><strong>选择要维护的模组：</strong>
+              <select id="manage-project-select" class="manage-select">
+                <option value="">-- 请选择模组 --</option>
+              </select>
+            </label>
+            <span id="manage-project-badge" class="batch-badge batch-badge--pending">请选择模组</span>
+          </div>
+
+          <div id="manage-releases-list" class="manage-releases-list">
+            <p class="empty">请先在上方选择一个模组以浏览其版本列表。</p>
           </div>
         </section>
       </div>

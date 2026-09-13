@@ -1,17 +1,16 @@
 :root {
   color-scheme: dark;
-  --bg: #0c0916;
-  --surface: #151022;
-  --surface-raised: #1f1733;
-  --surface-overlay: #291e42;
-  --text: #f6f1ff;
-  --muted: #a79cbd;
-  --line: #382c52;
-  --line-bright: #584480;
-  --violet: #a984ff;
-  --violet-bright: #d4c4ff;
-  --violet-dim: #7b52d9;
-  --accent-glow: rgba(169, 132, 255, 0.22);
+  --bg: #0b0d10;
+  --surface: #14181d;
+  --surface-raised: #1b2128;
+  --surface-overlay: #222a33;
+  --text: #f2f5f7;
+  --muted: #9ba7b4;
+  --line: #2b333d;
+  --line-bright: #3d4a58;
+  --accent: #84e1bc;
+  --accent-hover: #a3e8cc;
+  --accent-glow: rgba(132, 225, 188, 0.22);
   --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-family: var(--font-sans);
@@ -25,8 +24,8 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 50% -18rem, #381c6b 0%, transparent 42rem),
-    radial-gradient(circle at 85% 20%, rgba(85, 41, 150, 0.12) 0%, transparent 28rem),
+    radial-gradient(circle at 12% -5%, #17372e 0%, transparent 32rem),
+    radial-gradient(circle at 88% 25%, rgba(23, 55, 46, 0.18) 0%, transparent 30rem),
     var(--bg);
   color: var(--text);
 }
@@ -51,7 +50,7 @@ a {
   width: min(76rem, calc(100% - 2.5rem));
   margin: auto;
   padding: 1.5rem 0;
-  border-bottom: 1px solid rgba(56, 44, 82, 0.4);
+  border-bottom: 1px solid var(--line);
 }
 
 .brand {
@@ -68,11 +67,11 @@ a {
 }
 
 .brand:hover {
-  color: var(--violet-bright);
+  color: var(--accent);
 }
 
 .brand__mark {
-  color: var(--violet);
+  color: var(--accent);
   font-size: 1.15rem;
   text-shadow: 0 0 10px var(--accent-glow);
 }
@@ -83,7 +82,7 @@ a {
   gap: 0.35rem;
   border: 1px solid var(--line);
   padding: 0.4rem 0.85rem;
-  background: rgba(21, 16, 34, 0.8);
+  background: rgba(20, 24, 29, 0.85);
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 700;
@@ -95,9 +94,9 @@ a {
 }
 
 .back-link:hover {
-  border-color: var(--violet);
+  border-color: var(--accent);
   background: var(--surface-raised);
-  color: var(--violet-bright);
+  color: var(--accent);
   transform: translateY(-1px);
 }
 
@@ -113,7 +112,7 @@ a {
 
 .eyebrow {
   margin: 0 0 0.75rem;
-  color: var(--violet-bright);
+  color: var(--accent);
   font-size: 0.76rem;
   font-weight: 900;
   letter-spacing: 0.22em;
@@ -150,10 +149,10 @@ h1 {
 .toolbar input {
   width: min(28rem, 100%);
   border: 1px solid var(--line);
-  border-left: 3px solid var(--violet);
+  border-left: 3px solid var(--accent);
   border-radius: 0;
   padding: 0.82rem 1.1rem;
-  background: rgba(21, 16, 34, 0.9);
+  background: rgba(20, 24, 29, 0.95);
   color: var(--text);
   font: inherit;
   font-size: 0.92rem;
@@ -162,18 +161,18 @@ h1 {
 }
 
 .toolbar input:focus {
-  border-color: var(--violet-bright);
-  border-left-color: var(--violet-bright);
-  background: rgba(31, 23, 51, 0.95);
-  box-shadow: 0 0 0 1px var(--violet-bright), 0 0 20px var(--accent-glow);
+  border-color: var(--accent);
+  border-left-color: var(--accent);
+  background: rgba(27, 33, 40, 0.98);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 16px var(--accent-glow);
 }
 
 .toolbar input::placeholder {
-  color: rgba(167, 156, 189, 0.6);
+  color: rgba(155, 167, 180, 0.6);
 }
 
 #project-count {
-  color: var(--violet-bright);
+  color: var(--accent);
   font-size: 0.82rem;
   font-weight: 700;
   font-family: var(--font-mono);
@@ -194,12 +193,12 @@ h1 {
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--line);
-  border-top: 2px solid var(--violet-dim);
+  border-top: 2px solid #374654;
   border-radius: 0;
-  background: linear-gradient(165deg, rgba(29, 21, 46, 0.92), var(--surface));
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.35);
+  background: var(--surface);
+  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.4);
   text-decoration: none;
-  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.18s ease, box-shadow 0.18s ease, border-top-color 0.18s ease;
 }
 
 .mod-card::after {
@@ -209,24 +208,24 @@ h1 {
   right: 0;
   width: 14px;
   height: 14px;
-  background: linear-gradient(135deg, transparent 50%, var(--violet-dim) 50%);
+  background: linear-gradient(135deg, transparent 50%, #374654 50%);
   transition: background 0.18s;
   pointer-events: none;
 }
 
 .mod-card:hover {
-  border-color: var(--violet);
-  border-top-color: var(--violet-bright);
+  border-color: var(--line-bright);
+  border-top-color: var(--accent);
   transform: translateY(-4px);
-  box-shadow: 0 1.5rem 3.5rem rgba(0, 0, 0, 0.5), 0 0 24px rgba(169, 132, 255, 0.18);
+  box-shadow: 0 1.25rem 3rem rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow);
 }
 
 .mod-card:hover::after {
-  background: linear-gradient(135deg, transparent 50%, var(--violet-bright) 50%);
+  background: linear-gradient(135deg, transparent 50%, var(--accent) 50%);
 }
 
 .mod-card:focus-visible {
-  outline: 2px solid var(--violet-bright);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -241,9 +240,9 @@ h1 {
 
 .placeholder-banner {
   background:
-    linear-gradient(135deg, rgba(169, 132, 255, 0.15) 0%, transparent 60%),
-    repeating-linear-gradient(45deg, rgba(56, 44, 82, 0.25) 0, rgba(56, 44, 82, 0.25) 12px, transparent 12px, transparent 24px),
-    linear-gradient(135deg, #170d2c, #482382 60%, #291252);
+    linear-gradient(135deg, rgba(132, 225, 188, 0.12) 0%, transparent 60%),
+    repeating-linear-gradient(45deg, rgba(43, 51, 61, 0.3) 0, rgba(43, 51, 61, 0.3) 12px, transparent 12px, transparent 24px),
+    linear-gradient(135deg, #0e141a, #162a24 60%, #0d1a15);
 }
 
 .mod-card__body {
@@ -277,9 +276,9 @@ h1 {
 .project-icon--fallback {
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, var(--violet-dim), #391c66);
-  border-color: var(--violet);
-  color: #fff;
+  background: linear-gradient(135deg, #1b2e25, #111d17);
+  border-color: var(--accent);
+  color: var(--accent);
   font-size: 1.4rem;
   font-weight: 900;
   font-family: var(--font-mono);
@@ -289,10 +288,10 @@ h1 {
   flex-basis: 5.5rem;
   width: 5.5rem;
   height: 5.5rem;
-  border: 3px solid var(--violet);
+  border: 3px solid var(--accent);
   border-radius: 0;
   font-size: 2.2rem;
-  box-shadow: 0 0 0 2px #0c0916, 0 8px 24px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 0 2px #0b0d10, 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
 .mod-card h2 {
@@ -329,9 +328,9 @@ h1 {
   align-items: center;
   border-radius: 0;
   padding: 0.25rem 0.65rem;
-  background: rgba(33, 24, 52, 0.85);
+  background: #141b22;
   border: 1px solid var(--line);
-  border-left: 2px solid var(--violet-dim);
+  border-left: 2px solid #374654;
   color: var(--muted);
   font-size: 0.74rem;
   font-weight: 700;
@@ -343,10 +342,10 @@ h1 {
 }
 
 .tag--accent {
-  background: rgba(88, 47, 150, 0.9);
-  border-color: var(--violet);
-  border-left-color: var(--violet-bright);
-  color: #fff;
+  background: #192d24;
+  border-color: var(--accent);
+  border-left-color: var(--accent);
+  color: var(--accent);
   font-weight: 850;
 }
 
@@ -389,9 +388,9 @@ h1 {
   min-height: 22rem;
   overflow: hidden;
   border: 1px solid var(--line);
-  border-top: 3px solid var(--violet);
+  border-top: 3px solid var(--accent);
   border-radius: 0;
-  background-color: #170d2c;
+  background-color: #121820;
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.5);
 }
 
@@ -400,8 +399,8 @@ h1 {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(12, 8, 22, 0.94) 0%, rgba(12, 8, 22, 0.55) 60%, rgba(12, 8, 22, 0.25) 100%),
-    linear-gradient(0deg, rgba(12, 8, 22, 0.96) 0%, rgba(12, 8, 22, 0.45) 50%, transparent 100%);
+    linear-gradient(90deg, rgba(11, 13, 16, 0.94) 0%, rgba(11, 13, 16, 0.55) 60%, rgba(11, 13, 16, 0.25) 100%),
+    linear-gradient(0deg, rgba(11, 13, 16, 0.96) 0%, rgba(11, 13, 16, 0.45) 50%, transparent 100%);
 }
 
 .mod-banner__image {
@@ -440,7 +439,7 @@ h1 {
 
 .mod-banner__authors {
   margin: 0;
-  color: var(--violet-bright);
+  color: var(--accent);
   font-size: 0.88rem;
   font-weight: 800;
   font-family: var(--font-mono);
@@ -451,11 +450,11 @@ h1 {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  border: 1px solid var(--violet);
+  border: 1px solid var(--accent);
   border-radius: 0;
   padding: 0.32rem 0.85rem;
-  background: rgba(30, 20, 50, 0.85);
-  color: var(--violet-bright);
+  background: rgba(20, 36, 29, 0.85);
+  color: var(--accent);
   font-size: 0.78rem;
   font-weight: 850;
   font-family: var(--font-mono);
@@ -467,9 +466,9 @@ h1 {
 }
 
 .mod-banner__source:hover {
-  border-color: var(--violet-bright);
-  background: var(--violet);
-  color: #0d061a;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #0b0d10;
   transform: translateY(-1px);
   box-shadow: 0 0 16px var(--accent-glow);
 }
@@ -477,7 +476,7 @@ h1 {
 .mod-banner__summary {
   max-width: 44rem;
   margin: 0;
-  color: #ded4f2;
+  color: #c9d6df;
   line-height: 1.65;
   font-size: 1.02rem;
 }
@@ -510,7 +509,7 @@ h1 {
   display: inline-block;
   width: 4px;
   height: 1.1em;
-  background: var(--violet);
+  background: var(--accent);
 }
 
 .long-description {
@@ -559,11 +558,11 @@ h1 {
 
 .long-description blockquote {
   margin: 1.25rem 0;
-  border-left: 4px solid var(--violet);
+  border-left: 4px solid var(--accent);
   border-radius: 0;
   padding: 0.6rem 1.15rem;
-  background: rgba(169, 132, 255, 0.06);
-  color: #ded2f3;
+  background: rgba(132, 225, 188, 0.06);
+  color: #e4edf3;
 }
 
 .long-description blockquote > :first-child { margin-top: 0; }
@@ -571,7 +570,7 @@ h1 {
 
 .long-description blockquote blockquote {
   margin: 0.75rem 0;
-  border-left-color: var(--violet-dim);
+  border-left-color: #374654;
   background: rgba(0, 0, 0, 0.25);
 }
 
@@ -579,11 +578,11 @@ h1 {
 .long-description blockquote h2,
 .long-description blockquote h3 {
   margin-top: 0.5rem;
-  color: var(--violet-bright);
+  color: var(--accent);
 }
 
 .long-description a {
-  color: var(--violet-bright);
+  color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -596,17 +595,17 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 0;
   padding: 0.12rem 0.4rem;
-  background: #181226;
-  color: var(--violet-bright);
+  background: #14181d;
+  color: var(--accent);
   font: 0.88em var(--font-mono);
 }
 
 .long-description pre {
   margin: 1.25rem 0;
   padding: 1.15rem;
-  background: #0e0a18;
+  background: #0d1014;
   border: 1px solid var(--line);
-  border-left: 3px solid var(--violet-dim);
+  border-left: 3px solid var(--accent);
   border-radius: 0;
   overflow-x: auto;
 }
@@ -617,7 +616,7 @@ h1 {
   padding: 0;
   font-size: 0.88rem;
   line-height: 1.6;
-  color: #f2edfc;
+  color: #f2f5f7;
 }
 
 .long-description table {
@@ -664,7 +663,7 @@ h1 {
 
 .long-description input[type="checkbox"] {
   margin-right: 0.5rem;
-  accent-color: var(--violet);
+  accent-color: var(--accent);
   border-radius: 0;
 }
 
@@ -680,11 +679,11 @@ h1 {
 /* Download Section */
 .download-panel {
   border: 1px solid var(--line);
-  border-top: 3px solid var(--violet);
+  border-top: 3px solid var(--accent);
   border-radius: 0;
   background: var(--surface);
   padding: 1.35rem;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.4);
 }
 
 .release {
@@ -708,7 +707,7 @@ h1 {
 }
 
 .release summary::before {
-  color: var(--violet);
+  color: var(--accent);
   content: "▶";
   font-size: 0.75rem;
   transition: transform 0.15s;
@@ -750,15 +749,15 @@ h1 {
   align-items: center;
   border-radius: 0;
   border: 1px solid var(--line);
-  border-left: 3px solid var(--line-bright);
+  border-left: 3px solid #374654;
   padding: 0.85rem 1rem;
   background: var(--surface-raised);
   transition: border-left-color 0.15s, background 0.15s;
 }
 
 .download-file:hover {
-  border-left-color: var(--violet);
-  background: rgba(40, 28, 66, 0.6);
+  border-left-color: var(--accent);
+  background: #1f2730;
 }
 
 .download-file strong {
@@ -782,8 +781,8 @@ h1 {
   border: none;
   border-radius: 0;
   padding: 0.6rem 1.2rem;
-  background: linear-gradient(135deg, var(--violet-bright), var(--violet));
-  color: #100524;
+  background: var(--accent);
+  color: #0b0d10;
   font-size: 0.84rem;
   font-weight: 900;
   font-family: var(--font-mono);
@@ -796,7 +795,7 @@ h1 {
 }
 
 .download:hover {
-  filter: brightness(1.15);
+  background: var(--accent-hover);
   transform: translateY(-1px);
   box-shadow: 0 0 18px var(--accent-glow);
 }

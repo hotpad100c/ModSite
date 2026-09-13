@@ -43,6 +43,13 @@ const batchProgressPercent = document.querySelector("#batch-progress-percent");
 const batchProgressBar = document.querySelector("#batch-progress-bar");
 const batchQueueList = document.querySelector("#batch-queue-list");
 
+// Manage Releases Components
+const tabManage = document.querySelector("#tab-manage");
+const manageSection = document.querySelector("#manage-section");
+const manageProjectSelect = document.querySelector("#manage-project-select");
+const manageProjectBadge = document.querySelector("#manage-project-badge");
+const manageReleasesList = document.querySelector("#manage-releases-list");
+
 let projects = [];
 let batchQueue = [];
 let isBatchUploading = false;
@@ -218,6 +225,11 @@ function renderProjects() {
     meta.textContent = project.slug + " · " + project.releases.length + " 个版本";
     button.append(name, meta);
     button.addEventListener("click", () => {
+      if (tabManage.classList.contains("active")) {
+        manageProjectSelect.value = project.slug;
+        renderManageReleases(project.slug);
+        return;
+      }
       switchMode("single");
       form.elements.project.value = project.slug;
       form.elements.name.value = project.name || "";
@@ -236,10 +248,324 @@ function renderProjects() {
   });
 }
 
+function updateManageProjectSelect() {
+  const currentVal = manageProjectSelect.value;
+  manageProjectSelect.replaceChildren();
+
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "-- 请选择模组 --";
+  manageProjectSelect.append(defaultOption);
+
+  projects.forEach((proj) => {
+    const opt = document.createElement("option");
+    opt.value = proj.slug;
+    opt.textContent = `${proj.name} (${proj.slug}) - ${proj.releases.length} 个版本`;
+    manageProjectSelect.append(opt);
+  });
+
+  if (currentVal && projects.some((p) => p.slug === currentVal)) {
+    manageProjectSelect.value = currentVal;
+  } else if (projectInput.value && projects.some((p) => p.slug === projectInput.value.trim())) {
+    manageProjectSelect.value = projectInput.value.trim();
+  } else if (projects.length === 1) {
+    manageProjectSelect.value = projects[0].slug;
+  }
+
+  renderManageReleases(manageProjectSelect.value);
+}
+
+function renderManageReleases(slug) {
+  manageReleasesList.replaceChildren();
+
+  if (!slug) {
+    manageProjectBadge.className = "batch-badge batch-badge--pending";
+    manageProjectBadge.textContent = "请选择模组";
+    const emptyP = document.createElement("p");
+    emptyP.className = "empty";
+    emptyP.textContent = "请先在上方选择一个模组以浏览其版本列表。";
+    manageReleasesList.append(emptyP);
+    return;
+  }
+
+  const project = projects.find((p) => p.slug === slug);
+  if (!project) {
+    manageProjectBadge.className = "batch-badge batch-badge--error";
+    manageProjectBadge.textContent = "未找到模组";
+    return;
+  }
+
+  manageProjectBadge.className = "batch-badge batch-badge--success";
+  manageProjectBadge.textContent = `${project.name} · ${project.releases.length} 个版本`;
+
+  if (!project.releases || project.releases.length === 0) {
+    const emptyP = document.createElement("p");
+    emptyP.className = "empty";
+    emptyP.textContent = `模组 ${project.name} (${project.slug}) 暂无发布版本。`;
+    manageReleasesList.append(emptyP);
+    return;
+  }
+
+  project.releases.forEach((release) => {
+    const card = document.createElement("div");
+    card.className = "release-manage-card";
+
+    // Header
+    const header = document.createElement("div");
+    header.className = "release-manage-card__header";
+
+    const titleBox = document.createElement("div");
+    titleBox.className = "release-manage-card__title";
+
+    const verStrong = document.createElement("strong");
+    verStrong.textContent = `v${release.version}`;
+    titleBox.append(verStrong);
+
+    const releaseDate = release.publishedAt || release.releasedAt;
+    if (releaseDate) {
+      const dateSpan = document.createElement("span");
+      dateSpan.className = "release-manage-card__date";
+      dateSpan.textContent = new Date(releaseDate).toLocaleString();
+      titleBox.append(dateSpan);
+    }
+
+    const tagsBox = document.createElement("div");
+    tagsBox.className = "release-manage-card__tags";
+
+    const gameList = release.gameVersions || release.game || [];
+    if (gameList.length) {
+      const gBadge = document.createElement("span");
+      gBadge.className = "batch-badge batch-badge--pending";
+      gBadge.textContent = gameList.join(", ");
+      tagsBox.append(gBadge);
+    }
+    if (release.loaders && release.loaders.length) {
+      const lBadge = document.createElement("span");
+      lBadge.className = "batch-badge batch-badge--info";
+      lBadge.textContent = release.loaders.join(", ");
+      tagsBox.append(lBadge);
+    }
+    if (release.authors && release.authors.length) {
+      const aBadge = document.createElement("span");
+      aBadge.className = "batch-badge";
+      aBadge.style.borderColor = "var(--line)";
+      aBadge.textContent = `作者: ${release.authors.join(", ")}`;
+      tagsBox.append(aBadge);
+    }
+    titleBox.append(tagsBox);
+
+    // Delete entire release button
+    const deleteReleaseBtn = document.createElement("button");
+    deleteReleaseBtn.type = "button";
+    deleteReleaseBtn.className = "btn-delete-danger";
+    deleteReleaseBtn.textContent = "🗑️ 删除此版本";
+    deleteReleaseBtn.addEventListener("click", async () => {
+      const confirmed = window.confirm(
+        `确定要删除模组 "${project.name}" 的版本 "${release.version}" 吗？\n\n此操作将从发布清单中彻底移除该版本记录。`
+      );
+      if (!confirmed) return;
+
+      deleteReleaseBtn.disabled = true;
+      deleteReleaseBtn.textContent = "正在删除…";
+
+      try {
+        const formData = new FormData();
+        formData.append("project", project.slug);
+        formData.append("version", release.version);
+
+        const res = await fetch("/api/release/delete", { method: "POST", body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "删除版本失败");
+
+        showResult(true, data.message || "版本删除成功");
+        await refreshProjects();
+      } catch (err) {
+        showResult(false, err.message);
+        deleteReleaseBtn.disabled = false;
+        deleteReleaseBtn.textContent = "🗑️ 删除此版本";
+      }
+    });
+
+    header.append(titleBox, deleteReleaseBtn);
+    card.append(header);
+
+    // Files list
+    const filesList = document.createElement("ul");
+    filesList.className = "release-files-list";
+
+    if (!release.files || release.files.length === 0) {
+      const emptyLi = document.createElement("li");
+      emptyLi.className = "empty";
+      emptyLi.textContent = "此版本内暂无任何关联文件。";
+      filesList.append(emptyLi);
+    } else {
+      release.files.forEach((file) => {
+        const row = document.createElement("li");
+        row.className = "release-file-row";
+
+        const info = document.createElement("div");
+        info.className = "release-file-info";
+
+        const fName = document.createElement("span");
+        fName.className = "release-file-name";
+        fName.textContent = file.name;
+
+        let r2Path = file.path;
+        if (!r2Path && file.url) {
+          try {
+            r2Path = decodeURIComponent(new URL(file.url).pathname.replace(/^\/+/, ""));
+          } catch {
+            r2Path = file.url;
+          }
+        }
+
+        const fMeta = document.createElement("span");
+        fMeta.className = "release-file-meta";
+        const shaShort = file.sha256 ? file.sha256.slice(0, 10) + "..." : "无哈希";
+        fMeta.textContent = `${size(file.size)} · SHA256: ${shaShort} · R2: ${r2Path || "已上传"}`;
+
+        info.append(fName, fMeta);
+
+        const actions = document.createElement("div");
+        actions.className = "release-file-actions";
+
+        if (file.url) {
+          const dlLink = document.createElement("a");
+          dlLink.href = file.url;
+          dlLink.target = "_blank";
+          dlLink.rel = "noopener";
+          dlLink.className = "btn-subaction";
+          dlLink.style.textDecoration = "none";
+          dlLink.style.fontSize = "0.76rem";
+          dlLink.textContent = "下载";
+          actions.append(dlLink);
+        }
+
+        const deleteFileBtn = document.createElement("button");
+        deleteFileBtn.type = "button";
+        deleteFileBtn.className = "btn-delete-danger";
+        deleteFileBtn.textContent = "移除文件";
+        deleteFileBtn.addEventListener("click", async () => {
+          const confirmed = window.confirm(
+            `确定要从版本 "${release.version}" 中移除文件 "${file.name}" 吗？`
+          );
+          if (!confirmed) return;
+
+          deleteFileBtn.disabled = true;
+          deleteFileBtn.textContent = "正在移除…";
+
+          try {
+            const formData = new FormData();
+            formData.append("project", project.slug);
+            formData.append("version", release.version);
+            formData.append("fileName", file.name);
+
+            const res = await fetch("/api/release/file/delete", { method: "POST", body: formData });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "移除文件失败");
+
+            showResult(true, data.message || "文件已移除");
+            await refreshProjects();
+          } catch (err) {
+            showResult(false, err.message);
+            deleteFileBtn.disabled = false;
+            deleteFileBtn.textContent = "移除文件";
+          }
+        });
+
+        actions.append(deleteFileBtn);
+        row.append(info, actions);
+        filesList.append(row);
+      });
+    }
+
+    card.append(filesList);
+
+    // Add file box
+    const addFileBox = document.createElement("div");
+    addFileBox.className = "release-add-file-box";
+
+    const addLabel = document.createElement("label");
+    addLabel.innerHTML = `<strong>追加新文件：</strong>`;
+
+    const addInput = document.createElement("input");
+    addInput.type = "file";
+    addInput.className = "release-add-file-input";
+    addLabel.append(addInput);
+
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "btn-add-file";
+    addBtn.textContent = "➕ 上传并加入版本";
+
+    const statusSpan = document.createElement("span");
+    statusSpan.style.fontSize = "0.78rem";
+    statusSpan.style.fontFamily = "ui-monospace, monospace";
+    statusSpan.style.color = "var(--muted)";
+
+    addBtn.addEventListener("click", async () => {
+      if (!addInput.files || !addInput.files.length) {
+        statusSpan.style.color = "#ffb4ab";
+        statusSpan.textContent = "请先选择一个文件";
+        return;
+      }
+
+      const fileToAdd = addInput.files[0];
+      if (fileToAdd.size > 10 * 1024 * 1024) {
+        statusSpan.style.color = "#ffb4ab";
+        statusSpan.textContent = "文件超过 10MB 限制";
+        return;
+      }
+
+      if (release.files && release.files.some((f) => f.name === fileToAdd.name)) {
+        const proceed = window.confirm(
+          `版本 "${release.version}" 中已存在同名文件 "${fileToAdd.name}"。继续操作将会覆盖该文件，是否继续？`
+        );
+        if (!proceed) return;
+      }
+
+      addBtn.disabled = true;
+      addInput.disabled = true;
+      statusSpan.style.color = "var(--accent)";
+      statusSpan.textContent = `正在上传 ${fileToAdd.name} 至 R2 并登记版本…`;
+
+      try {
+        const formData = new FormData();
+        formData.append("project", project.slug);
+        formData.append("version", release.version);
+        formData.append("file", fileToAdd);
+
+        const res = await fetch("/api/release/file/add", { method: "POST", body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "添加文件失败");
+
+        showResult(true, data.message || "文件添加成功");
+        await refreshProjects();
+      } catch (err) {
+        statusSpan.style.color = "#ffb4ab";
+        statusSpan.textContent = `失败: ${err.message}`;
+        showResult(false, err.message);
+        addBtn.disabled = false;
+        addInput.disabled = false;
+      }
+    });
+
+    addFileBox.append(addLabel, addBtn, statusSpan);
+    card.append(addFileBox);
+
+    manageReleasesList.append(card);
+  });
+}
+
+manageProjectSelect.addEventListener("change", () => {
+  renderManageReleases(manageProjectSelect.value);
+});
+
 async function refreshProjects() {
   const response = await fetch("/api/catalog", { cache: "no-store" });
   projects = (await response.json()).projects;
   renderProjects();
+  updateManageProjectSelect();
   if (batchQueue.length) {
     updateQueueConflicts();
     renderBatchQueue();
@@ -251,18 +577,31 @@ function switchMode(mode) {
   if (mode === "batch") {
     tabBatch.classList.add("active");
     tabSingle.classList.remove("active");
+    tabManage.classList.remove("active");
     form.style.display = "none";
     batchSection.style.display = "block";
+    manageSection.style.display = "none";
+  } else if (mode === "manage") {
+    tabManage.classList.add("active");
+    tabSingle.classList.remove("active");
+    tabBatch.classList.remove("active");
+    form.style.display = "none";
+    batchSection.style.display = "none";
+    manageSection.style.display = "block";
+    updateManageProjectSelect();
   } else {
     tabSingle.classList.add("active");
     tabBatch.classList.remove("active");
+    tabManage.classList.remove("active");
     form.style.display = "grid";
     batchSection.style.display = "none";
+    manageSection.style.display = "none";
   }
 }
 
 tabSingle.addEventListener("click", () => switchMode("single"));
 tabBatch.addEventListener("click", () => switchMode("batch"));
+tabManage.addEventListener("click", () => switchMode("manage"));
 
 switchToBatchBtn.addEventListener("click", () => {
   switchMode("batch");

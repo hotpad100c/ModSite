@@ -1,13 +1,15 @@
 import { createServer } from "node:http";
-import { readFile, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { readFile, mkdtemp, rm, writeFile, rename } from "node:fs/promises";
 import { basename, extname, join, resolve, sep } from "node:path";
 import { Readable } from "node:stream";
 import { spawn } from "node:child_process";
 import { tmpdir } from "node:os";
 import { inspectFabricJar } from "./fabric.mjs";
+import { removeRelease, removeReleaseFile, addReleaseFile, fileRecord, upload } from "./publish.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const ADMIN_ROOT = resolve(ROOT, "admin");
+const CONFIG_PATH = resolve(ROOT, "site/config.json");
 const CATALOG_PATH = resolve(ROOT, "site/catalog.json");
 const PORT = 4173;
 const MAX_REQUEST_SIZE = 80 * 1024 * 1024;
@@ -126,6 +128,90 @@ async function inspectJar(request, response) {
   }
 }
 
+async function deleteReleaseHandler(request, response) {
+  try {
+    const webRequest = new Request("http://127.0.0.1" + request.url, { method: "POST", headers: request.headers, body: Readable.toWeb(request), duplex: "half" });
+    const form = await webRequest.formData();
+    const project = form.get("project");
+    const version = form.get("version");
+    if (!project || !version) return json(response, 400, { error: "缺少 project 或 version 参数" });
+
+    const catalog = JSON.parse(await readFile(CATALOG_PATH, "utf8"));
+    removeRelease(catalog, project, version);
+
+    const temporaryPath = `${CATALOG_PATH}.tmp`;
+    await writeFile(temporaryPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
+    await rename(temporaryPath, CATALOG_PATH);
+
+    return json(response, 200, { message: `已成功删除项目 ${project} 的版本 ${version}` });
+  } catch (error) {
+    return json(response, 400, { error: error.message });
+  }
+}
+
+async function deleteReleaseFileHandler(request, response) {
+  try {
+    const webRequest = new Request("http://127.0.0.1" + request.url, { method: "POST", headers: request.headers, body: Readable.toWeb(request), duplex: "half" });
+    const form = await webRequest.formData();
+    const project = form.get("project");
+    const version = form.get("version");
+    const fileName = form.get("fileName");
+    if (!project || !version || !fileName) return json(response, 400, { error: "缺少 project、version 或 fileName 参数" });
+
+    const catalog = JSON.parse(await readFile(CATALOG_PATH, "utf8"));
+    removeReleaseFile(catalog, project, version, fileName);
+
+    const temporaryPath = `${CATALOG_PATH}.tmp`;
+    await writeFile(temporaryPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
+    await rename(temporaryPath, CATALOG_PATH);
+
+    return json(response, 200, { message: `已成功从版本 ${version} 中移除文件 ${fileName}` });
+  } catch (error) {
+    return json(response, 400, { error: error.message });
+  }
+}
+
+async function addReleaseFileHandler(request, response) {
+  await loadEnv();
+  const webRequest = new Request("http://127.0.0.1" + request.url, { method: "POST", headers: request.headers, body: Readable.toWeb(request), duplex: "half" });
+  const form = await webRequest.formData();
+  const project = form.get("project");
+  const version = form.get("version");
+  const file = form.get("file");
+
+  if (!project || !version || !file || typeof file === "string" || !file.size) {
+    return json(response, 400, { error: "缺少有效的文件、项目或版本参数" });
+  }
+  if (file.size > MAX_FILE_SIZE) {
+    return json(response, 400, { error: `${file.name} 超过 10MB 上限` });
+  }
+
+  const directory = await mkdtemp(join(tmpdir(), "modsite-file-"));
+  try {
+    const safeName = basename(file.name).replace(/[\x00-\x1f]/g, "_");
+    const tempPath = join(directory, safeName);
+    await writeFile(tempPath, Buffer.from(await file.arrayBuffer()));
+
+    const config = JSON.parse(await readFile(CONFIG_PATH, "utf8"));
+    const record = await fileRecord(tempPath, project, version, config.downloadBaseUrl);
+
+    upload(config.r2Bucket, record);
+
+    const catalog = JSON.parse(await readFile(CATALOG_PATH, "utf8"));
+    addReleaseFile(catalog, project, version, record.public);
+
+    const temporaryPath = `${CATALOG_PATH}.tmp`;
+    await writeFile(temporaryPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
+    await rename(temporaryPath, CATALOG_PATH);
+
+    return json(response, 200, { message: `已成功将 ${file.name} 添加至版本 ${version}`, file: record.public });
+  } catch (error) {
+    return json(response, 400, { error: error.message });
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+}
+
 async function serveFile(request, response) {
   const relative = request.url === "/" ? "index.html" : request.url.slice(1);
   const path = resolve(ADMIN_ROOT, relative);
@@ -148,6 +234,9 @@ const server = createServer(async (request, response) => {
     if (request.method === "GET" && request.url === "/api/catalog") return json(response, 200, JSON.parse(await readFile(CATALOG_PATH, "utf8")));
     if (request.method === "POST" && request.url === "/api/inspect-jar") return await inspectJar(request, response);
     if (request.method === "POST" && (request.url === "/api/publish" || request.url === "/api/project/update")) return await publish(request, response);
+    if (request.method === "POST" && request.url === "/api/release/delete") return await deleteReleaseHandler(request, response);
+    if (request.method === "POST" && request.url === "/api/release/file/delete") return await deleteReleaseFileHandler(request, response);
+    if (request.method === "POST" && request.url === "/api/release/file/add") return await addReleaseFileHandler(request, response);
     if (request.method === "POST" && request.url === "/api/deploy") {
       const wrangler = resolve(ROOT, "node_modules/wrangler/bin/wrangler.js");
       const result = await run(process.execPath, [wrangler, "pages", "deploy", "site", "--project-name", "modsite"]);
