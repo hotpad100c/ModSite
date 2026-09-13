@@ -1,12 +1,15 @@
 :root {
   color-scheme: dark;
-  --bg: #0b0d10;
-  --surface: #14181d;
-  --surface-2: #1b2128;
-  --text: #f2f5f7;
-  --muted: #9ba7b4;
-  --line: #2b333d;
-  --accent: #84e1bc;
+  --bg: #0c0916;
+  --surface: #151022;
+  --surface-2: #1f1733;
+  --text: #f6f1ff;
+  --muted: #a79cbd;
+  --line: #382c52;
+  --line-bright: #584480;
+  --accent: #a984ff;
+  --accent-hover: #d4c4ff;
+  --accent-dim: #7b52d9;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
@@ -17,7 +20,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at 12% -5%, #17372e, transparent 32rem), var(--bg);
+  background: radial-gradient(circle at 12% -5%, #381c6b, transparent 32rem), var(--bg);
   color: var(--text);
 }
 
@@ -97,7 +100,7 @@ form {
   border-radius: 0;
   clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
   background: var(--accent);
-  color: #061510;
+  color: #100524;
   font-size: 0.82rem;
   font-weight: 900;
   font-family: ui-monospace, monospace;
@@ -218,7 +221,7 @@ button {
   clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
   padding: 0.75rem 1.35rem;
   background: var(--accent);
-  color: #061510;
+  color: #100524;
   font: inherit;
   font-weight: 900;
   font-family: ui-monospace, monospace;
@@ -231,7 +234,7 @@ button {
 button:hover {
   filter: brightness(1.1);
   transform: translateY(-1px);
-  box-shadow: 0 0 16px rgba(132, 225, 188, 0.3);
+  box-shadow: 0 0 16px rgba(169, 132, 255, 0.3);
 }
 
 button:disabled {
@@ -452,10 +455,10 @@ dialog form {
 .jar-parsed-badge {
   margin-bottom: 0.8rem;
   border-radius: 0;
-  border: 1px solid rgba(132, 225, 188, 0.4);
+  border: 1px solid rgba(169, 132, 255, 0.4);
   border-left: 4px solid var(--accent);
   padding: 0.75rem 1rem;
-  background: rgba(132, 225, 188, 0.08);
+  background: rgba(169, 132, 255, 0.08);
   color: var(--accent);
   font-size: 0.85rem;
   line-height: 1.5;
@@ -510,7 +513,7 @@ dialog form {
   margin: 0 0 1rem;
   border: 1px dashed var(--accent);
   padding: 0.75rem 1rem;
-  background: rgba(132, 225, 188, 0.08);
+  background: rgba(169, 132, 255, 0.08);
   color: var(--accent);
   font-size: 0.86rem;
   line-height: 1.5;
@@ -618,9 +621,9 @@ dialog form {
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #4aa681, var(--accent));
+  background: linear-gradient(90deg, #7b52d9, var(--accent));
   transition: width 0.2s ease;
-  box-shadow: 0 0 10px rgba(132, 225, 188, 0.5);
+  box-shadow: 0 0 10px rgba(169, 132, 255, 0.5);
 }
 
 /* Batch Cards */
@@ -656,13 +659,13 @@ dialog form {
 
 .batch-card.state-uploading {
   border-left-color: var(--accent);
-  background: rgba(132, 225, 188, 0.06);
-  box-shadow: 0 0 16px rgba(132, 225, 188, 0.15);
+  background: rgba(169, 132, 255, 0.06);
+  box-shadow: 0 0 16px rgba(169, 132, 255, 0.15);
 }
 
 .batch-card.state-success {
-  border-left-color: #84e1bc;
-  background: rgba(132, 225, 188, 0.08);
+  border-left-color: var(--accent);
+  background: rgba(169, 132, 255, 0.08);
 }
 
 .batch-card.state-error {
@@ -692,7 +695,7 @@ dialog form {
   font-size: 1.3rem;
   font-weight: 900;
   color: var(--accent);
-  background: #13241e;
+  background: #24143a;
 }
 
 .batch-card__content {
@@ -775,13 +778,13 @@ dialog form {
 }
 
 .batch-badge--uploading {
-  background: #173b2d;
+  background: #2e1d4c;
   color: var(--accent);
 }
 
 .batch-badge--success {
-  background: #164030;
-  color: #84e1bc;
+  background: #3c1e6d;
+  color: var(--accent-hover);
 }
 
 .batch-badge--error {
@@ -916,8 +919,8 @@ dialog form {
   gap: 0.85rem;
   align-items: center;
   border: 1px solid var(--line);
-  border-left: 3px solid #374654;
-  background: #101419;
+  border-left: 3px solid #584480;
+  background: #120e1c;
   padding: 0.65rem 0.9rem;
 }
 
@@ -994,9 +997,9 @@ dialog form {
 }
 
 .btn-add-file {
-  background: #1b2e25;
+  background: #271a3f;
   color: var(--accent);
-  border: 1px solid rgba(132, 225, 188, 0.35);
+  border: 1px solid rgba(169, 132, 255, 0.35);
   padding: 0.4rem 0.85rem;
   font-size: 0.78rem;
   font-weight: 800;
@@ -1007,7 +1010,7 @@ dialog form {
 }
 
 .btn-add-file:hover {
-  background: #254235;
+  background: #392260;
   border-color: var(--accent);
   color: #fff;
 }
