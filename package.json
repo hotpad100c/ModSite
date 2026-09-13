@@ -1,0 +1,22 @@
+{
+  "name": "modsite",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev site",
+    "manage": "node scripts/manage.mjs",
+    "deploy": "wrangler pages deploy site --project-name modsite",
+    "publish": "node scripts/publish.mjs",
+    "test": "node --test",
+    "vendor": "node scripts/sync-vendor.mjs",
+    "postinstall": "node scripts/sync-vendor.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.39.0"
+  },
+  "dependencies": {
+    "adm-zip": "^0.6.1",
+    "dompurify": "^3.4.15",
+    "marked": "^18.0.13"
+  }
+}

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>模组发布管理</title>
+    <link rel="stylesheet" href="/admin.css">
+    <script src="/admin.js" type="module"></script>
+  </head>
+  <body>
+    <header>
+      <p class="eyebrow">LOCAL PUBLISHER</p>
+      <h1>模组发布管理</h1>
+      <p>此页面只在你的电脑上运行。文件会通过本地 Wrangler 上传到 Cloudflare R2。</p>
+    </header>
+
+    <main>
+      <form id="publish-form">
+        <section class="panel">
+          <div class="panel-heading"><span class="step">1</span><div><h2>项目信息</h2><p>选择已有项目，或输入新的项目标识。</p></div></div>
+          <div class="fields">
+            <label>项目标识 <small>小写字母、数字、连字符</small>
+              <input name="project" id="project-input" list="projects-list" pattern="[a-z0-9][a-z0-9-]*" required placeholder="example-mod">
+              <datalist id="projects-list"></datalist>
+            </label>
+            <label>项目名称 <small>新项目必填</small><input name="name" id="name-input" placeholder="示例模组"></label>
+            <label class="wide">项目简介<textarea name="description" id="description-input" rows="2" placeholder="这个模组做什么？"></textarea></label>
+            <label class="wide">详细介绍 <small>显示在模组详情页，支持 Markdown</small><textarea name="long-description" id="long-description-input" rows="5" placeholder="# 标题&#10;&#10;- 功能列表&#10;&#10;[链接](https://example.com)"></textarea></label>
+            <label>作者列表 <small>多个作者逗号分隔，选 jar 自动解析</small><input name="authors" id="authors-input" placeholder="Ryan100c"></label>
+            <label>源码仓库 URL <small>如 GitHub 仓库，选 jar 自动解析</small><input name="source" id="source-input" type="url" placeholder="https://github.com/Ryan100c/Lucidity"></label>
+            
+            <div class="image-uploader-card">
+              <div class="image-uploader-card__header">
+                <label for="icon-file">模组图标 (Icon) <small>本地选择自动命名并传到 R2</small></label>
+              </div>
+              <div class="image-uploader-card__body">
+                <div id="icon-preview" class="image-preview image-preview--icon">
+                  <span class="preview-empty">无图标</span>
+                </div>
+                <div class="image-uploader-card__inputs">
+                  <input id="icon-file" name="iconFile" type="file" accept="image/*">
+                  <span id="icon-hint" class="image-hint">选择本地图片上传到 R2 (images/[id]-icon.ext)</span>
+                  <input name="icon" id="icon-url" type="url" placeholder="或输入外部图片 URL (留空则使用上传图片)">
+                </div>
+              </div>
+            </div>
+
+            <div class="image-uploader-card">
+              <div class="image-uploader-card__header">
+                <label for="banner-file">模组横幅 (Banner) <small>本地选择自动命名并传到 R2</small></label>
+              </div>
+              <div class="image-uploader-card__body">
+                <div id="banner-preview" class="image-preview image-preview--banner">
+                  <span class="preview-empty">无横幅</span>
+                </div>
+                <div class="image-uploader-card__inputs">
+                  <input id="banner-file" name="bannerFile" type="file" accept="image/*">
+                  <span id="banner-hint" class="image-hint">选择本地图片上传到 R2 (images/[id]-banner.ext)</span>
+                  <input name="banner" id="banner-url" type="url" placeholder="或输入外部图片 URL (留空则使用上传图片)">
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-subaction wide">
+              <button id="update-project-btn" type="button" class="btn-subaction">仅更新模组资料与图片</button>
+              <span class="subaction-hint">（无需提供版本号或 jar 文件，直接上传新选图片并更新基本信息）</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading"><span class="step">2</span><div><h2>版本信息</h2><p>同一项目不能重复发布相同版本。</p></div></div>
+          <div class="fields">
+            <label>版本号<input name="version" id="version-input" pattern="[A-Za-z0-9][A-Za-z0-9._+\-]*" placeholder="1.0.0"></label>
+            <label>游戏版本 <small>逗号分隔</small><input name="game" placeholder="1.20.1,1.20.2"></label>
+            <label>加载器 <small>逗号分隔</small><input name="loader" placeholder="Fabric,Forge"></label>
+            <label class="wide">版本说明<textarea name="notes" rows="3" placeholder="修复内容、新功能或注意事项"></textarea></label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading"><span class="step">3</span><div><h2>选择发布文件</h2><p>可一次选择多个版本文件（如 .jar），每个文件最大 10MB。</p></div></div>
+          <div id="jar-parsed-badge" class="jar-parsed-badge" style="display:none;"></div>
+          <label class="drop-zone">
+            <input id="files" name="files" type="file" multiple>
+            <strong>点击选择文件</strong><span>或将文件拖放到这里（自动解析 Fabric 模组信息）</span>
+          </label>
+          <ul id="file-list" class="file-list"></ul>
+        </section>
+
+        <div class="actions">
+          <label class="check"><input name="dryRun" type="checkbox" value="true"> 仅验证，不上传</label>
+          <button id="publish" type="submit">发布版本</button>
+        </div>
+      </form>
+
+      <aside>
+        <section class="panel sticky">
+          <div class="panel-heading"><span class="step muted">✓</span><div><h2>已有项目</h2><p id="project-count">正在读取…</p></div></div>
+          <div id="existing-projects"></div>
+          <button id="deploy" class="secondary" type="button">部署公开网站</button>
+        </section>
+      </aside>
+    </main>
+
+    <dialog id="result-dialog">
+      <h2 id="result-title">操作结果</h2>
+      <pre id="result-output"></pre>
+      <form method="dialog"><button>关闭</button></form>
+    </dialog>
+  </body>
+</html>
