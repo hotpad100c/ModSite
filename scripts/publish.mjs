@@ -142,6 +142,97 @@ export function updateReleaseGameVersions(catalog, projectSlug, version, gameVer
   return catalog;
 }
 
+export function syncModrinthProject(catalog, modrinthProject, versions = [], options = {}) {
+  const slug = modrinthProject.slug || modrinthProject.id;
+  let project = catalog.projects.find((p) => p.slug === slug);
+
+  let bannerUrl = "";
+  if (modrinthProject.gallery && Array.isArray(modrinthProject.gallery) && modrinthProject.gallery.length > 0) {
+    const featured = modrinthProject.gallery.find((g) => g.featured) || modrinthProject.gallery[0];
+    bannerUrl = featured.raw_url || featured.url || "";
+  }
+
+  let authorsList = [];
+  if (modrinthProject.authors && Array.isArray(modrinthProject.authors)) {
+    authorsList = modrinthProject.authors;
+  } else if (modrinthProject.author) {
+    authorsList = [modrinthProject.author];
+  } else if (modrinthProject.team_members && Array.isArray(modrinthProject.team_members)) {
+    authorsList = modrinthProject.team_members.map((m) => m.user?.username || m.user?.name).filter(Boolean);
+  }
+
+  const projectMetadata = {
+    slug,
+    name: modrinthProject.title || modrinthProject.name || slug,
+    description: modrinthProject.description || "",
+    longDescription: modrinthProject.body || "",
+    icon: modrinthProject.icon_url || "",
+    banner: bannerUrl,
+    source: modrinthProject.source_url || "",
+    authors: authorsList
+  };
+
+  if (!project) {
+    project = {
+      ...projectMetadata,
+      releases: []
+    };
+    catalog.projects.push(project);
+  } else {
+    project.name = projectMetadata.name;
+    if (projectMetadata.description) project.description = projectMetadata.description;
+    if (projectMetadata.longDescription) project.longDescription = projectMetadata.longDescription;
+    if (projectMetadata.icon) project.icon = projectMetadata.icon;
+    if (projectMetadata.banner) project.banner = projectMetadata.banner;
+    if (projectMetadata.source) project.source = projectMetadata.source;
+    if (projectMetadata.authors.length) project.authors = projectMetadata.authors;
+  }
+
+  if (options.syncVersions !== false && Array.isArray(versions) && versions.length > 0) {
+    const newReleases = versions.map((v) => {
+      const loaders = (v.loaders || []).map((l) => l.charAt(0).toUpperCase() + l.slice(1));
+      const files = (v.files || []).map((f) => ({
+        name: f.filename,
+        size: f.size,
+        sha256: f.hashes?.sha256 || "",
+        sha512: f.hashes?.sha512 || "",
+        url: f.url
+      }));
+
+      return {
+        version: v.version_number,
+        publishedAt: v.date_published || new Date().toISOString(),
+        gameVersions: v.game_versions || [],
+        loaders,
+        notes: v.changelog || "",
+        files
+      };
+    });
+
+    if (options.overwrite) {
+      newReleases.forEach((newRel) => {
+        const idx = project.releases.findIndex((r) => r.version === newRel.version);
+        if (idx >= 0) {
+          project.releases[idx] = newRel;
+        } else {
+          project.releases.push(newRel);
+        }
+      });
+    } else {
+      newReleases.forEach((newRel) => {
+        if (!project.releases.some((r) => r.version === newRel.version)) {
+          project.releases.push(newRel);
+        }
+      });
+    }
+
+    project.releases.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
+  }
+
+  catalog.projects.sort((a, b) => a.name.localeCompare(b.name, "zh-CN"));
+  return project;
+}
+
 export function removeRelease(catalog, projectSlug, version) {
   const project = catalog.projects.find((item) => item.slug === projectSlug);
   if (!project) throw new Error(`找不到项目 ${projectSlug}`);

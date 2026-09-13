@@ -1071,6 +1071,190 @@ dialog form {
   color: #fff;
 }
 
+/* Modrinth Integration Tab */
+.modrinth-query-bar {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  padding: 1rem 1.2rem;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  margin-bottom: 1.25rem;
+}
+
+.modrinth-query-bar label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.84rem;
+  color: var(--text);
+  flex-grow: 1;
+  min-width: 12rem;
+}
+
+.modrinth-input {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.84rem;
+  font-family: ui-monospace, monospace;
+}
+
+.modrinth-input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.modrinth-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.modrinth-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.15rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  transition: all 0.15s;
+}
+
+.modrinth-card:hover {
+  border-color: var(--accent);
+  border-left-color: var(--accent);
+  background: #181226;
+}
+
+.modrinth-card.is-selected {
+  border-color: var(--accent);
+  border-left-color: var(--accent-hover);
+  background: #1e1531;
+  box-shadow: 0 0 16px rgba(169, 132, 255, 0.12);
+}
+
+.modrinth-card.is-existing {
+  border-left-color: #584480;
+}
+
+.modrinth-card__top {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+
+.modrinth-card__checkbox {
+  margin-top: 0.35rem;
+  accent-color: var(--accent);
+  cursor: pointer;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.modrinth-card__icon {
+  width: 3.25rem;
+  height: 3.25rem;
+  object-fit: contain;
+  background: #0b0814;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+.modrinth-card__icon--fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--accent);
+  font-family: ui-monospace, monospace;
+}
+
+.modrinth-card__title-box {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.modrinth-card__title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.modrinth-card__slug {
+  font-size: 0.74rem;
+  font-family: ui-monospace, monospace;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.modrinth-card__desc {
+  font-size: 0.82rem;
+  color: #b0a3c7;
+  line-height: 1.45;
+  margin: 0.75rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.4rem;
+}
+
+.modrinth-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  font-family: ui-monospace, monospace;
+  color: var(--muted);
+  margin-bottom: 0.85rem;
+}
+
+.modrinth-card__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.modrinth-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.65rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.btn-sync-single {
+  background: #271a3f;
+  color: var(--accent);
+  border: 1px solid rgba(169, 132, 255, 0.4);
+  padding: 0.35rem 0.8rem;
+  font-size: 0.76rem;
+  font-weight: 800;
+  font-family: ui-monospace, monospace;
+  cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+  transition: all 0.15s;
+}
+
+.btn-sync-single:hover {
+  background: #392260;
+  border-color: var(--accent-hover);
+  color: #fff;
+}
+
 @media (max-width: 48rem) {
   main {
     grid-template-columns: 1fr;

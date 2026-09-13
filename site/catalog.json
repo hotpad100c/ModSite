@@ -31,12 +31,6 @@
               "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2/22f9e8512f6e-lucidity-2.0.2%2B1.21.1.jar"
             },
             {
-              "name": "lucidity-2.0.2+1.21.11.jar",
-              "size": 690699,
-              "sha256": "092efc594e60c0bab5b0aadc4a1d6e1f7bb96270689bb988bdc3a4487b871752",
-              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2/092efc594e60-lucidity-2.0.2%2B1.21.11.jar"
-            },
-            {
               "name": "lucidity-2.0.2+1.21.3.jar",
               "size": 661544,
               "sha256": "3af58ecffaf819d52cd7185c1a207c011fbe53abd94ec9503d09b666e84196e9",
@@ -65,6 +59,12 @@
               "size": 666143,
               "sha256": "0d179214b2da2b7c2ad0de54480b675c41231e890f3c04bd68ae8d28ca71f350",
               "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2/0d179214b2da-lucidity-2.0.2%2B1.21.9.jar"
+            },
+            {
+              "name": "lucidity-2.0.2+1.21.11.jar",
+              "size": 690699,
+              "sha256": "092efc594e60c0bab5b0aadc4a1d6e1f7bb96270689bb988bdc3a4487b871752",
+              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2/092efc594e60-lucidity-2.0.2%2B1.21.11.jar"
             }
           ]
         }
@@ -122,12 +122,12 @@
       "slug": "visualdust",
       "name": "VisualDust",
       "description": "Bakes redstone dust update order into 3D planes and voxel clouds drawn in the world.",
-      "longDescription": "",
-      "icon": "https://dl.ryan100c.party/images/visualdust-icon.png",
-      "banner": "",
+      "longDescription": "# VisualDust \r\n\r\n## Commands\r\n\r\nAll commands are **client‑side only**.  \r\nThe server does **not** need to install anything.\r\n\r\n| Command | Description |\r\n| --- | --- |\r\n| `/visualdust here <x\\|y\\|z> [order\\|group]` | Add a plane at the player’s current coordinates |\r\n| `/visualdust add <x\\|y\\|z> <coord> [order\\|group]` | Add a plane at a specified coordinate |\r\n| `/visualdust remove <x\\|y\\|z> <coord>` | Remove a plane |\r\n| `/visualdust clear` | Clear all planes |\r\n| `/visualdust list` | List all current planes |\r\n| `/visualdust mode <order\\|group>` | Switch the color mode of all planes |\r\n| `/visualdust alpha <0-100>` | Opacity (%) — default is 70 |\r\n| `/visualdust radius <8-256>` | Baking radius (blocks) — default is 96 |\r\n| `/visualdust query` | Print the update order and group classification of the block under your feet |\r\n| `/visualdust search <d1> [d2..d6]` | Search by update‑order prefix and highlight matching cells on the plane |\r\n| `/visualdust search <d1..> <sizeX> <sizeY> <sizeZ>` | Search inside a cuboid centered on the player; matching blocks appear as cube clouds |\r\n| `/visualdust search` | With no parameters, clear search highlights |\r\n\r\n`x` planes cover (Y, Z),  \r\n`y` planes cover (X, Z),  \r\n`z` planes cover (X, Y).  \r\nVertical range is clamped to world height.\r\n\r\nUp to **16 planes** can exist at once.  \r\nPlanes on the same axis and same coordinate **replace** each other instead of stacking  \r\n(stacking would cause repeated blending of transparency).\r\n\r\n---\r\n\r\n## Searching by Update Order\r\n\r\n`/visualdust search` takes **1–6 directions**, matching the **prefix** of the block update order:\r\n\r\n```\r\n/visualdust search self down south      # Equivalent to O -Y +Z\r\n/visualdust search                      # No parameters = clear highlights\r\n```\r\n\r\nDirections may be written as:\r\n\r\n- `self` `down` `up` `north` `south` `west` `east`\r\n- or equivalently  \r\n  `O` `-Y` `+Y` `-Z` `+Z` `-X` `+X`\r\n\r\n### Structure‑aware autocomplete\r\n\r\nAutocomplete only shows directions that can extend the current prefix into a **real existing** update order.  \r\nImpossible structural combinations simply never appear.\r\n\r\nExample:\r\n\r\n```\r\n(empty)            -> 5 options: O  -Y  +Y  -Z  +Z      ← +X/-X proven never to lead\r\nO                  -> 4 options: -Y  +Y  -Z  +Z\r\nO -Y               -> 1 option: +Z\r\nO -Y +Z            -> 1 option: +X\r\nO -Y +Z +X         -> 1 option: +Y\r\nO -Y +Z +X +Y      -> 2 options: -Z  -X\r\n```\r\n\r\nRepeated directions are naturally excluded — once a direction is used, no valid sequence can follow it, so autocomplete shows nothing.\r\n\r\n### Why up to 6 directions?\r\n\r\nThere are 7 elements in the update order.  \r\nThe first 6 positions uniquely determine the 7th, so 6 parameters give an exact match.\r\n\r\nManually typing structurally impossible combinations (autocomplete won’t show them, but you can force them) will report **“does not exist”**, e.g.:\r\n\r\n```\r\n/visualdust search east   # +X leading — mathematically impossible\r\n```\r\n\r\nMatching cells are baked into a separate VertexBuffer and overlaid in bright yellow on top of the plane’s color mode.\r\n\r\n---\r\n\r\n## Cuboid Search\r\n\r\nIf you add three sizes after the directions, the mode switches from **plane highlight** to **cube cloud**:\r\n\r\n```\r\n/visualdust search O -Y +Z 64 64 64\r\n```\r\n\r\nInside a `sizeX × sizeY × sizeZ` cuboid centered on the player, all matching blocks are rendered as cube clouds.\r\n\r\n- Each axis max: **512**\r\n- Max scan volume: **16.77 million blocks (256³)**\r\n- **The center is fixed at the moment you run the command** — it does not follow the player afterward.\r\n\r\n---\r\n\r\n## Two Color Modes\r\n\r\n### **order**\r\nColor based on the full 7‑direction update order using Fourier coloring.  \r\nAll **5040 permutations** have unique colors.\r\n\r\n### **group**\r\nColor based on the 3‑group classification:\r\n\r\n- 6 colors (red/orange/pink variants)  \r\n  - Hue = which group leads  \r\n  - Brightness = order of the remaining two groups\r\n- Blocks not fitting the grouping are colored **gray**  \r\n  (about **2.93%** of all blocks).",
+      "icon": "https://www.bing.com/th/id/OIP.vXohMhrhh4jGjJCF43M54AAAAA?w=193&h=193&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=ImgAns&rm=2",
+      "banner": "https://dl.ryan100c.party/images/visualdust-banner.png",
       "source": "https://github.com/",
       "authors": [
-        "Ryan"
+        "Ryan100C"
       ],
       "releases": [
         {

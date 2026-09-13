@@ -51,6 +51,31 @@ const manageProjectBadge = document.querySelector("#manage-project-badge");
 const manageReleasesList = document.querySelector("#manage-releases-list");
 const btnDeleteProject = document.querySelector("#btn-delete-project");
 
+// Modrinth Sync Components
+const tabModrinth = document.querySelector("#tab-modrinth");
+const modrinthSection = document.querySelector("#modrinth-section");
+const modrinthUsernameInput = document.querySelector("#modrinth-username-input");
+const modrinthTokenInput = document.querySelector("#modrinth-token-input");
+const btnFetchModrinth = document.querySelector("#btn-fetch-modrinth");
+const modrinthControl = document.querySelector("#modrinth-control");
+const modrinthSummaryCount = document.querySelector("#modrinth-summary-count");
+const modrinthSelectedText = document.querySelector("#modrinth-selected-text");
+const modrinthSyncVersionsCheck = document.querySelector("#modrinth-sync-versions-check");
+const modrinthUploadR2Check = document.querySelector("#modrinth-upload-r2-check");
+const modrinthOverwriteCheck = document.querySelector("#modrinth-overwrite-check");
+const modrinthSelectAllBtn = document.querySelector("#modrinth-select-all-btn");
+const modrinthDeselectAllBtn = document.querySelector("#modrinth-deselect-all-btn");
+const modrinthSyncBtn = document.querySelector("#modrinth-sync-btn");
+const modrinthProgressBox = document.querySelector("#modrinth-progress-box");
+const modrinthProgressLabel = document.querySelector("#modrinth-progress-label");
+const modrinthProgressPercent = document.querySelector("#modrinth-progress-percent");
+const modrinthProgressBar = document.querySelector("#modrinth-progress-bar");
+const modrinthGrid = document.querySelector("#modrinth-grid");
+
+let modrinthProjects = [];
+let selectedModrinthIds = new Set();
+let isModrinthSyncing = false;
+
 let projects = [];
 let batchQueue = [];
 let isBatchUploading = false;
@@ -678,34 +703,29 @@ async function refreshProjects() {
 
 // Mode Switcher
 function switchMode(mode) {
-  if (mode === "batch") {
-    tabBatch.classList.add("active");
-    tabSingle.classList.remove("active");
-    tabManage.classList.remove("active");
-    form.style.display = "none";
-    batchSection.style.display = "block";
-    manageSection.style.display = "none";
-  } else if (mode === "manage") {
-    tabManage.classList.add("active");
-    tabSingle.classList.remove("active");
-    tabBatch.classList.remove("active");
-    form.style.display = "none";
-    batchSection.style.display = "none";
-    manageSection.style.display = "block";
+  tabSingle.classList.toggle("active", mode === "single");
+  tabBatch.classList.toggle("active", mode === "batch");
+  tabManage.classList.toggle("active", mode === "manage");
+  tabModrinth.classList.toggle("active", mode === "modrinth");
+
+  form.style.display = mode === "single" ? "grid" : "none";
+  batchSection.style.display = mode === "batch" ? "block" : "none";
+  manageSection.style.display = mode === "manage" ? "block" : "none";
+  modrinthSection.style.display = mode === "modrinth" ? "block" : "none";
+
+  if (mode === "manage") {
     updateManageProjectSelect();
-  } else {
-    tabSingle.classList.add("active");
-    tabBatch.classList.remove("active");
-    tabManage.classList.remove("active");
-    form.style.display = "grid";
-    batchSection.style.display = "none";
-    manageSection.style.display = "none";
+  } else if (mode === "modrinth") {
+    if (!modrinthProjects.length) {
+      fetchModrinthProjects();
+    }
   }
 }
 
 tabSingle.addEventListener("click", () => switchMode("single"));
 tabBatch.addEventListener("click", () => switchMode("batch"));
 tabManage.addEventListener("click", () => switchMode("manage"));
+tabModrinth.addEventListener("click", () => switchMode("modrinth"));
 
 switchToBatchBtn.addEventListener("click", () => {
   switchMode("batch");
@@ -1175,3 +1195,264 @@ deployButton.addEventListener("click", async () => {
 });
 
 refreshProjects().catch((error) => showResult(false, error.message));
+
+// Modrinth Sync Logic
+async function fetchModrinthProjects() {
+  const username = modrinthUsernameInput.value.trim() || "Ryan100c";
+  const token = modrinthTokenInput.value.trim();
+
+  localStorage.setItem("modrinth_username", username);
+  if (token) localStorage.setItem("modrinth_token", token);
+
+  btnFetchModrinth.disabled = true;
+  btnFetchModrinth.textContent = "正在连接 Modrinth…";
+
+  try {
+    const params = new URLSearchParams({ user: username });
+    if (token) params.set("token", token);
+
+    const res = await fetch(`/api/modrinth/projects?${params.toString()}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "获取 Modrinth 项目失败");
+
+    modrinthProjects = data.projects || [];
+    selectedModrinthIds.clear();
+    modrinthControl.style.display = "block";
+    modrinthSummaryCount.textContent = `已读取 ${modrinthProjects.length} 个 Modrinth 项目（用户: ${data.username}）`;
+    updateModrinthSelectionUI();
+    renderModrinthProjects();
+  } catch (err) {
+    showResult(false, err.message);
+  } finally {
+    btnFetchModrinth.disabled = false;
+    btnFetchModrinth.textContent = "🔍 读取 Modrinth 项目";
+  }
+}
+
+function updateModrinthSelectionUI() {
+  modrinthSelectedText.textContent = `已选中 ${selectedModrinthIds.size} 项`;
+  modrinthSyncBtn.disabled = selectedModrinthIds.size === 0 || isModrinthSyncing;
+  modrinthSyncBtn.textContent = selectedModrinthIds.size > 0
+    ? `⚡ 批量同步选中的 ${selectedModrinthIds.size} 个项目`
+    : "⚡ 同步选中的项目";
+}
+
+function renderModrinthProjects() {
+  modrinthGrid.replaceChildren();
+
+  if (!modrinthProjects.length) {
+    const emptyP = document.createElement("p");
+    emptyP.className = "empty";
+    emptyP.textContent = "该 Modrinth 用户名下暂无公开发布的模组项目。";
+    modrinthGrid.append(emptyP);
+    return;
+  }
+
+  modrinthProjects.forEach((proj) => {
+    const card = document.createElement("div");
+    card.className = "modrinth-card" + (selectedModrinthIds.has(proj.id) ? " is-selected" : "") + (proj.isExisting ? " is-existing" : "");
+
+    // Top Section
+    const top = document.createElement("div");
+    top.className = "modrinth-card__top";
+
+    const chk = document.createElement("input");
+    chk.type = "checkbox";
+    chk.className = "modrinth-card__checkbox";
+    chk.checked = selectedModrinthIds.has(proj.id);
+    chk.addEventListener("change", () => {
+      if (chk.checked) {
+        selectedModrinthIds.add(proj.id);
+        card.classList.add("is-selected");
+      } else {
+        selectedModrinthIds.delete(proj.id);
+        card.classList.remove("is-selected");
+      }
+      updateModrinthSelectionUI();
+    });
+
+    let iconElem;
+    if (proj.icon_url) {
+      iconElem = document.createElement("img");
+      iconElem.className = "modrinth-card__icon";
+      iconElem.src = proj.icon_url;
+      iconElem.alt = proj.title;
+      iconElem.loading = "lazy";
+    } else {
+      iconElem = document.createElement("div");
+      iconElem.className = "modrinth-card__icon modrinth-card__icon--fallback";
+      iconElem.textContent = proj.title.charAt(0);
+    }
+
+    const titleBox = document.createElement("div");
+    titleBox.className = "modrinth-card__title-box";
+
+    const title = document.createElement("div");
+    title.className = "modrinth-card__title";
+    title.textContent = proj.title;
+    title.title = proj.title;
+
+    const slug = document.createElement("div");
+    slug.className = "modrinth-card__slug";
+    slug.textContent = proj.slug;
+
+    titleBox.append(title, slug);
+    top.append(chk, iconElem, titleBox);
+
+    // Description
+    const desc = document.createElement("div");
+    desc.className = "modrinth-card__desc";
+    desc.textContent = proj.description || "无简介";
+    desc.title = proj.description || "";
+
+    // Meta Row
+    const meta = document.createElement("div");
+    meta.className = "modrinth-card__meta";
+
+    const dlSpan = document.createElement("span");
+    dlSpan.textContent = `⬇️ ${(proj.downloads || 0).toLocaleString()}`;
+    meta.append(dlSpan);
+
+    const verSpan = document.createElement("span");
+    verSpan.textContent = `📦 ${proj.versionsCount} 个版本`;
+    meta.append(verSpan);
+
+    if (proj.galleryCount > 0) {
+      const gSpan = document.createElement("span");
+      gSpan.textContent = `🖼️ ${proj.galleryCount} 张画廊`;
+      meta.append(gSpan);
+    }
+
+    // Status Badge
+    let statusBadge;
+    if (proj.isExisting) {
+      statusBadge = document.createElement("span");
+      statusBadge.className = "batch-badge batch-badge--success";
+      statusBadge.textContent = `本地已有 (${proj.existingReleasesCount} 版本)`;
+    } else {
+      statusBadge = document.createElement("span");
+      statusBadge.className = "batch-badge batch-badge--pending";
+      statusBadge.textContent = "本地未收录";
+    }
+    meta.append(statusBadge);
+
+    // Footer
+    const footer = document.createElement("div");
+    footer.className = "modrinth-card__footer";
+
+    const link = document.createElement("a");
+    link.href = `https://modrinth.com/mod/${proj.slug}`;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.className = "btn-subaction";
+    link.style.fontSize = "0.74rem";
+    link.style.textDecoration = "none";
+    link.textContent = "在 Modrinth 打开 ↗";
+
+    const syncSingleBtn = document.createElement("button");
+    syncSingleBtn.type = "button";
+    syncSingleBtn.className = "btn-sync-single";
+    syncSingleBtn.textContent = "⚡ 立即同步";
+    syncSingleBtn.addEventListener("click", () => {
+      executeModrinthSync([proj.id]);
+    });
+
+    footer.append(link, syncSingleBtn);
+
+    card.append(top, desc, meta, footer);
+    modrinthGrid.append(card);
+  });
+}
+
+async function executeModrinthSync(targetIds) {
+  if (!targetIds || !targetIds.length || isModrinthSyncing) return;
+
+  const syncVersions = modrinthSyncVersionsCheck.checked;
+  const uploadToR2 = modrinthUploadR2Check.checked;
+  const overwrite = modrinthOverwriteCheck.checked;
+  const token = modrinthTokenInput.value.trim();
+
+  if (uploadToR2) {
+    const confirmR2 = window.confirm(
+      `您勾选了【转存文件至私有 R2】。\n\n同步时将自动把所选模组的所有 jar 安装包下载并转存至您的 Cloudflare R2（生成专属独立域名）。若项目版本较多可能需要耗费一定时间。\n\n是否继续？`
+    );
+    if (!confirmR2) return;
+  }
+
+  isModrinthSyncing = true;
+  modrinthSyncBtn.disabled = true;
+  modrinthProgressBox.style.display = "block";
+  modrinthProgressBar.style.width = "20%";
+  modrinthProgressLabel.textContent = `正在连接 Modrinth 同步 ${targetIds.length} 个项目…`;
+  modrinthProgressPercent.textContent = "20%";
+
+  try {
+    const payload = {
+      projectIds: targetIds,
+      syncVersions,
+      uploadToR2,
+      overwrite,
+      token
+    };
+
+    modrinthProgressBar.style.width = "50%";
+    modrinthProgressPercent.textContent = "50%";
+    modrinthProgressLabel.textContent = "正在拉取详细图文与版本数据…";
+
+    const res = await fetch("/api/modrinth/sync", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "同步失败");
+
+    modrinthProgressBar.style.width = "100%";
+    modrinthProgressPercent.textContent = "100%";
+    modrinthProgressLabel.textContent = "同步完成！";
+
+    let detailSummary = data.message + "\n\n";
+    if (data.results) {
+      data.results.forEach((r) => {
+        detailSummary += r.success
+          ? `✓ [${r.name || r.id}] 成功同步 (${r.versionsCount} 个版本)\n`
+          : `✗ [${r.id}] 失败: ${r.error}\n`;
+      });
+    }
+
+    showResult(true, detailSummary);
+    await refreshProjects();
+    await fetchModrinthProjects();
+  } catch (err) {
+    showResult(false, err.message);
+  } finally {
+    isModrinthSyncing = false;
+    modrinthSyncBtn.disabled = selectedModrinthIds.size === 0;
+    setTimeout(() => {
+      modrinthProgressBox.style.display = "none";
+      modrinthProgressBar.style.width = "0%";
+    }, 2500);
+  }
+}
+
+// Initialize saved Modrinth username / token
+const savedUsername = localStorage.getItem("modrinth_username");
+if (savedUsername) modrinthUsernameInput.value = savedUsername;
+const savedToken = localStorage.getItem("modrinth_token");
+if (savedToken) modrinthTokenInput.value = savedToken;
+
+btnFetchModrinth.addEventListener("click", fetchModrinthProjects);
+modrinthSelectAllBtn.addEventListener("click", () => {
+  modrinthProjects.forEach((p) => selectedModrinthIds.add(p.id));
+  updateModrinthSelectionUI();
+  renderModrinthProjects();
+});
+modrinthDeselectAllBtn.addEventListener("click", () => {
+  selectedModrinthIds.clear();
+  updateModrinthSelectionUI();
+  renderModrinthProjects();
+});
+modrinthSyncBtn.addEventListener("click", () => {
+  executeModrinthSync([...selectedModrinthIds]);
+});

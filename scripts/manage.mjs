@@ -5,7 +5,7 @@ import { Readable } from "node:stream";
 import { spawn } from "node:child_process";
 import { tmpdir } from "node:os";
 import { inspectFabricJar } from "./fabric.mjs";
-import { removeRelease, removeReleaseFile, addReleaseFile, removeProject, updateReleaseGameVersions, fileRecord, upload } from "./publish.mjs";
+import { removeRelease, removeReleaseFile, addReleaseFile, removeProject, updateReleaseGameVersions, syncModrinthProject, fileRecord, upload } from "./publish.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const ADMIN_ROOT = resolve(ROOT, "admin");
@@ -269,6 +269,144 @@ async function updateGameVersionsHandler(request, response) {
   }
 }
 
+const MODRINTH_USER_AGENT = "hotpad100c/ModSite/1.0.0 (contact@ryan100c.party)";
+
+async function getModrinthProjectsHandler(request, response) {
+  const url = new URL(request.url, "http://127.0.0.1");
+  const username = url.searchParams.get("user")?.trim() || "Ryan100c";
+  const token = url.searchParams.get("token")?.trim();
+
+  const headers = { "User-Agent": MODRINTH_USER_AGENT };
+  if (token) headers["Authorization"] = token;
+
+  try {
+    const res = await fetch(`https://api.modrinth.com/v2/user/${encodeURIComponent(username)}/projects`, { headers });
+    if (!res.ok) {
+      const errText = await res.text();
+      return json(response, res.status, { error: `Modrinth API 错误 (${res.status}): ${errText || res.statusText}` });
+    }
+
+    const projects = await res.json();
+    const catalog = JSON.parse(await readFile(CATALOG_PATH, "utf8"));
+
+    const enriched = projects.map((p) => {
+      const existing = catalog.projects.find((cp) => cp.slug === p.slug || cp.slug === p.id);
+      return {
+        id: p.id,
+        slug: p.slug,
+        title: p.title,
+        description: p.description,
+        icon_url: p.icon_url,
+        downloads: p.downloads,
+        followers: p.followers,
+        versionsCount: p.versions?.length || 0,
+        galleryCount: p.gallery?.length || 0,
+        source_url: p.source_url,
+        published: p.published,
+        updated: p.updated,
+        isExisting: !!existing,
+        existingReleasesCount: existing?.releases?.length || 0
+      };
+    });
+
+    return json(response, 200, { username, projects: enriched });
+  } catch (error) {
+    return json(response, 500, { error: error.message });
+  }
+}
+
+async function syncModrinthProjectsHandler(request, response) {
+  await loadEnv();
+  const webRequest = new Request("http://127.0.0.1" + request.url, { method: "POST", headers: request.headers, body: Readable.toWeb(request), duplex: "half" });
+
+  let payload;
+  const contentType = request.headers["content-type"] || "";
+  if (contentType.includes("application/json")) {
+    payload = await webRequest.json();
+  } else {
+    const form = await webRequest.formData();
+    payload = {
+      projectIds: form.getAll("projectIds"),
+      syncVersions: form.get("syncVersions") !== "false",
+      uploadToR2: form.get("uploadToR2") === "true",
+      overwrite: form.get("overwrite") !== "false",
+      token: form.get("token") || ""
+    };
+  }
+
+  const { projectIds, syncVersions = true, uploadToR2 = false, overwrite = true, token = "" } = payload;
+  if (!projectIds || !Array.isArray(projectIds) || !projectIds.length) {
+    return json(response, 400, { error: "请至少选择一个要同步的 Modrinth 项目" });
+  }
+
+  const headers = { "User-Agent": MODRINTH_USER_AGENT };
+  if (token) headers["Authorization"] = token;
+
+  const config = JSON.parse(await readFile(CONFIG_PATH, "utf8"));
+  const catalog = JSON.parse(await readFile(CATALOG_PATH, "utf8"));
+  const results = [];
+
+  for (const pid of projectIds) {
+    try {
+      // 1. Fetch project details
+      const pRes = await fetch(`https://api.modrinth.com/v2/project/${encodeURIComponent(pid)}`, { headers });
+      if (!pRes.ok) throw new Error(`获取项目 ${pid} 失败: ${pRes.statusText}`);
+      const projectData = await pRes.json();
+
+      let versionsData = [];
+      if (syncVersions) {
+        const vRes = await fetch(`https://api.modrinth.com/v2/project/${encodeURIComponent(pid)}/version`, { headers });
+        if (vRes.ok) {
+          versionsData = await vRes.json();
+        }
+      }
+
+      // 2. If uploadToR2 is requested, download and upload files to R2
+      if (uploadToR2 && versionsData.length > 0) {
+        const directory = await mkdtemp(join(tmpdir(), "modsite-modrinth-"));
+        try {
+          for (const ver of versionsData) {
+            for (const file of ver.files || []) {
+              if (!file.url) continue;
+              const fileRes = await fetch(file.url);
+              if (!fileRes.ok) continue;
+              const buffer = Buffer.from(await fileRes.arrayBuffer());
+              const safeName = basename(file.filename).replace(/[\x00-\x1f]/g, "_");
+              const tempPath = join(directory, safeName);
+              await writeFile(tempPath, buffer);
+
+              const record = await fileRecord(tempPath, projectData.slug || pid, ver.version_number, config.downloadBaseUrl);
+              upload(config.r2Bucket, record);
+              file.url = record.public.url;
+              file.hashes = file.hashes || {};
+              file.hashes.sha256 = record.public.sha256;
+            }
+          }
+        } finally {
+          await rm(directory, { recursive: true, force: true });
+        }
+      }
+
+      // 3. Sync into catalog
+      const synced = syncModrinthProject(catalog, projectData, versionsData, { syncVersions, overwrite });
+      results.push({ id: pid, slug: synced.slug, name: synced.name, versionsCount: synced.releases.length, success: true });
+    } catch (err) {
+      results.push({ id: pid, success: false, error: err.message });
+    }
+  }
+
+  // Atomic write to catalog.json
+  const temporaryPath = `${CATALOG_PATH}.tmp`;
+  await writeFile(temporaryPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
+  await rename(temporaryPath, CATALOG_PATH);
+
+  const successCount = results.filter((r) => r.success).length;
+  return json(response, 200, {
+    message: `已成功同步 ${successCount} / ${projectIds.length} 个项目`,
+    results
+  });
+}
+
 async function serveFile(request, response) {
   const parsedUrl = new URL(request.url, "http://127.0.0.1");
   const pathname = decodeURIComponent(parsedUrl.pathname);
@@ -371,6 +509,8 @@ const server = createServer(async (request, response) => {
     if (request.method === "POST" && request.url === "/api/release/file/delete") return await deleteReleaseFileHandler(request, response);
     if (request.method === "POST" && request.url === "/api/release/file/add") return await addReleaseFileHandler(request, response);
     if (request.method === "POST" && request.url === "/api/release/game-versions/update") return await updateGameVersionsHandler(request, response);
+    if (request.method === "GET" && request.url.startsWith("/api/modrinth/projects")) return await getModrinthProjectsHandler(request, response);
+    if (request.method === "POST" && request.url === "/api/modrinth/sync") return await syncModrinthProjectsHandler(request, response);
     if (request.method === "POST" && request.url === "/api/deploy") {
       const wrangler = resolve(ROOT, "node_modules/wrangler/bin/wrangler.js");
       const result = await run(process.execPath, [wrangler, "pages", "deploy", "site", "--project-name", "modsite"]);

@@ -20,6 +20,7 @@
         <button type="button" id="tab-single" class="mode-tab active">单模组发布 / 资料编辑</button>
         <button type="button" id="tab-batch" class="mode-tab">⚡ 批量极速解析上传</button>
         <button type="button" id="tab-manage" class="mode-tab">📦 版本维护与文件管理</button>
+        <button type="button" id="tab-modrinth" class="mode-tab">🌐 Modrinth 同步</button>
       </div>
     </div>
 
@@ -177,6 +178,61 @@
 
           <div id="manage-releases-list" class="manage-releases-list">
             <p class="empty">请先在上方选择一个模组以浏览其版本列表。</p>
+          </div>
+        </section>
+
+        <section id="modrinth-section" class="panel" style="display: none;">
+          <div class="panel-heading">
+            <span class="step">🌐</span>
+            <div>
+              <h2>Modrinth 项目一键获取与同步</h2>
+              <p>连接 Modrinth 开放 API，检索您在 Modrinth 上的全部模组，支持手动单选/多选项目，自动提取完整图文介绍、横幅、标签及历史版本发布记录。</p>
+            </div>
+          </div>
+
+          <div class="modrinth-query-bar">
+            <label><strong>Modrinth 用户名：</strong>
+              <input type="text" id="modrinth-username-input" class="modrinth-input" value="Ryan100c" placeholder="例如: Ryan100c">
+            </label>
+            <label><strong>PAT Token (可选)：</strong>
+              <input type="password" id="modrinth-token-input" class="modrinth-input" placeholder="访问私有/未公开模组时填写">
+            </label>
+            <button type="button" id="btn-fetch-modrinth" class="btn-primary">🔍 读取 Modrinth 项目</button>
+          </div>
+
+          <div id="modrinth-control" class="batch-control" style="display: none;">
+            <div class="batch-control__header">
+              <div class="batch-summary">
+                <strong id="modrinth-summary-count">已加载 0 个 Modrinth 项目</strong>
+                <span id="modrinth-selected-text">已选中 0 项</span>
+              </div>
+              <div class="batch-actions">
+                <label class="check">
+                  <input id="modrinth-sync-versions-check" type="checkbox" checked> 同步历史版本与安装包
+                </label>
+                <label class="check">
+                  <input id="modrinth-upload-r2-check" type="checkbox"> 转存至私有 R2（默认使用 Modrinth CDN 链接）
+                </label>
+                <label class="check">
+                  <input id="modrinth-overwrite-check" type="checkbox" checked> 允许覆盖本地已有项目
+                </label>
+                <button id="modrinth-select-all-btn" type="button" class="btn-subaction">全选</button>
+                <button id="modrinth-deselect-all-btn" type="button" class="btn-subaction">取消选择</button>
+                <button id="modrinth-sync-btn" type="button" class="btn-primary">⚡ 同步选中的项目</button>
+              </div>
+            </div>
+
+            <div id="modrinth-progress-box" class="batch-progress-box" style="display: none;">
+              <div class="batch-progress-header">
+                <span id="modrinth-progress-label">准备就绪</span>
+                <span id="modrinth-progress-percent">0%</span>
+              </div>
+              <div class="progress-track">
+                <div id="modrinth-progress-bar" class="progress-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div id="modrinth-grid" class="modrinth-grid"></div>
           </div>
         </section>
       </div>
