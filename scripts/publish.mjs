@@ -12,7 +12,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 export function parseArgs(argv) {
   const options = { files: [] };
-  const booleans = new Set(["dry-run", "help", "update-project-only"]);
+  const booleans = new Set(["dry-run", "help", "update-project-only", "allow-overwrite", "overwrite"]);
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (!argument.startsWith("--")) {
@@ -102,14 +102,53 @@ export function applyProjectMetadata(catalog, options) {
 export function applyRelease(catalog, options, release) {
   let project = catalog.projects.find((item) => item.slug === options.project);
   if (project?.releases.some((item) => item.version === options.version)) {
-    throw new Error(`项目 ${options.project} 已存在版本 ${options.version}`);
+    if (!options.overwrite && !options["allow-overwrite"]) {
+      throw new Error(`项目 ${options.project} 已存在版本 ${options.version}`);
+    }
+    project.releases = project.releases.filter((item) => item.version !== options.version);
   }
   project = applyProjectMetadata(catalog, options);
   project.releases.unshift(release);
   return catalog;
 }
 
-async function fileRecord(filePath, project, version, downloadBaseUrl) {
+export function removeRelease(catalog, projectSlug, version) {
+  const project = catalog.projects.find((item) => item.slug === projectSlug);
+  if (!project) throw new Error(`找不到项目 ${projectSlug}`);
+  const initialLength = project.releases.length;
+  project.releases = project.releases.filter((item) => item.version !== version);
+  if (project.releases.length === initialLength) {
+    throw new Error(`项目 ${projectSlug} 中未找到版本 ${version}`);
+  }
+  return catalog;
+}
+
+export function removeReleaseFile(catalog, projectSlug, version, fileName) {
+  const project = catalog.projects.find((item) => item.slug === projectSlug);
+  if (!project) throw new Error(`找不到项目 ${projectSlug}`);
+  const release = project.releases.find((item) => item.version === version);
+  if (!release) throw new Error(`项目 ${projectSlug} 中未找到版本 ${version}`);
+  const initialLength = release.files.length;
+  release.files = release.files.filter((item) => item.name !== fileName);
+  if (release.files.length === initialLength) {
+    throw new Error(`版本 ${version} 中未找到文件 ${fileName}`);
+  }
+  return catalog;
+}
+
+export function addReleaseFile(catalog, projectSlug, version, filePublicRecord) {
+  const project = catalog.projects.find((item) => item.slug === projectSlug);
+  if (!project) throw new Error(`找不到项目 ${projectSlug}`);
+  const release = project.releases.find((item) => item.version === version);
+  if (!release) throw new Error(`项目 ${projectSlug} 中未找到版本 ${version}`);
+  if (release.files.some((item) => item.name === filePublicRecord.name)) {
+    throw new Error(`版本 ${version} 中已存在名为 ${filePublicRecord.name} 的文件`);
+  }
+  release.files.push(filePublicRecord);
+  return catalog;
+}
+
+export async function fileRecord(filePath, project, version, downloadBaseUrl) {
   const absolutePath = resolve(filePath);
   const details = await stat(absolutePath);
   if (!details.isFile()) throw new Error(`${filePath} 不是文件`);
@@ -124,7 +163,7 @@ async function fileRecord(filePath, project, version, downloadBaseUrl) {
   };
 }
 
-function runWranglerUpload(args, targetName) {
+export function runWranglerUpload(args, targetName) {
   const wrangler = resolve(ROOT, "node_modules/wrangler/bin/wrangler.js");
   const result = spawnSync(process.execPath, [wrangler, ...args], {
     cwd: ROOT,
@@ -150,7 +189,7 @@ function runWranglerUpload(args, targetName) {
   }
 }
 
-function upload(bucket, file) {
+export function upload(bucket, file) {
   const dispositionName = file.public.name.replace(/["\\\r\n]/g, "_");
   runWranglerUpload([
     "r2", "object", "put", `${bucket}/${file.key}`,
@@ -202,7 +241,7 @@ function usage() {
     npm run publish -- --project demo --banner-file .\\banner.webp`);
 }
 
-async function loadEnv() {
+export async function loadEnv() {
   try {
     const envPath = resolve(ROOT, ".env");
     const content = await readFile(envPath, "utf8");

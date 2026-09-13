@@ -150,6 +150,54 @@
           ]
         }
       ]
+    },
+    {
+      "slug": "microtimingreplay",
+      "name": "MicroTimingReplay",
+      "description": "Record micro events and replay them!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/microtimingreplay-icon.png",
+      "banner": "https://cdn.modrinth.com/data/whfX7zco/images/876547b8dd21131298eb3aab39e080c65fe4a4a0.png",
+      "source": "https://github.com/hotpad100c/MicroTimingReplay",
+      "authors": [
+        "Ryan100C",
+        "bulefire-fox"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-13T14:22:44.317Z",
+          "gameVersions": [
+            "1.21.1",
+            "26.1.2",
+            "26.2"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "microtimingreplay-1.21.1.jar",
+              "size": 707851,
+              "sha256": "495a8d56ac09a6a29b661f3385eff6c71c2d4433fad253bd4bd5d4514c0f0252",
+              "url": "https://dl.ryan100c.party/releases/microtimingreplay/1.0.0/495a8d56ac09-microtimingreplay-1.21.1.jar"
+            },
+            {
+              "name": "microtimingreplay-26.1.jar",
+              "size": 730144,
+              "sha256": "c01c44bda59fb5e01a4f0f9f44e769ac14ffc4361dc2a729d0f4c77e265c7f5b",
+              "url": "https://dl.ryan100c.party/releases/microtimingreplay/1.0.0/c01c44bda59f-microtimingreplay-26.1.jar"
+            },
+            {
+              "name": "microtimingreplay-26.2.jar",
+              "size": 730917,
+              "sha256": "a99cd4b72fb38bb0278039f363d95d2908be1322249fd76a47e649a1c289a984",
+              "url": "https://dl.ryan100c.party/releases/microtimingreplay/1.0.0/a99cd4b72fb3-microtimingreplay-26.2.jar"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

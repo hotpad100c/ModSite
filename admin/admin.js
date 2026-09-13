@@ -8,6 +8,8 @@ const dialog = document.querySelector("#result-dialog");
 const output = document.querySelector("#result-output");
 const title = document.querySelector("#result-title");
 const jarParsedBadge = document.querySelector("#jar-parsed-badge");
+const multiJarTip = document.querySelector("#multi-jar-tip");
+const switchToBatchBtn = document.querySelector("#switch-to-batch-btn");
 
 const iconFileInput = document.querySelector("#icon-file");
 const iconUrlInput = document.querySelector("#icon-url");
@@ -22,7 +24,28 @@ const bannerHint = document.querySelector("#banner-hint");
 const projectInput = document.querySelector("#project-input");
 const versionInput = document.querySelector("#version-input");
 
+// Batch Upload Components
+const tabSingle = document.querySelector("#tab-single");
+const tabBatch = document.querySelector("#tab-batch");
+const batchSection = document.querySelector("#batch-section");
+const batchFilesInput = document.querySelector("#batch-files-input");
+const batchDropZone = document.querySelector("#batch-drop-zone");
+const batchControl = document.querySelector("#batch-control");
+const batchCountText = document.querySelector("#batch-count-text");
+const batchDetailText = document.querySelector("#batch-detail-text");
+const batchOverwriteCheck = document.querySelector("#batch-overwrite-check");
+const batchDryrunCheck = document.querySelector("#batch-dryrun-check");
+const batchClearBtn = document.querySelector("#batch-clear-btn");
+const batchUploadBtn = document.querySelector("#batch-upload-btn");
+const batchProgressBox = document.querySelector("#batch-progress-box");
+const batchProgressLabel = document.querySelector("#batch-progress-label");
+const batchProgressPercent = document.querySelector("#batch-progress-percent");
+const batchProgressBar = document.querySelector("#batch-progress-bar");
+const batchQueueList = document.querySelector("#batch-queue-list");
+
 let projects = [];
+let batchQueue = [];
+let isBatchUploading = false;
 
 const size = (bytes) => (bytes / 1024 / 1024).toFixed(2) + " MB";
 
@@ -30,6 +53,18 @@ function showResult(ok, message) {
   title.textContent = ok ? "操作完成" : "操作失败";
   output.textContent = message;
   dialog.showModal();
+}
+
+function dataURLtoFile(dataurl, filename) {
+  const arr = dataurl.split(",");
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
 }
 
 function updateImagePreview(previewEl, url, emptyText = "无图片") {
@@ -141,7 +176,14 @@ function renderFiles() {
     fileList.append(item);
   });
 
-  const firstJar = files.find((f) => f.name.toLowerCase().endsWith(".jar"));
+  const jarFiles = files.filter((f) => f.name.toLowerCase().endsWith(".jar"));
+  if (jarFiles.length > 1) {
+    multiJarTip.style.display = "block";
+  } else {
+    multiJarTip.style.display = "none";
+  }
+
+  const firstJar = jarFiles[0];
   if (firstJar) {
     inspectJarFile(firstJar);
   } else if (jarParsedBadge) {
@@ -176,6 +218,7 @@ function renderProjects() {
     meta.textContent = project.slug + " · " + project.releases.length + " 个版本";
     button.append(name, meta);
     button.addEventListener("click", () => {
+      switchMode("single");
       form.elements.project.value = project.slug;
       form.elements.name.value = project.name || "";
       form.elements.description.value = project.description || "";
@@ -197,7 +240,374 @@ async function refreshProjects() {
   const response = await fetch("/api/catalog", { cache: "no-store" });
   projects = (await response.json()).projects;
   renderProjects();
+  if (batchQueue.length) {
+    updateQueueConflicts();
+    renderBatchQueue();
+  }
 }
+
+// Mode Switcher
+function switchMode(mode) {
+  if (mode === "batch") {
+    tabBatch.classList.add("active");
+    tabSingle.classList.remove("active");
+    form.style.display = "none";
+    batchSection.style.display = "block";
+  } else {
+    tabSingle.classList.add("active");
+    tabBatch.classList.remove("active");
+    form.style.display = "grid";
+    batchSection.style.display = "none";
+  }
+}
+
+tabSingle.addEventListener("click", () => switchMode("single"));
+tabBatch.addEventListener("click", () => switchMode("batch"));
+
+switchToBatchBtn.addEventListener("click", () => {
+  switchMode("batch");
+  if (fileInput.files && fileInput.files.length) {
+    handleBatchFiles([...fileInput.files]);
+  }
+});
+
+// Batch Functions
+async function inspectJarBufferOrFile(file) {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await fetch("/api/inspect-jar", { method: "POST", body: formData });
+    if (!response.ok) return { isFabric: false, filename: file.name };
+    const data = await response.json();
+    return { ...data, filename: file.name };
+  } catch {
+    return { isFabric: false, filename: file.name };
+  }
+}
+
+async function handleBatchFiles(filesList) {
+  const jarFiles = filesList.filter((f) => f.name.toLowerCase().endsWith(".jar"));
+  if (!jarFiles.length) {
+    showResult(false, "未选择任何 .jar 模组文件。");
+    return;
+  }
+
+  batchControl.style.display = "flex";
+  batchCountText.textContent = `正在并发解析 ${jarFiles.length} 个模组包…`;
+  batchDetailText.textContent = `请稍候，系统正并发读取各包中的 fabric.mod.json…`;
+  batchUploadBtn.disabled = true;
+
+  // Concurrent parsing via /api/inspect-jar
+  const results = await Promise.all(jarFiles.map((file) => inspectJarBufferOrFile(file)));
+
+  // Group files by (id, version)
+  const groupMap = new Map();
+
+  results.forEach((info, index) => {
+    const file = jarFiles[index];
+    const rawId = info.id || file.name.replace(/\.jar$/i, "").toLowerCase().replace(/[^a-z0-9-]/g, "-");
+    const id = rawId.replace(/^[^a-z0-9]+/, "").replace(/[^a-z0-9-]+/g, "-") || "mod";
+    const version = info.version || "1.0.0";
+    const groupKey = `${id}@@${version}`;
+
+    if (!groupMap.has(groupKey)) {
+      groupMap.set(groupKey, {
+        id,
+        name: info.name || id,
+        version,
+        description: info.description || "",
+        gameVersions: info.gameVersions || [],
+        loader: info.loader || "Fabric",
+        authors: info.authors || [],
+        source: info.source || "",
+        iconDataUrl: info.iconDataUrl || "",
+        files: [file],
+        status: "pending",
+        errorMessage: "",
+        isFabric: Boolean(info.isFabric)
+      });
+    } else {
+      const existing = groupMap.get(groupKey);
+      existing.files.push(file);
+      if (!existing.description && info.description) existing.description = info.description;
+      if (!existing.source && info.source) existing.source = info.source;
+      if (!existing.iconDataUrl && info.iconDataUrl) existing.iconDataUrl = info.iconDataUrl;
+      if (info.gameVersions?.length) {
+        existing.gameVersions = [...new Set([...existing.gameVersions, ...info.gameVersions])];
+      }
+      if (info.authors?.length) {
+        existing.authors = [...new Set([...existing.authors, ...info.authors])];
+      }
+    }
+  });
+
+  // Merge into batchQueue
+  groupMap.forEach((newItem, key) => {
+    const existingIndex = batchQueue.findIndex((item) => `${item.id}@@${item.version}` === key);
+    if (existingIndex >= 0) {
+      batchQueue[existingIndex] = newItem;
+    } else {
+      batchQueue.push(newItem);
+    }
+  });
+
+  updateQueueConflicts();
+  renderBatchQueue();
+  batchUploadBtn.disabled = false;
+}
+
+function updateQueueConflicts() {
+  const allowOverwrite = batchOverwriteCheck.checked;
+  batchQueue.forEach((item) => {
+    const existingProject = projects.find((p) => p.slug === item.id);
+    const versionExists = existingProject?.releases?.some((r) => r.version === item.version);
+    item.alreadyExists = Boolean(versionExists);
+
+    if (item.status === "pending" || item.status === "exists") {
+      if (item.alreadyExists && !allowOverwrite) {
+        item.status = "exists";
+      } else {
+        item.status = "pending";
+      }
+    }
+  });
+}
+
+function renderBatchQueue() {
+  batchQueueList.replaceChildren();
+  const totalUnits = batchQueue.length;
+  const totalFiles = batchQueue.reduce((acc, cur) => acc + cur.files.length, 0);
+
+  batchCountText.textContent = `共 ${totalUnits} 个模组发布单元`;
+  batchDetailText.textContent = `已聚合 ${totalFiles} 个版本文件`;
+
+  if (!batchQueue.length) {
+    batchControl.style.display = "none";
+    return;
+  }
+  batchControl.style.display = "flex";
+
+  batchQueue.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = `batch-card state-${item.status}`;
+
+    // Icon
+    if (item.iconDataUrl) {
+      const img = document.createElement("img");
+      img.className = "batch-card__icon";
+      img.src = item.iconDataUrl;
+      img.alt = item.name;
+      card.append(img);
+    } else {
+      const fallback = document.createElement("div");
+      fallback.className = "batch-card__icon batch-card__icon--fallback";
+      fallback.textContent = (item.name || item.id).slice(0, 1).toUpperCase();
+      card.append(fallback);
+    }
+
+    // Content
+    const content = document.createElement("div");
+    content.className = "batch-card__content";
+
+    const header = document.createElement("div");
+    header.className = "batch-card__header";
+    const titleEl = document.createElement("strong");
+    titleEl.textContent = item.name || item.id;
+    const idEl = document.createElement("code");
+    idEl.textContent = item.id;
+    header.append(titleEl, idEl);
+    content.append(header);
+
+    const meta = document.createElement("div");
+    meta.className = "batch-card__meta";
+    meta.textContent = `版本: ${item.version} · 游戏: ${item.gameVersions.join(", ") || "通用"} · 加载器: ${item.loader}`;
+    if (item.authors.length) meta.textContent += ` · 作者: ${item.authors.join(", ")}`;
+    if (item.source) meta.textContent += ` · 源码: ${item.source}`;
+    content.append(meta);
+
+    const filesLine = document.createElement("div");
+    filesLine.className = "batch-card__files";
+    filesLine.textContent = item.files.map((f) => `${f.name} (${size(f.size)})`).join("，");
+    content.append(filesLine);
+
+    if (item.errorMessage) {
+      const errEl = document.createElement("div");
+      errEl.className = "batch-card__error-msg";
+      errEl.textContent = `错误: ${item.errorMessage}`;
+      content.append(errEl);
+    }
+
+    card.append(content);
+
+    // Actions & Badge
+    const actions = document.createElement("div");
+    actions.className = "batch-card__actions";
+
+    const badge = document.createElement("span");
+    badge.className = `batch-badge batch-badge--${item.status}`;
+    if (item.status === "pending") badge.textContent = "待上传";
+    else if (item.status === "parsing") badge.textContent = "解析中";
+    else if (item.status === "uploading") badge.textContent = "正在上传…";
+    else if (item.status === "success") badge.textContent = "✔ 已发布";
+    else if (item.status === "error") badge.textContent = "❌ 失败";
+    else if (item.status === "exists") badge.textContent = "⚠️ 版本已存在(跳过)";
+    actions.append(badge);
+
+    if (!isBatchUploading && item.status !== "uploading") {
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "btn-remove-item";
+      removeBtn.textContent = "移除";
+      removeBtn.title = "从队列移除此项";
+      removeBtn.addEventListener("click", () => {
+        batchQueue.splice(index, 1);
+        renderBatchQueue();
+      });
+      actions.append(removeBtn);
+    }
+
+    card.append(actions);
+    batchQueueList.append(card);
+  });
+}
+
+async function startBatchUpload() {
+  if (isBatchUploading) return;
+  const itemsToUpload = batchQueue.filter((item) => item.status === "pending");
+  if (!itemsToUpload.length) {
+    return showResult(false, "队列中没有待上传的模组（已存在版本的模组已被自动跳过；若需强行重新发布请勾选【允许覆盖已存在版本】）。");
+  }
+
+  isBatchUploading = true;
+  batchUploadBtn.disabled = true;
+  batchClearBtn.disabled = true;
+  batchOverwriteCheck.disabled = true;
+  batchDryrunCheck.disabled = true;
+  batchProgressBox.style.display = "flex";
+
+  const isDryRun = batchDryrunCheck.checked;
+  const isOverwrite = batchOverwriteCheck.checked;
+
+  let successCount = 0;
+  let failCount = 0;
+  let skipCount = batchQueue.filter((item) => item.status === "exists").length;
+
+  const total = itemsToUpload.length;
+
+  for (let i = 0; i < total; i++) {
+    const item = itemsToUpload[i];
+    item.status = "uploading";
+    item.errorMessage = "";
+    renderBatchQueue();
+
+    const percent = Math.round((i / total) * 100);
+    batchProgressLabel.textContent = `正在上传 (${i + 1}/${total}): ${item.name} ${item.version}...`;
+    batchProgressPercent.textContent = `${percent}%`;
+    batchProgressBar.style.width = `${percent}%`;
+
+    try {
+      const formData = new FormData();
+      formData.append("project", item.id);
+      formData.append("name", item.name);
+      formData.append("description", item.description);
+      formData.append("version", item.version);
+      if (item.gameVersions.length) formData.append("game", item.gameVersions.join(","));
+      if (item.loader) formData.append("loader", item.loader);
+      if (item.authors.length) formData.append("authors", item.authors.join(", "));
+      if (item.source) formData.append("source", item.source);
+      if (isDryRun) formData.append("dryRun", "true");
+      if (isOverwrite) formData.append("overwrite", "true");
+
+      // Check if project exists in catalog; if new and has embedded icon, auto-attach iconFile
+      const projectExists = projects.some((p) => p.slug === item.id);
+      if (!projectExists && item.iconDataUrl) {
+        try {
+          const iconFile = dataURLtoFile(item.iconDataUrl, `${item.id}-icon.png`);
+          formData.append("iconFile", iconFile);
+        } catch {}
+      }
+
+      item.files.forEach((f) => formData.append("files", f));
+
+      const res = await fetch("/api/publish", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "发布失败");
+      }
+
+      item.status = "success";
+      successCount++;
+    } catch (err) {
+      item.status = "error";
+      item.errorMessage = err.message;
+      failCount++;
+    }
+
+    renderBatchQueue();
+  }
+
+  batchProgressLabel.textContent = "批量发布处理完毕";
+  batchProgressPercent.textContent = "100%";
+  batchProgressBar.style.width = "100%";
+
+  isBatchUploading = false;
+  batchUploadBtn.disabled = false;
+  batchClearBtn.disabled = false;
+  batchOverwriteCheck.disabled = false;
+  batchDryrunCheck.disabled = false;
+
+  await refreshProjects();
+  showResult(
+    failCount === 0,
+    `批量处理完成！\n\n成功: ${successCount} 个\n失败: ${failCount} 个\n跳过(已存在): ${skipCount} 个${
+      isDryRun ? "\n\n（本次为仅验证 Dry Run 模式，未实际上传到 R2 与清单）" : ""
+    }`
+  );
+}
+
+// Batch Event Listeners
+batchFilesInput.addEventListener("change", () => {
+  if (batchFilesInput.files && batchFilesInput.files.length) {
+    handleBatchFiles([...batchFilesInput.files]);
+  }
+});
+
+["dragenter", "dragover"].forEach((eventName) => {
+  batchDropZone.addEventListener(eventName, (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    batchDropZone.style.borderColor = "var(--accent)";
+  });
+});
+
+["dragleave", "drop"].forEach((eventName) => {
+  batchDropZone.addEventListener(eventName, (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    batchDropZone.style.borderColor = "";
+  });
+});
+
+batchDropZone.addEventListener("drop", (e) => {
+  const dt = e.dataTransfer;
+  if (dt && dt.files && dt.files.length) {
+    handleBatchFiles([...dt.files]);
+  }
+});
+
+batchOverwriteCheck.addEventListener("change", () => {
+  updateQueueConflicts();
+  renderBatchQueue();
+});
+
+batchClearBtn.addEventListener("click", () => {
+  batchQueue = [];
+  batchFilesInput.value = "";
+  batchProgressBox.style.display = "none";
+  renderBatchQueue();
+});
+
+batchUploadBtn.addEventListener("click", startBatchUpload);
 
 fileInput.addEventListener("change", renderFiles);
 iconFileInput.addEventListener("change", updateImageHints);
@@ -219,26 +629,38 @@ updateProjectButton.addEventListener("click", async () => {
   }
 
   updateProjectButton.disabled = true;
-  updateProjectButton.textContent = form.elements.dryRun.checked ? "正在验证…" : "正在保存项目资料与上传图片…";
+  updateProjectButton.textContent = "正在更新…";
 
   try {
-    const formData = new FormData(form);
-    formData.set("updateProjectOnly", "true");
+    const formData = new FormData();
+    formData.append("project", projectSlug);
+    formData.append("name", form.elements.name.value.trim());
+    formData.append("description", form.elements.description.value.trim());
+    formData.append("long-description", form.elements["long-description"].value.trim());
+    formData.append("authors", form.elements.authors.value.trim());
+    formData.append("source", form.elements.source.value.trim());
+    formData.append("updateProjectOnly", "true");
+
+    if (iconFileInput.files && iconFileInput.files[0]) {
+      formData.append("iconFile", iconFileInput.files[0]);
+    } else if (iconUrlInput.value.trim()) {
+      formData.append("icon", iconUrlInput.value.trim());
+    }
+
+    if (bannerFileInput.files && bannerFileInput.files[0]) {
+      formData.append("bannerFile", bannerFileInput.files[0]);
+    } else if (bannerUrlInput.value.trim()) {
+      formData.append("banner", bannerUrlInput.value.trim());
+    }
+
     const response = await fetch("/api/project/update", { method: "POST", body: formData });
     const result = await response.json();
     showResult(response.ok, result.message || result.error);
-    if (response.ok && !form.elements.dryRun.checked) {
+    if (response.ok) {
       await refreshProjects();
-      const updated = projects.find((p) => p.slug === projectSlug);
-      if (updated) {
-        form.elements.icon.value = updated.icon || "";
-        form.elements.banner.value = updated.banner || "";
-        form.elements.authors.value = (updated.authors || []).join(", ");
-        form.elements.source.value = updated.source || "";
-        iconFileInput.value = "";
-        bannerFileInput.value = "";
-        updateImageHints();
-      }
+      iconFileInput.value = "";
+      bannerFileInput.value = "";
+      updateImageHints();
     }
   } catch (error) {
     showResult(false, error.message);
@@ -248,7 +670,7 @@ updateProjectButton.addEventListener("click", async () => {
   }
 });
 
-// 发布新版本
+// 发布新版本（单模组模式）
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 

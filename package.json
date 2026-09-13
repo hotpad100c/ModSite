@@ -8,6 +8,7 @@
     "deploy": "wrangler pages deploy site --project-name modsite",
     "publish": "node scripts/publish.mjs",
     "test": "node --test",
+    "build": "node scripts/sync-vendor.mjs",
     "vendor": "node scripts/sync-vendor.mjs",
     "postinstall": "node scripts/sync-vendor.mjs"
   },

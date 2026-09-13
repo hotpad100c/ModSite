@@ -90,3 +90,22 @@ test("持久化 authors 与 source 属性到项目信息中", () => {
   assert.equal(project.source, "https://github.com/Ryan100c/Lucidity");
   assert.deepEqual(project.authors, ["Ryan100c", "ContributorOne"]);
 });
+
+test("当传入 allow-overwrite 时允许覆盖已有版本", () => {
+  const catalog = { projects: [] };
+  const options = { project: "demo", name: "Demo", version: "1.0.0" };
+  const initialRelease = { version: "1.0.0", notes: "初始版本", files: [] };
+  applyRelease(catalog, options, initialRelease);
+  assert.equal(catalog.projects[0].releases.length, 1);
+  assert.equal(catalog.projects[0].releases[0].notes, "初始版本");
+
+  // 未开启 allow-overwrite 时应报错
+  assert.throws(() => applyRelease(catalog, options, { version: "1.0.0", notes: "更新版本", files: [] }), /已存在版本/);
+
+  // 开启 allow-overwrite 时应成功替换
+  const updatedRelease = { version: "1.0.0", notes: "覆盖更新版本", files: [] };
+  applyRelease(catalog, { ...options, "allow-overwrite": true }, updatedRelease);
+  assert.equal(catalog.projects[0].releases.length, 1);
+  assert.equal(catalog.projects[0].releases[0].notes, "覆盖更新版本");
+});
+

@@ -96,6 +96,7 @@ async function publish(request, response) {
 
     if (isUpdateProjectOnly) args.push("--update-project-only");
     if (form.get("dryRun") === "true") args.push("--dry-run");
+    if (form.get("overwrite") === "true" || form.get("allowOverwrite") === "true") args.push("--allow-overwrite");
     args.push(...paths);
 
     const result = await run(process.execPath, args);
