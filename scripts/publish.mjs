@@ -134,13 +134,19 @@ function runWranglerUpload(args, targetName) {
   });
 
   if (result.status !== 0) {
-    const errorOutput = ((result.stderr || "") + "\n" + (result.stdout || "")).trim();
-    if (errorOutput.includes("CLOUDFLARE_API_TOKEN") || errorOutput.includes("not authenticated") || errorOutput.includes("wrangler login")) {
+    const rawOutput = ((result.stderr || "") + "\n" + (result.stdout || "")).trim();
+    const cleanedOutput = rawOutput
+      .split(/\r?\n/)
+      .filter((line) => !line.includes("UV_HANDLE_CLOSING") && !line.includes("Assertion failed:"))
+      .join("\n")
+      .trim();
+
+    if (rawOutput.includes("CLOUDFLARE_API_TOKEN") || rawOutput.includes("not authenticated") || rawOutput.includes("wrangler login")) {
       throw new Error(
-        `Cloudflare 凭证未授权：请先在电脑终端运行一次 "npx wrangler login" 完成登录；或者在项目根目录创建 .env 文件并配置 CLOUDFLARE_API_TOKEN=你的Token。\n\nWrangler 输出：\n${errorOutput}`
+        `Cloudflare 凭证未授权：请先在电脑终端（PowerShell 或 CMD）运行一次 "npx wrangler login" 完成登录；或者在项目根目录创建 .env 文件并配置 CLOUDFLARE_API_TOKEN=你的Token。\n\n详细提示：\n${cleanedOutput}`
       );
     }
-    throw new Error(`上传 ${targetName} 失败：\n${errorOutput}`);
+    throw new Error(`上传 ${targetName} 失败：\n${cleanedOutput || rawOutput}`);
   }
 }
 
@@ -201,9 +207,14 @@ async function loadEnv() {
     const envPath = resolve(ROOT, ".env");
     const content = await readFile(envPath, "utf8");
     for (const line of content.split(/\r?\n/)) {
-      const match = line.trim().match(/^([A-Za-z0-9_]+)\s*=\s*(.*)$/);
-      if (match && !process.env[match[1]]) {
-        process.env[match[1]] = match[2].trim().replace(/^["']|["']$/g, "");
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const match = trimmed.match(/^([A-Za-z0-9_]+)\s*=\s*(.*)$/);
+      if (match) {
+        const val = match[2].trim().replace(/^["']|["']$/g, "");
+        if (val) {
+          process.env[match[1]] = val;
+        }
       }
     }
   } catch {}
@@ -317,7 +328,7 @@ async function main() {
   console.log("发布完成。运行 npm run deploy 更新网站。");
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch((error) => {
     console.error(`发布失败：${error.message}`);
     process.exitCode = 1;

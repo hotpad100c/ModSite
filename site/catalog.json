@@ -3,7 +3,7 @@
     {
       "slug": "lucidity",
       "name": "Lucidity",
-      "description": "All-in-One Minecraft Client Visual Assistance Mod",
+      "description": "Visualize minecraft!",
       "longDescription": "\r\n># Major Update:\r\n>\r\n>> Starting from version 2.0.1, this mod now uses` malilib` as its configuration dependency instead of `Yet Another Config Lib`.And aslo reqires `RyansRenderingKit`\r\n>> The codebase has been almost completely refactored. Some old features, such as Trajectory and ProjectileCamera, have been removed, while several new features have been introduced. You can open the configuration by pressing X + V or via Mod Menu\r\n\r\n# lucidity\r\n![](https://count.getloli.com/@lucidity?name=lucidity&theme=3d-num&padding=7&offset=0&align=top&scale=1&pixelated=1&darkmode=auto)\r\n> The Ultimate Client-Side Visualization Tool!\r\n## What Is This\r\nThis mod adds various client-side visual features, such as \r\n\r\n- selective block/entiy/particle rendering\r\n- fluid source highlighting\r\n- orientation display\r\n- ore highlighting\r\n- container comparator output display\r\n- ...more!\r\n- \r\n- ~~mob tracking range visualization~~(v2.0 -)\r\n- ~~previews for certain commands.~~(v2.0 -)\r\n- ~~damage indicator~~(v2.0 -)\r\n- ~~projectile trajectory prediction~~(v2.0 -)\r\n\r\n\r\n## Main Features\r\n\r\n### Selective Rendering\r\n\r\nThis feature offers various selective rendering options (\"Specific Content\" below refers to the selected blocks/entities/particles by the player).\r\n\r\nBlock/Entity/Particle Rendering Modes:\r\n\r\n- Disabled\r\n\r\n- Render specific content inside the selection area\r\n\r\n- Render specific content outside the selection area\r\n\r\n- Do not render specific content inside the selection area\r\n\r\n- Do not render specific content outside the selection area\r\n\r\n- Render only specific content\r\n\r\n- Do not render specific content\r\n\r\n- Render everything inside the selection area\r\n\r\n- Render everything outside the selection area\r\n\r\n- Render everything inside the selection area except specific content\r\n\r\n- Render everything outside the selection area except specific content\r\n\r\n\r\n### Ore Highlighting\r\n\r\nHighlights ores within the detection range (allows adding custom blocks as ores and adjusting highlight colors per ore type).\r\n\r\n### Key Display\r\n\r\nDisplays all pressed keys.\r\n\r\n### Damage Indicator\r\n\r\nIndicates the source of damage\r\n\r\nCalculates potential damage\r\n\r\n\r\n### Fluid Highlighting\r\n\r\nApplies a special highlight texture to fluid blocks from texture packs.\r\n\r\n- Fluid source direction \r\n- Bubble column direction\r\n\r\n### Projectile Trajectory\r\n\r\nMarks the following with lines:\r\n\r\n- Predicted trajectory of projectiles held by other players\r\n\r\n- First-person predicted trajectory of held projectiles\r\n\r\n- Predicted trajectory of projectiles held by mobs/entities\r\n\r\n- Real-time predicted trajectory of existing projectiles in the world\r\n\r\n\r\n### Explosion Visualization\r\n\r\nExplosion Visualization \r\nA powerful tool that simulates and visualizes explosion details in real time, including:\r\n\r\n- Explosion rays\r\n\r\n- Blocks that will be destroyed\r\n\r\n- Explosion center\r\n\r\n- Estimated damage to nearby entities\r\n\r\n- Sample points of affected entities\r\n\r\n\r\n### Mob Debug Renderings\r\n\r\n- Visualizes areas where entities can detect target.\r\n- Displays spawnable entities on blocks around the player(not alwaysaccurate).\r\n- Displays a line between entity's eye and its target's eye.\r\n- Shows the effective attack range of sonic booms.\r\n\r\n### Creative Helper\r\n\r\n- Displays the range of certain commands (/fill, /clone)\r\n\r\n- Improves the visibility of structure voids\r\n\r\n- Enhances the appearance of barriers\r\n\r\n- Forces the rendering of some technical blocks (barriers, structure voids, etc.)\r\n\r\n\r\n### Other Fun Features! \r\n\r\n- Press Ctrl while firing a projectile to switch your view to the projectile's perspective (press Shift to reset view)\r\n\r\n- Visualizes surrounding sound events (e.g., footsteps)\r\n\r\n- Displays surrounding block events (accuracy not guaranteed)",
       "icon": "https://dl.ryan100c.party/images/lucidity-icon.png",
       "banner": "https://dl.ryan100c.party/images/lucidity-banner.png",
@@ -12,6 +12,25 @@
         "Ryan100C"
       ],
       "releases": [
+        {
+          "version": "2.0.2-1.21.11",
+          "publishedAt": "2026-09-13T14:08:28.009Z",
+          "gameVersions": [
+            "1.21.11"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "lucidity-2.0.2+1.21.11.jar",
+              "size": 690699,
+              "sha256": "092efc594e60c0bab5b0aadc4a1d6e1f7bb96270689bb988bdc3a4487b871752",
+              "url": "https://dl.ryan100c.party/releases/lucidity/2.0.2-1.21.11/092efc594e60-lucidity-2.0.2%2B1.21.11.jar"
+            }
+          ]
+        },
         {
           "version": "2.0.2-1.21.9",
           "publishedAt": "2026-09-13T13:46:19.271Z",

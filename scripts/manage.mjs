@@ -24,9 +24,14 @@ async function loadEnv() {
     const envPath = resolve(ROOT, ".env");
     const content = await readFile(envPath, "utf8");
     for (const line of content.split(/\r?\n/)) {
-      const match = line.trim().match(/^([A-Za-z0-9_]+)\s*=\s*(.*)$/);
-      if (match && !process.env[match[1]]) {
-        process.env[match[1]] = match[2].trim().replace(/^["']|["']$/g, "");
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const match = trimmed.match(/^([A-Za-z0-9_]+)\s*=\s*(.*)$/);
+      if (match) {
+        const val = match[2].trim().replace(/^["']|["']$/g, "");
+        if (val) {
+          process.env[match[1]] = val;
+        }
       }
     }
   } catch {}
@@ -42,6 +47,7 @@ const run = (command, args) => new Promise((resolveRun) => {
 });
 
 async function publish(request, response) {
+  await loadEnv();
   const contentLength = Number(request.headers["content-length"] || 0);
   if (contentLength > MAX_REQUEST_SIZE) return json(response, 413, { error: "一次选择的文件太多，请分批发布" });
   const webRequest = new Request("http://127.0.0.1" + request.url, { method: "POST", headers: request.headers, body: Readable.toWeb(request), duplex: "half" });
