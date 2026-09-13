@@ -112,6 +112,36 @@ export function applyRelease(catalog, options, release) {
   return catalog;
 }
 
+export function removeProject(catalog, projectSlug) {
+  const initialLength = catalog.projects.length;
+  catalog.projects = catalog.projects.filter((item) => item.slug !== projectSlug);
+  if (catalog.projects.length === initialLength) {
+    throw new Error(`找不到项目 ${projectSlug}`);
+  }
+  return catalog;
+}
+
+export function updateReleaseGameVersions(catalog, projectSlug, version, gameVersions) {
+  const project = catalog.projects.find((item) => item.slug === projectSlug);
+  if (!project) throw new Error(`找不到项目 ${projectSlug}`);
+  const release = project.releases.find((item) => item.version === version);
+  if (!release) throw new Error(`项目 ${projectSlug} 中未找到版本 ${version}`);
+
+  const versionsArray = Array.isArray(gameVersions)
+    ? gameVersions.map((v) => String(v).trim()).filter(Boolean)
+    : String(gameVersions || "")
+        .split(/[,，\s]+/)
+        .map((v) => v.trim())
+        .filter(Boolean);
+
+  if (!versionsArray.length) {
+    throw new Error("游戏版本范围不能为空");
+  }
+
+  release.gameVersions = versionsArray;
+  return catalog;
+}
+
 export function removeRelease(catalog, projectSlug, version) {
   const project = catalog.projects.find((item) => item.slug === projectSlug);
   if (!project) throw new Error(`找不到项目 ${projectSlug}`);
@@ -141,10 +171,12 @@ export function addReleaseFile(catalog, projectSlug, version, filePublicRecord) 
   if (!project) throw new Error(`找不到项目 ${projectSlug}`);
   const release = project.releases.find((item) => item.version === version);
   if (!release) throw new Error(`项目 ${projectSlug} 中未找到版本 ${version}`);
-  if (release.files.some((item) => item.name === filePublicRecord.name)) {
-    throw new Error(`版本 ${version} 中已存在名为 ${filePublicRecord.name} 的文件`);
+  const existingIndex = release.files.findIndex((item) => item.name === filePublicRecord.name);
+  if (existingIndex >= 0) {
+    release.files[existingIndex] = filePublicRecord;
+  } else {
+    release.files.push(filePublicRecord);
   }
-  release.files.push(filePublicRecord);
   return catalog;
 }
 
