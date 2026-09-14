@@ -50,7 +50,8 @@ export async function inspectProjectDir(dirPath, catalogProjects = []) {
     primaryJar: null,
     isPublished: false,
     publishedReleasesCount: 0,
-    latestPublishedVersion: ""
+    latestPublishedVersion: "",
+    isShelved: false
   };
 
   // 1. Parse gradle.properties

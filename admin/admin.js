@@ -74,14 +74,18 @@ const modrinthGrid = document.querySelector("#modrinth-grid");
 
 // Workspace Scanner Components
 const tabWorkspace = document.querySelector("#tab-workspace");
+const tabShelved = document.querySelector("#tab-shelved");
+const tabShelvedCount = document.querySelector("#tab-shelved-count");
 const workspaceSection = document.querySelector("#workspace-section");
 const workspaceDirInput = document.querySelector("#workspace-dir-input");
 const btnScanWorkspace = document.querySelector("#btn-scan-workspace");
 const workspaceControl = document.querySelector("#workspace-control");
+const workspaceActiveCount = document.querySelector("#workspace-active-count");
 const workspaceTotalCount = document.querySelector("#workspace-total-count");
 const workspaceBuiltCount = document.querySelector("#workspace-built-count");
 const workspaceUnbuiltCount = document.querySelector("#workspace-unbuilt-count");
 const workspaceUnpublishedCount = document.querySelector("#workspace-unpublished-count");
+const workspaceShelvedCount = document.querySelector("#workspace-shelved-count");
 const workspaceSearchInput = document.querySelector("#workspace-search-input");
 const workspaceFilterChips = document.querySelectorAll(".workspace-filter-chips .filter-chip");
 const chipAllCount = document.querySelector("#chip-all-count");
@@ -89,6 +93,7 @@ const chipBuiltCount = document.querySelector("#chip-built-count");
 const chipUnbuiltCount = document.querySelector("#chip-unbuilt-count");
 const chipUnpublishedCount = document.querySelector("#chip-unpublished-count");
 const chipPublishedCount = document.querySelector("#chip-published-count");
+const chipShelvedCount = document.querySelector("#chip-shelved-count");
 const workspaceGrid = document.querySelector("#workspace-grid");
 
 const workspaceBuildDialog = document.querySelector("#workspace-build-dialog");
@@ -746,12 +751,13 @@ function switchMode(mode) {
   tabManage.classList.toggle("active", mode === "manage");
   tabModrinth.classList.toggle("active", mode === "modrinth");
   tabWorkspace.classList.toggle("active", mode === "workspace");
+  tabShelved.classList.toggle("active", mode === "shelved");
 
   form.style.display = mode === "single" ? "grid" : "none";
   batchSection.style.display = mode === "batch" ? "block" : "none";
   manageSection.style.display = mode === "manage" ? "block" : "none";
   modrinthSection.style.display = mode === "modrinth" ? "block" : "none";
-  workspaceSection.style.display = mode === "workspace" ? "block" : "none";
+  workspaceSection.style.display = (mode === "workspace" || mode === "shelved") ? "block" : "none";
 
   if (mode === "manage") {
     updateManageProjectSelect();
@@ -760,8 +766,20 @@ function switchMode(mode) {
       fetchModrinthProjects();
     }
   } else if (mode === "workspace") {
+    currentWorkspaceFilter = "all";
+    workspaceFilterChips.forEach((c) => c.classList.toggle("active", c.dataset.filter === "all"));
     if (!workspaceProjects.length) {
       fetchWorkspaceProjects();
+    } else {
+      renderWorkspaceProjects();
+    }
+  } else if (mode === "shelved") {
+    currentWorkspaceFilter = "shelved";
+    workspaceFilterChips.forEach((c) => c.classList.toggle("active", c.dataset.filter === "shelved"));
+    if (!workspaceProjects.length) {
+      fetchWorkspaceProjects();
+    } else {
+      renderWorkspaceProjects();
     }
   }
 }
@@ -771,6 +789,7 @@ tabBatch.addEventListener("click", () => switchMode("batch"));
 tabManage.addEventListener("click", () => switchMode("manage"));
 tabModrinth.addEventListener("click", () => switchMode("modrinth"));
 tabWorkspace.addEventListener("click", () => switchMode("workspace"));
+tabShelved.addEventListener("click", () => switchMode("shelved"));
 
 switchToBatchBtn.addEventListener("click", () => {
   switchMode("batch");
@@ -1538,23 +1557,55 @@ async function fetchWorkspaceProjects() {
   }
 }
 
+async function toggleShelveProject(project, shelved) {
+  project.isShelved = Boolean(shelved);
+  updateWorkspaceCounts();
+  renderWorkspaceProjects();
+
+  try {
+    const res = await fetch("/api/workspace/shelve", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        project: project.id,
+        folderName: project.folderName,
+        shelved: Boolean(shelved)
+      })
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      console.error("更新放置状态失败:", data.error);
+    }
+  } catch (err) {
+    console.error("更新放置状态异常:", err);
+  }
+}
+
 function updateWorkspaceCounts() {
-  const total = workspaceProjects.length;
-  const built = workspaceProjects.filter((p) => p.builtJars && p.builtJars.length > 0).length;
-  const unbuilt = total - built;
-  const published = workspaceProjects.filter((p) => p.isPublished).length;
-  const unpublished = total - published;
+  const shelvedList = workspaceProjects.filter((p) => p.isShelved);
+  const activeList = workspaceProjects.filter((p) => !p.isShelved);
 
-  workspaceTotalCount.textContent = total;
-  workspaceBuiltCount.textContent = built;
-  workspaceUnbuiltCount.textContent = unbuilt;
-  workspaceUnpublishedCount.textContent = unpublished;
+  const activeCount = activeList.length;
+  const shelvedCount = shelvedList.length;
+  const builtCount = activeList.filter((p) => p.builtJars && p.builtJars.length > 0).length;
+  const unbuiltCount = activeCount - builtCount;
+  const publishedCount = activeList.filter((p) => p.isPublished).length;
+  const unpublishedCount = activeCount - publishedCount;
 
-  if (chipAllCount) chipAllCount.textContent = total;
-  if (chipBuiltCount) chipBuiltCount.textContent = built;
-  if (chipUnbuiltCount) chipUnbuiltCount.textContent = unbuilt;
-  if (chipUnpublishedCount) chipUnpublishedCount.textContent = unpublished;
-  if (chipPublishedCount) chipPublishedCount.textContent = published;
+  if (workspaceActiveCount) workspaceActiveCount.textContent = activeCount;
+  if (workspaceTotalCount) workspaceTotalCount.textContent = activeCount;
+  if (workspaceBuiltCount) workspaceBuiltCount.textContent = builtCount;
+  if (workspaceUnbuiltCount) workspaceUnbuiltCount.textContent = unbuiltCount;
+  if (workspaceUnpublishedCount) workspaceUnpublishedCount.textContent = unpublishedCount;
+  if (workspaceShelvedCount) workspaceShelvedCount.textContent = shelvedCount;
+
+  if (chipAllCount) chipAllCount.textContent = activeCount;
+  if (chipBuiltCount) chipBuiltCount.textContent = builtCount;
+  if (chipUnbuiltCount) chipUnbuiltCount.textContent = unbuiltCount;
+  if (chipUnpublishedCount) chipUnpublishedCount.textContent = unpublishedCount;
+  if (chipPublishedCount) chipPublishedCount.textContent = publishedCount;
+  if (chipShelvedCount) chipShelvedCount.textContent = shelvedCount;
+  if (tabShelvedCount) tabShelvedCount.textContent = shelvedCount;
 }
 
 function renderWorkspaceProjects() {
@@ -1562,10 +1613,15 @@ function renderWorkspaceProjects() {
 
   const query = workspaceSearchQuery.trim().toLowerCase();
   const filtered = workspaceProjects.filter((p) => {
-    if (currentWorkspaceFilter === "built" && (!p.builtJars || p.builtJars.length === 0)) return false;
-    if (currentWorkspaceFilter === "unbuilt" && p.builtJars && p.builtJars.length > 0) return false;
-    if (currentWorkspaceFilter === "published" && !p.isPublished) return false;
-    if (currentWorkspaceFilter === "unpublished" && p.isPublished) return false;
+    if (currentWorkspaceFilter === "shelved") {
+      if (!p.isShelved) return false;
+    } else {
+      if (p.isShelved) return false;
+      if (currentWorkspaceFilter === "built" && (!p.builtJars || p.builtJars.length === 0)) return false;
+      if (currentWorkspaceFilter === "unbuilt" && p.builtJars && p.builtJars.length > 0) return false;
+      if (currentWorkspaceFilter === "published" && !p.isPublished) return false;
+      if (currentWorkspaceFilter === "unpublished" && p.isPublished) return false;
+    }
 
     if (query) {
       const matchName = (p.name || "").toLowerCase().includes(query);
@@ -1584,9 +1640,15 @@ function renderWorkspaceProjects() {
     emptyDiv.style.gridColumn = "1 / -1";
     emptyDiv.style.padding = "2.5rem";
     emptyDiv.style.textAlign = "center";
-    emptyDiv.textContent = query || currentWorkspaceFilter !== "all"
-      ? "没有找到符合当前筛选条件的本地工程。"
-      : "该目录下未检测到任何包含 gradle.properties 或 build.gradle 的 Minecraft 模组工程。";
+    if (currentWorkspaceFilter === "shelved") {
+      emptyDiv.textContent = query
+        ? "没有找到符合搜索条件的已放置工程。"
+        : "暂无放置中的工程。可在任何工程卡片右上角勾选【暂时放置】，将其移入此列表。";
+    } else {
+      emptyDiv.textContent = query || currentWorkspaceFilter !== "all"
+        ? "没有找到符合当前筛选条件的本地工程。"
+        : "该目录下未检测到任何包含 gradle.properties 或 build.gradle 的 Minecraft 模组工程。";
+    }
     workspaceGrid.append(emptyDiv);
     return;
   }
@@ -1594,9 +1656,9 @@ function renderWorkspaceProjects() {
   filtered.forEach((p) => {
     const card = document.createElement("div");
     const hasBuilt = p.builtJars && p.builtJars.length > 0;
-    card.className = `workspace-card status-${hasBuilt ? "built" : "unbuilt"}`;
+    card.className = `workspace-card status-${p.isShelved ? "shelved" : (hasBuilt ? "built" : "unbuilt")}`;
 
-    // Top: icon + titles
+    // Top: icon + titles + shelve toggle
     const top = document.createElement("div");
     top.className = "workspace-card__top";
 
@@ -1630,7 +1692,24 @@ function renderWorkspaceProjects() {
     folderElem.title = p.dirPath;
 
     titleBox.append(title, idElem, folderElem);
-    top.append(iconElem, titleBox);
+
+    const shelveLabel = document.createElement("label");
+    shelveLabel.className = `workspace-card__shelve-label ${p.isShelved ? "is-shelved" : ""}`;
+    shelveLabel.title = p.isShelved ? "点击取消放置，恢复至活跃工程列表" : "勾选后暂时放置此工程，不再在常规列表中显示";
+
+    const shelveCheckbox = document.createElement("input");
+    shelveCheckbox.type = "checkbox";
+    shelveCheckbox.checked = Boolean(p.isShelved);
+    shelveCheckbox.addEventListener("change", (e) => {
+      e.stopPropagation();
+      toggleShelveProject(p, shelveCheckbox.checked);
+    });
+
+    const shelveText = document.createElement("span");
+    shelveText.textContent = p.isShelved ? "已放置" : "暂时放置";
+
+    shelveLabel.append(shelveCheckbox, shelveText);
+    top.append(iconElem, titleBox, shelveLabel);
 
     // Badges Row
     const badgesRow = document.createElement("div");
@@ -1733,7 +1812,17 @@ function renderWorkspaceProjects() {
     publishBtn.disabled = !hasBuilt;
     publishBtn.addEventListener("click", () => directPublishProject(p));
 
-    footer.append(buildBtn, loadBtn, publishBtn);
+    if (p.isShelved) {
+      const unshelveBtn = document.createElement("button");
+      unshelveBtn.type = "button";
+      unshelveBtn.className = "btn-workspace-load";
+      unshelveBtn.textContent = "↩️ 恢复工程";
+      unshelveBtn.title = "取消放置，恢复到活跃工程列表中";
+      unshelveBtn.addEventListener("click", () => toggleShelveProject(p, false));
+      footer.append(unshelveBtn, buildBtn, loadBtn, publishBtn);
+    } else {
+      footer.append(buildBtn, loadBtn, publishBtn);
+    }
 
     card.append(top, badgesRow, meta, footer);
     workspaceGrid.append(card);

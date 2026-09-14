@@ -893,6 +893,39 @@
       ]
     },
     {
+      "slug": "daxiaobian",
+      "name": "DaXiaoBian",
+      "description": "This is an example description! Tell everyone what your mod is about!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/daxiaobian-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Me!"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-14T11:03:44.088Z",
+          "gameVersions": [
+            "1.21.11"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "daxiaobian-1.0.0.jar",
+              "size": 14122,
+              "sha256": "759c7bb46f8a3a74cb345579c8cd95f97b2fb0b33b76f045c2d073123c466fb7",
+              "url": "https://dl.ryan100c.party/releases/daxiaobian/1.0.0/759c7bb46f8a-daxiaobian-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "explosionvisualizer",
       "name": "ExplosionVisualizer",
       "description": "Use real-time 3D rendering to display various information about the explosion",
@@ -1228,6 +1261,72 @@
       ]
     },
     {
+      "slug": "growingworld",
+      "name": "GrowingWorld",
+      "description": "Cool growing world woww  ooww",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/growingworld-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Ryan100C"
+      ],
+      "releases": [
+        {
+          "version": "1.0.1",
+          "publishedAt": "2026-09-14T11:03:01.124Z",
+          "gameVersions": [
+            "1.21.10"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "growingworld-1.0.1.jar",
+              "size": 48344,
+              "sha256": "cc07ad44ef8fc157dfec7f3f238aa66243e3d672144998c43b03351f4da2e243",
+              "url": "https://dl.ryan100c.party/releases/growingworld/1.0.1/cc07ad44ef8f-growingworld-1.0.1.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "justlag",
+      "name": "JustLag",
+      "description": "This is an example description! Tell everyone what your mod is about!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/justlag-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Me!"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-14T11:02:47.008Z",
+          "gameVersions": [
+            "1.21.11"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "justlag-1.0.0.jar",
+              "size": 18026,
+              "sha256": "88b02435a7c66a5fa9caca292309105dcfb931d8d6eb1dc98ce7894f1aa82416",
+              "url": "https://dl.ryan100c.party/releases/justlag/1.0.0/88b02435a7c6-justlag-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "kmmms",
       "name": "KeepMyModMenuScroll(KMMMS)",
       "description": "This mod keeps your mod menu page scroll after you leave the mod menu screen",
@@ -1294,6 +1393,72 @@
               "sha256": "",
               "sha512": "880da4fdd1c57578fa74ce9eeb9cd5fe22b2467178410d347e1520ab5c3371fcf008df835e31b20b06294a4cd4535d33ea569039adeb0a26f21cb78bf605cca3",
               "url": "https://cdn.modrinth.com/data/axukUHes/versions/yGxiPmxx/keepmyscroll-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "log4c",
+      "name": "Log4C",
+      "description": "Display client log in-game!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/log4c-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Ryan100c"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-14T10:59:29.757Z",
+          "gameVersions": [
+            "1.21"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "log4c-1.0.0.jar",
+              "size": 41924,
+              "sha256": "0f346aacc6de439f182230e3629cd4ba586a99863ab711fe7106c39b9759933f",
+              "url": "https://dl.ryan100c.party/releases/log4c/1.0.0/0f346aacc6de-log4c-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lover",
+      "name": "Lover",
+      "description": "This is an example description! Tell everyone what your mod is about!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/lover-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Me!"
+      ],
+      "releases": [
+        {
+          "version": "1.1.0",
+          "publishedAt": "2026-09-14T10:59:43.751Z",
+          "gameVersions": [
+            "1.21.11"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "lover-1.1.0.jar",
+              "size": 1625193,
+              "sha256": "6ef1eca883e6f1a8127356c93d1ed6c1d5add675c7b0b72b75d55d2df651b8e1",
+              "url": "https://dl.ryan100c.party/releases/lover/1.1.0/6ef1eca883e6-lover-1.1.0.jar"
             }
           ]
         }
@@ -1418,6 +1583,70 @@
       ]
     },
     {
+      "slug": "mincartrevolution-neo",
+      "name": "MinecartRevolution",
+      "description": "",
+      "longDescription": "",
+      "icon": "",
+      "banner": "",
+      "source": "",
+      "authors": [],
+      "releases": [
+        {
+          "version": "1.0.1",
+          "publishedAt": "2026-09-14T10:59:57.297Z",
+          "gameVersions": [
+            "26.1.2"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "minecartrevolution-1.0.1.jar",
+              "size": 668792,
+              "sha256": "dd4033ba83efe07e09022456f969db1775f8561a58dab9b4097436316790e2d6",
+              "url": "https://dl.ryan100c.party/releases/mincartrevolution-neo/1.0.1/dd4033ba83ef-minecartrevolution-1.0.1.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "notenoughmineingredients",
+      "name": "NotEnoughMineIngredients",
+      "description": "This is an example description! Tell everyone what your mod is about!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/notenoughmineingredients-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Me!"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-14T11:04:02.141Z",
+          "gameVersions": [
+            "1.21.5"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "notenoughmineingredients-1.0.0.jar",
+              "size": 28117,
+              "sha256": "69969f271c61bd487004c5fd3e01e08684661df1e68eee5395f286eaa07bdd4a",
+              "url": "https://dl.ryan100c.party/releases/notenoughmineingredients/1.0.0/69969f271c61-notenoughmineingredients-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "ohmyresin",
       "name": "OhMyResin",
       "description": "Added some command to simulate resin generation",
@@ -1517,6 +1746,40 @@
               "sha256": "",
               "sha512": "ee4dc605ac91007306e24df9e1e5d82da04a6649ffeb2bc0e40f119505fd95ecea5f601bbe55f5cb2fdd95c18f84292ac09f7fa56f58b3ca76b8502b135a114c",
               "url": "https://cdn.modrinth.com/data/wUqeB4tD/versions/JX8LZnmS/fackplayercontrol-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "persona",
+      "name": "roster",
+      "description": "Brings the consept of character to minecraft!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/persona-icon.png",
+      "banner": "",
+      "source": "",
+      "authors": [
+        "Ryan100C",
+        "observer (1300752575)"
+      ],
+      "releases": [
+        {
+          "version": "1.1.0",
+          "publishedAt": "2026-09-14T10:56:42.851Z",
+          "gameVersions": [
+            "1.21.11"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "persona-1.1.0.jar",
+              "size": 291476,
+              "sha256": "b4dae78671ee5d1db1f8854b7cbe8cd36e8c8e1d8528a7fc8adde4998a549133",
+              "url": "https://dl.ryan100c.party/releases/persona/1.1.0/b4dae78671ee-persona-1.1.0.jar"
             }
           ]
         }
@@ -2059,6 +2322,105 @@
               "sha256": "",
               "sha512": "422d792d83d7c1991fa3331e125ea04e5fb2de5675a960f1db23e0edd6a51b458adeeeda572cb84d3b7e32a2b5b12ed9b64be3ab6c1bb282bfc479df40a953b2",
               "url": "https://cdn.modrinth.com/data/F8rYkahN/versions/fWrZVNXb/entityeyelinenoarrow-1.0.0-sources.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "simulatica",
+      "name": "simulatica",
+      "description": "Simulate minecraft inside Litematica!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/simulatica-icon.png",
+      "banner": "",
+      "source": "https://github.com/hotpad100c/simulatica",
+      "authors": [
+        "Ryan100C"
+      ],
+      "releases": [
+        {
+          "version": "2.0.0",
+          "publishedAt": "2026-09-14T11:00:25.384Z",
+          "gameVersions": [
+            "1.21.11"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "simulatica-2.0.0.jar",
+              "size": 112527,
+              "sha256": "d9cb61f4816ed1192951de7eaf67bfd91a87112a5efc0c1fa94dffb91e2571ca",
+              "url": "https://dl.ryan100c.party/releases/simulatica/2.0.0/d9cb61f4816e-simulatica-2.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ticker",
+      "name": "Ticker",
+      "description": "A mod that adds some command to trigger some GameEvents",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/ticker-icon.png",
+      "banner": "",
+      "source": "https://github.com/hotpad100c",
+      "authors": [
+        "Ryan100c"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-14T11:04:18.491Z",
+          "gameVersions": [
+            "1.21"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "ticker-1.0.0.jar",
+              "size": 2636466,
+              "sha256": "6b06dfd0eec6826aadafe37be3d98aff18b98b03d8833c100649dcc51317dfdf",
+              "url": "https://dl.ryan100c.party/releases/ticker/1.0.0/6b06dfd0eec6-ticker-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "tinytooover",
+      "name": "TinyTooOver",
+      "description": "Cool babies",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/tinytooover-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Ryan100C"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-14T11:00:34.713Z",
+          "gameVersions": [
+            "26.1.1"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "tinytooover-1.0.0.jar",
+              "size": 53375,
+              "sha256": "97af31be0cc5edc7b67f7bda3590d4a6676b9f76edbafd35c94d991cd9c90d0e",
+              "url": "https://dl.ryan100c.party/releases/tinytooover/1.0.0/97af31be0cc5-tinytooover-1.0.0.jar"
             }
           ]
         }

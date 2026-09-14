@@ -14,6 +14,7 @@ const ADMIN_ROOT = resolve(ROOT, "admin");
 const SITE_ROOT = resolve(ROOT, "site");
 const CONFIG_PATH = resolve(ROOT, "site/config.json");
 const CATALOG_PATH = resolve(ROOT, "site/catalog.json");
+const SHELVED_PATH = resolve(ROOT, ".workspace-shelved.json");
 const PORT = 4173;
 const MAX_REQUEST_SIZE = 80 * 1024 * 1024;
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
@@ -409,13 +410,37 @@ async function syncModrinthProjectsHandler(request, response) {
   });
 }
 
+async function loadShelvedProjects() {
+  try {
+    const data = await readFile(SHELVED_PATH, "utf8");
+    const list = JSON.parse(data);
+    return Array.isArray(list) ? list : [];
+  } catch {
+    return [];
+  }
+}
+
+async function saveShelvedProjects(list) {
+  const tmpPath = `${SHELVED_PATH}.tmp`;
+  await writeFile(tmpPath, `${JSON.stringify(list, null, 2)}\n`, "utf8");
+  await rename(tmpPath, SHELVED_PATH);
+}
+
 async function getWorkspaceProjectsHandler(request, response) {
   const url = new URL(request.url, "http://127.0.0.1");
   const targetDir = url.searchParams.get("dir")?.trim() || "c:\\coding";
 
   try {
     const catalog = JSON.parse(await readFile(CATALOG_PATH, "utf8"));
+    const shelved = await loadShelvedProjects();
+    const shelvedSet = new Set(shelved.map((s) => (typeof s === "string" ? s : s.id || s.folderName)));
+
     const result = await scanWorkspace(targetDir, catalog.projects || []);
+    for (const proj of result.projects) {
+      proj.isShelved = shelvedSet.has(proj.id) || shelvedSet.has(proj.folderName);
+    }
+    result.shelvedCount = result.projects.filter((p) => p.isShelved).length;
+    result.activeCount = result.projects.length - result.shelvedCount;
     return json(response, 200, result);
   } catch (error) {
     return json(response, 400, { error: error.message });
@@ -551,6 +576,46 @@ async function publishDirectWorkspaceHandler(request, response) {
   }
 }
 
+async function toggleShelveHandler(request, response) {
+  const webRequest = new Request("http://127.0.0.1" + request.url, {
+    method: "POST",
+    headers: request.headers,
+    body: Readable.toWeb(request),
+    duplex: "half"
+  });
+
+  let payload;
+  const contentType = request.headers["content-type"] || "";
+  if (contentType.includes("application/json")) {
+    payload = await webRequest.json();
+  } else {
+    const form = await webRequest.formData();
+    payload = {
+      project: form.get("project"),
+      folderName: form.get("folderName"),
+      shelved: form.get("shelved") === "true" || form.get("shelved") === true
+    };
+  }
+
+  const { project, folderName, shelved } = payload || {};
+  const key = project || folderName;
+  if (!key) return json(response, 400, { error: "缺少 project 或 folderName 参数" });
+
+  try {
+    let list = await loadShelvedProjects();
+    const keyStr = String(key);
+    if (shelved) {
+      if (!list.includes(keyStr)) list.push(keyStr);
+    } else {
+      list = list.filter((k) => k !== keyStr && k !== folderName && k !== project);
+    }
+    await saveShelvedProjects(list);
+    return json(response, 200, { success: true, key: keyStr, shelved: Boolean(shelved), count: list.length });
+  } catch (error) {
+    return json(response, 500, { error: error.message });
+  }
+}
+
 async function serveFile(request, response) {
   const parsedUrl = new URL(request.url, "http://127.0.0.1");
   const pathname = decodeURIComponent(parsedUrl.pathname);
@@ -658,6 +723,7 @@ const server = createServer(async (request, response) => {
     if (request.method === "GET" && request.url.startsWith("/api/workspace/projects")) return await getWorkspaceProjectsHandler(request, response);
     if (request.method === "POST" && request.url === "/api/workspace/build") return await buildWorkspaceProjectHandler(request, response);
     if (request.method === "POST" && request.url === "/api/workspace/publish-direct") return await publishDirectWorkspaceHandler(request, response);
+    if (request.method === "POST" && request.url === "/api/workspace/shelve") return await toggleShelveHandler(request, response);
     if (request.method === "POST" && request.url === "/api/deploy") {
       const wrangler = resolve(ROOT, "node_modules/wrangler/bin/wrangler.js");
       const result = await run(process.execPath, [wrangler, "pages", "deploy", "site", "--project-name", "modsite"]);

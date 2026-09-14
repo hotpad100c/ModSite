@@ -1415,6 +1415,60 @@ dialog form {
   border-left-color: #5c4b75;
 }
 
+.workspace-card.status-shelved {
+  border-left-color: #3b2a54;
+  opacity: 0.85;
+}
+
+.workspace-card.status-shelved:hover {
+  opacity: 1;
+}
+
+.workspace-card__shelve-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-family: ui-monospace, monospace;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  background: #090710;
+  border: 1px solid var(--line);
+  transition: all 0.15s;
+  user-select: none;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.workspace-card__shelve-label:hover {
+  color: var(--accent);
+  border-color: rgba(169, 132, 255, 0.4);
+}
+
+.workspace-card__shelve-label input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 0.95rem;
+  height: 0.95rem;
+  cursor: pointer;
+}
+
+.workspace-card__shelve-label.is-shelved {
+  background: rgba(169, 132, 255, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.filter-chip--shelved {
+  border-color: rgba(169, 132, 255, 0.3);
+}
+
+.filter-chip--shelved.active {
+  background: #392260;
+  border-color: var(--accent);
+  color: #fff;
+}
+
 .workspace-card__top {
   display: flex;
   gap: 0.85rem;
