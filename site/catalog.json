@@ -961,13 +961,13 @@
     {
       "slug": "daxiaobian",
       "name": "DaXiaoBian",
-      "description": "This is an example description! Tell everyone what your mod is about!",
-      "longDescription": "",
+      "description": "Randomize the sizes of all mobs.",
+      "longDescription": "> Custom mod for challenge video.\r\n\r\n# Settings\r\n\r\n- /gamerule daxiaobian:max_scale -> Max mob  random size\r\n- /gamerule daxiaobian:max_scale -> Min mob random size\r\n- /gamerule daxiaobian:shuffle_delay -> Delay for randomize player size",
       "icon": "https://dl.ryan100c.party/images/daxiaobian-icon.png",
-      "banner": "",
+      "banner": "https://dl.ryan100c.party/images/daxiaobian-banner.png",
       "source": "https://github.com/FabricMC/fabric-example-mod",
       "authors": [
-        "Me!"
+        "Ryan100C"
       ],
       "releases": [
         {
@@ -994,13 +994,13 @@
     {
       "slug": "eiddumper",
       "name": "EIDDumper",
-      "description": "This is an example description! Tell everyone what your mod is about!",
-      "longDescription": "",
+      "description": "Dump entity ID list",
+      "longDescription": "# How To Use\r\n\r\n- /eid dump head  -> view top entries in entity list\r\n- /eid dump <min> <max> -> view entity list from <min> to <max>\r\n- /eid get -> get entity id counter\r\n- /eid set -> set entity id counter",
       "icon": "https://dl.ryan100c.party/images/eiddumper-icon.png",
-      "banner": "",
+      "banner": "https://dl.ryan100c.party/images/eiddumper-banner.png",
       "source": "https://github.com/FabricMC/fabric-example-mod",
       "authors": [
-        "Me!"
+        "Ryan100C"
       ],
       "releases": [
         {

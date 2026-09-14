@@ -12,24 +12,31 @@
   <body>
     <header class="site-header">
       <a id="site-name" class="brand" href="./">Ryan100C's Mods</a>
-      <span class="brand__mark" aria-hidden="true">✦</span>
+      <div class="header-right">
+        <span class="brand__mark" aria-hidden="true" data-i18n="brandMark">✦</span>
+        <div class="lang-switch" id="lang-switch" role="group" aria-label="Language Selector">
+          <button type="button" class="lang-btn active" data-lang="en">EN</button>
+          <span class="lang-divider">/</span>
+          <button type="button" class="lang-btn" data-lang="zh">中</button>
+        </div>
+      </div>
     </header>
 
     <main class="home">
       <section class="home-intro">
-        <p class="eyebrow">MOD COLLECTION</p>
-        <h1 id="page-title">Collection</h1>
-        <p id="site-description">All my mods</p>
+        <p class="eyebrow" data-i18n="homeEyebrow">MOD COLLECTION</p>
+        <h1 id="page-title" data-i18n="homeTitle">Collection</h1>
+        <p id="site-description" data-i18n="homeDesc">All my mods</p>
       </section>
 
       <section class="toolbar" aria-label="Filter mods">
-        <label class="sr-only" for="search">Search for mods</label>
-        <input id="search" type="search" placeholder="Search by name, version, loader…" autocomplete="off">
+        <label class="sr-only" for="search" data-i18n="searchAriaLabel">Search for mods</label>
+        <input id="search" type="search" placeholder="Search by name, version, loader…" data-i18n-placeholder="searchPlaceholder" autocomplete="off">
         <span id="project-count" aria-live="polite"></span>
       </section>
 
       <section id="projects" class="mod-grid" aria-live="polite">
-        <p class="loading">Loading mods…</p>
+        <p class="loading" data-i18n="loadingMods">Loading mods…</p>
       </section>
     </main>
 

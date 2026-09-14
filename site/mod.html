@@ -11,8 +11,15 @@
   <body>
     <header class="site-header">
       <a id="site-name" class="brand" href="./">Ryan100C's Mods</a>
-      <a class="back-link" href="./">← Back</a>
+      <div class="header-right">
+        <a class="back-link" id="back-link" href="./" data-i18n="backToList">← Back</a>
+        <div class="lang-switch" id="lang-switch" role="group" aria-label="Language Selector">
+          <button type="button" class="lang-btn active" data-lang="en">EN</button>
+          <span class="lang-divider">/</span>
+          <button type="button" class="lang-btn" data-lang="zh">中</button>
+        </div>
+      </div>
     </header>
-    <main id="mod-page"><p class="loading">Loading mod details…</p></main>
+    <main id="mod-page"><p class="loading" data-i18n="loadingModDetails">Loading mod details…</p></main>
   </body>
 </html>

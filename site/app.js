@@ -1,37 +1,137 @@
+import { t, getCurrentLang, setupLanguageSwitcher, translateBatch, isPlaceholderDesc } from "./i18n.js";
+
 const projectsRoot = document.querySelector("#projects");
 const search = document.querySelector("#search");
 const count = document.querySelector("#project-count");
-const element = (tag, className, text) => { const node = document.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; };
-const tag = (text) => element("span", "tag", text);
-const cardImage = (project) => { if (!project.banner) return element("div", "mod-card__banner placeholder-banner"); const image = element("img", "mod-card__banner"); image.src = project.banner; image.alt = ""; return image; };
-const projectIcon = (project) => { if (!project.icon) return element("span", "project-icon project-icon--fallback", project.name.slice(0, 1)); const image = element("img", "project-icon"); image.src = project.icon; image.alt = ""; return image; };
-const renderProject = (project) => {
-  const link = element("a", "mod-card"); link.href = `mod.html?project=${encodeURIComponent(project.slug)}`; link.append(cardImage(project));
-  const body = element("div", "mod-card__body"); const heading = element("div", "mod-card__heading"); heading.append(projectIcon(project)); const text = element("div"); text.append(element("h2", "", project.name)); const latest = project.releases[0]; if (latest) text.append(element("p", "mod-card__version", `Latest ${latest.version}`)); heading.append(text); body.append(heading);
-  if (project.description) body.append(element("p", "mod-card__description", project.description)); const meta = element("div", "tags"); if (latest) [...latest.gameVersions.map((version) => `Game ${version}`), ...latest.loaders].forEach((value) => meta.append(tag(value))); if (meta.childElementCount) body.append(meta); link.append(body); return link;
+
+const element = (tag, className, text) => {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
 };
-const searchableText = (project) => [project.name, project.description, ...project.releases.flatMap((release) => [release.version, ...release.gameVersions, ...release.loaders])].join(" ").toLocaleLowerCase();
+
+const tag = (text) => element("span", "tag", text);
+
+const cardImage = (project) => {
+  if (!project.banner) return element("div", "mod-card__banner placeholder-banner");
+  const image = element("img", "mod-card__banner");
+  image.src = project.banner;
+  image.alt = "";
+  image.loading = "lazy";
+  return image;
+};
+
+const projectIcon = (project) => {
+  if (!project.icon) return element("span", "project-icon project-icon--fallback", project.name.slice(0, 1));
+  const image = element("img", "project-icon");
+  image.src = project.icon;
+  image.alt = "";
+  image.loading = "lazy";
+  return image;
+};
+
+const translatedDescriptions = new Map();
+
+const renderProject = (project, lang) => {
+  const link = element("a", "mod-card");
+  link.href = `mod.html?project=${encodeURIComponent(project.slug)}`;
+  link.append(cardImage(project));
+
+  const body = element("div", "mod-card__body");
+  const heading = element("div", "mod-card__heading");
+  heading.append(projectIcon(project));
+
+  const text = element("div");
+  text.append(element("h2", "", project.name));
+
+  const latest = project.releases[0];
+  if (latest) {
+    text.append(element("p", "mod-card__version", t("latestVersion", { version: latest.version }, lang)));
+  }
+  heading.append(text);
+  body.append(heading);
+
+  if (project.description) {
+    let descText = project.description;
+    if (isPlaceholderDesc(descText)) {
+      descText = t("noSummaryAvailable", {}, lang);
+    } else if (lang === "zh" && translatedDescriptions.has(project.slug)) {
+      descText = translatedDescriptions.get(project.slug);
+    }
+    const descEl = element("p", "mod-card__description", descText);
+    descEl.dataset.slug = project.slug;
+    body.append(descEl);
+  }
+
+  const meta = element("div", "tags");
+  if (latest) {
+    [...latest.gameVersions.map((version) => t("gameVersion", { version }, lang)), ...latest.loaders].forEach((value) => {
+      meta.append(tag(value));
+    });
+  }
+  if (meta.childElementCount) body.append(meta);
+  link.append(body);
+  return link;
+};
+
+const searchableText = (project) =>
+  [project.name, project.description, ...project.releases.flatMap((release) => [release.version, ...release.gameVersions, ...release.loaders])].join(" ").toLocaleLowerCase();
+
+let allProjects = [];
+
 const render = (projects, query = "") => {
+  const lang = getCurrentLang();
+  search.placeholder = t("searchPlaceholder", {}, lang);
+
   const needle = query.trim().toLocaleLowerCase();
   const visible = needle ? projects.filter((project) => searchableText(project).includes(needle)) : projects;
   projectsRoot.replaceChildren();
-  count.textContent = visible.length === 1 ? "1 mod" : `${visible.length} mods`;
-  if (!visible.length) return projectsRoot.append(element("p", "empty", projects.length ? "No matching mods found." : "No mods published yet."));
-  visible.forEach((project) => projectsRoot.append(renderProject(project)));
+
+  count.textContent = visible.length === 1 ? t("modsCountSingle", {}, lang) : t("modsCountPlural", { count: visible.length }, lang);
+
+  if (!visible.length) {
+    return projectsRoot.append(element("p", "empty", t(projects.length ? "noMatch" : "noModsYet", {}, lang)));
+  }
+
+  visible.forEach((project) => projectsRoot.append(renderProject(project, lang)));
+
+  // Batch translate descriptions into Chinese if needed
+  if (lang === "zh") {
+    const toTranslate = visible.filter((p) => p.description && !isPlaceholderDesc(p.description) && !translatedDescriptions.has(p.slug));
+    if (toTranslate.length) {
+      translateBatch(toTranslate.map((p) => p.description), "zh", "en").then((translations) => {
+        if (getCurrentLang() !== "zh") return;
+        toTranslate.forEach((proj, idx) => {
+          if (translations[idx]) {
+            translatedDescriptions.set(proj.slug, translations[idx]);
+            const el = projectsRoot.querySelector(`.mod-card__description[data-slug="${proj.slug}"]`);
+            if (el) el.textContent = translations[idx];
+          }
+        });
+      });
+    }
+  }
 };
+
 try {
+  setupLanguageSwitcher(() => {
+    render(allProjects, search.value);
+  });
+
   const [configResponse, catalogResponse] = await Promise.all([
     fetch("./config.json", { cache: "no-store" }),
     fetch("./catalog.json", { cache: "no-store" })
   ]);
   if (!configResponse.ok || !catalogResponse.ok) throw new Error("Unable to load site data");
   const [config, catalog] = await Promise.all([configResponse.json(), catalogResponse.json()]);
+
+  allProjects = catalog.projects;
   document.title = config.siteName;
   document.querySelector("#site-name").textContent = config.siteName;
-  document.querySelector("#page-title").textContent = config.siteName;
-  document.querySelector("#site-description").textContent = config.siteDescription;
-  render(catalog.projects);
-  search.addEventListener("input", () => render(catalog.projects, search.value));
+
+  render(allProjects);
+  search.addEventListener("input", () => render(allProjects, search.value));
 } catch (error) {
   projectsRoot.replaceChildren(element("p", "error", `${error.message}. Please try again later.`));
 }
