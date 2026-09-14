@@ -14,6 +14,8 @@ const ADMIN_ROOT = resolve(ROOT, "admin");
 const SITE_ROOT = resolve(ROOT, "site");
 const CONFIG_PATH = resolve(ROOT, "site/config.json");
 const CATALOG_PATH = resolve(ROOT, "site/catalog.json");
+const GLOSSARY_PATH = resolve(ROOT, "site/glossary.json");
+const OVERRIDES_PATH = resolve(ROOT, "site/overrides.json");
 const SHELVED_PATH = resolve(ROOT, ".workspace-shelved.json");
 const PORT = 4173;
 const MAX_REQUEST_SIZE = 80 * 1024 * 1024;
@@ -88,9 +90,12 @@ async function publish(request, response) {
     }
 
     const args = [resolve(ROOT, "scripts/publish.mjs")];
-    for (const name of ["project", "name", "description", "long-description", "icon", "banner", "source", "authors", "version", "game", "loader", "notes"]) {
+    for (const name of ["project", "name", "name_zh", "description", "description_zh", "long-description", "long_description_zh", "icon", "banner", "source", "authors", "version", "game", "loader", "notes"]) {
       const value = form.get(name);
-      if (value) args.push("--" + name, String(value));
+      if (value) {
+        const flagName = name.replace(/_/g, "-");
+        args.push("--" + flagName, String(value));
+      }
     }
 
     const iconFile = form.get("iconFile");
@@ -616,6 +621,65 @@ async function toggleShelveHandler(request, response) {
   }
 }
 
+async function getTranslationsHandler(request, response) {
+  try {
+    let glossary = [];
+    let overrides = {};
+    try {
+      glossary = JSON.parse(await readFile(GLOSSARY_PATH, "utf8"));
+    } catch {}
+    try {
+      overrides = JSON.parse(await readFile(OVERRIDES_PATH, "utf8"));
+    } catch {}
+    return json(response, 200, { glossary, overrides });
+  } catch (err) {
+    return json(response, 500, { error: err.message });
+  }
+}
+
+async function saveTranslationsHandler(request, response) {
+  try {
+    const webRequest = new Request("http://127.0.0.1" + request.url, {
+      method: "POST",
+      headers: request.headers,
+      body: Readable.toWeb(request),
+      duplex: "half"
+    });
+    const payload = await webRequest.json();
+    const { glossary, overrides, syncToCatalog } = payload || {};
+
+    if (glossary && Array.isArray(glossary)) {
+      await writeFile(GLOSSARY_PATH, JSON.stringify(glossary, null, 2), "utf8");
+    }
+
+    if (overrides && typeof overrides === "object") {
+      await writeFile(OVERRIDES_PATH, JSON.stringify(overrides, null, 2), "utf8");
+
+      if (syncToCatalog !== false) {
+        try {
+          const catalog = JSON.parse(await readFile(CATALOG_PATH, "utf8"));
+          let updated = false;
+          catalog.projects.forEach((proj) => {
+            const ov = overrides[proj.slug];
+            if (ov) {
+              if (ov.name_zh !== undefined) { proj.name_zh = ov.name_zh; updated = true; }
+              if (ov.description_zh !== undefined) { proj.description_zh = ov.description_zh; updated = true; }
+              if (ov.longDescription_zh !== undefined) { proj.longDescription_zh = ov.longDescription_zh; updated = true; }
+            }
+          });
+          if (updated) {
+            await writeFile(CATALOG_PATH, JSON.stringify(catalog, null, 2), "utf8");
+          }
+        } catch {}
+      }
+    }
+
+    return json(response, 200, { success: true, message: "翻译与术语表已成功保存" });
+  } catch (err) {
+    return json(response, 500, { error: err.message });
+  }
+}
+
 async function serveFile(request, response) {
   const parsedUrl = new URL(request.url, "http://127.0.0.1");
   const pathname = decodeURIComponent(parsedUrl.pathname);
@@ -724,6 +788,8 @@ const server = createServer(async (request, response) => {
     if (request.method === "POST" && request.url === "/api/workspace/build") return await buildWorkspaceProjectHandler(request, response);
     if (request.method === "POST" && request.url === "/api/workspace/publish-direct") return await publishDirectWorkspaceHandler(request, response);
     if (request.method === "POST" && request.url === "/api/workspace/shelve") return await toggleShelveHandler(request, response);
+    if (request.method === "GET" && request.url === "/api/translations") return await getTranslationsHandler(request, response);
+    if (request.method === "POST" && request.url === "/api/translations/save") return await saveTranslationsHandler(request, response);
     if (request.method === "POST" && request.url === "/api/deploy") {
       const wrangler = resolve(ROOT, "node_modules/wrangler/bin/wrangler.js");
       const result = await run(process.execPath, [wrangler, "pages", "deploy", "site", "--project-name", "modsite"]);

@@ -850,7 +850,9 @@
             }
           ]
         }
-      ]
+      ],
+      "name_zh": "CarpetGUI 图形界面",
+      "description_zh": "Carpet 模组的可视化图形配置界面"
     },
     {
       "slug": "cauldronfix",
@@ -1600,13 +1602,13 @@
     {
       "slug": "lover",
       "name": "Lover",
-      "description": "This is an example description! Tell everyone what your mod is about!",
-      "longDescription": "",
+      "description": "Marry any entity.",
+      "longDescription": "# How To Use\r\n\r\n- /wedding setstart -> set start point\r\n- /wedding setend -> set end point\r\n- /gamerule lover:gift -> enable gift\r\n- /gamerule lover:escape_time -> wedding cooldown\r\n- /gamerule lover:walking_speed -> walking speed",
       "icon": "https://dl.ryan100c.party/images/lover-icon.png",
-      "banner": "",
+      "banner": "https://dl.ryan100c.party/images/lover-banner.png",
       "source": "https://github.com/FabricMC/fabric-example-mod",
       "authors": [
-        "Me!"
+        "Ryan100C"
       ],
       "releases": [
         {

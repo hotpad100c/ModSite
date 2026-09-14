@@ -77,8 +77,11 @@ export function applyProjectMetadata(catalog, options) {
     project = {
       slug: options.project,
       name: options.name,
+      name_zh: options["name-zh"] || "",
       description: options.description || "",
+      description_zh: options["description-zh"] || "",
       longDescription: options["long-description"] || "",
+      longDescription_zh: options["long-description-zh"] || "",
       icon: options.icon || "",
       banner: options.banner || "",
       source: options.source || "",
@@ -88,8 +91,11 @@ export function applyProjectMetadata(catalog, options) {
     catalog.projects.push(project);
   } else {
     if (options.name) project.name = options.name;
+    if (options["name-zh"] !== undefined) project.name_zh = options["name-zh"];
     if (options.description !== undefined) project.description = options.description;
+    if (options["description-zh"] !== undefined) project.description_zh = options["description-zh"];
     if (options["long-description"] !== undefined) project.longDescription = options["long-description"];
+    if (options["long-description-zh"] !== undefined) project.longDescription_zh = options["long-description-zh"];
     if (options.icon !== undefined) project.icon = options.icon;
     if (options.banner !== undefined) project.banner = options.banner;
     if (options.source !== undefined) project.source = options.source;

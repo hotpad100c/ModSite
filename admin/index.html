@@ -23,6 +23,7 @@
         <button type="button" id="tab-modrinth" class="mode-tab">🌐 Modrinth 同步</button>
         <button type="button" id="tab-workspace" class="mode-tab">💻 本地工程探测</button>
         <button type="button" id="tab-shelved" class="mode-tab">⏸️ 放置工程 (<span id="tab-shelved-count">0</span>)</button>
+        <button type="button" id="tab-translations" class="mode-tab">🌐 翻译与术语纠偏</button>
       </div>
     </div>
 
@@ -36,9 +37,12 @@
                 <input name="project" id="project-input" list="projects-list" pattern="[a-z0-9][a-z0-9-]*" required placeholder="example-mod">
                 <datalist id="projects-list"></datalist>
               </label>
-              <label>项目名称 <small>新项目必填</small><input name="name" id="name-input" placeholder="示例模组"></label>
-              <label class="wide">项目简介<textarea name="description" id="description-input" rows="2" placeholder="这个模组做什么？"></textarea></label>
-              <label class="wide">详细介绍 <small>显示在模组详情页，支持 Markdown</small><textarea name="long-description" id="long-description-input" rows="5" placeholder="# 标题&#10;&#10;- 功能列表&#10;&#10;[链接](https://example.com)"></textarea></label>
+              <label>项目名称 (英文)<small>新项目必填</small><input name="name" id="name-input" placeholder="示例: CarpetGUI"></label>
+              <label>模组中文名称 <small>可选，中文模式优先展示</small><input name="name_zh" id="name-zh-input" placeholder="示例: Carpet 拓展界面"></label>
+              <label class="wide">英文简介<textarea name="description" id="description-input" rows="2" placeholder="这个模组做什么？（英文）"></textarea></label>
+              <label class="wide">中文一句话简介 <small>可选，留空则自动机翻</small><textarea name="description_zh" id="description-zh-input" rows="2" placeholder="精准中文简介..."></textarea></label>
+              <label class="wide">英文详细介绍 <small>显示在模组详情页，支持 Markdown</small><textarea name="long-description" id="long-description-input" rows="5" placeholder="# 标题&#10;&#10;- 功能列表&#10;&#10;[链接](https://example.com)"></textarea></label>
+              <label class="wide">中文详细介绍 <small>可选，Markdown 格式，中文模式优先展示</small><textarea name="long_description_zh" id="long-description-zh-input" rows="5" placeholder="# 中文详细介绍&#10;&#10;精准翻译的正文 Markdown..."></textarea></label>
               <label>作者列表 <small>多个作者逗号分隔，选 jar 自动解析</small><input name="authors" id="authors-input" placeholder="Ryan100c"></label>
               <label>源码仓库 URL <small>如 GitHub 仓库，选 jar 自动解析</small><input name="source" id="source-input" type="url" placeholder="https://github.com/Ryan100c/Lucidity"></label>
               
@@ -309,6 +313,72 @@
             </div>
 
             <div id="workspace-grid" class="workspace-grid"></div>
+          </div>
+        </section>
+
+        <!-- Translations & Terminology Section -->
+        <section id="translations-section" class="panel" style="display: none;">
+          <div class="panel-heading">
+            <span class="step">🌐</span>
+            <div>
+              <h2>翻译与术语纠偏系统</h2>
+              <p>支持 3 重策略：① 模组中文资料直接指定；② 全局 Minecraft 专有名词术语表强制映射；③ 智能机翻草稿一键生成与人工纠偏。</p>
+            </div>
+          </div>
+
+          <!-- Part 1: Glossary Table -->
+          <div class="trans-subpanel">
+            <div class="trans-subpanel__header">
+              <div>
+                <h3 class="trans-subpanel__title">📚 1. Minecraft 专有术语对照表 (Glossary)</h3>
+                <p class="trans-subpanel__desc">
+                  用于在智能机翻和前台渲染时强制将 Minecraft 生态专有名词映射为标准中文（例如防止将 Redstone Dust 翻成“红石尘埃”，防止将 Fake Player 翻成“假玩家”，防止将 Fabric/Quilt 翻成“织物/被子”）。
+                </p>
+              </div>
+              <div class="trans-subpanel__actions">
+                <button type="button" id="btn-save-glossary" class="btn-primary">💾 保存术语表</button>
+              </div>
+            </div>
+
+            <div class="glossary-add-bar">
+              <input type="text" id="glossary-term-input" class="workspace-input" placeholder="英文专有名词 (如: Redstone Dust)">
+              <span class="glossary-arrow">➔</span>
+              <input type="text" id="glossary-trans-input" class="workspace-input" placeholder="规范中文翻译 (如: 红石粉)">
+              <button type="button" id="btn-add-glossary" class="btn-subaction">➕ 添加术语</button>
+            </div>
+
+            <div class="glossary-status-row">
+              <span id="glossary-count-text" class="subaction-hint">共 0 条术语</span>
+              <span id="glossary-status-msg" class="trans-status-msg"></span>
+            </div>
+
+            <div id="glossary-chips-grid" class="glossary-chips-grid"></div>
+          </div>
+
+          <!-- Part 2: Mod Translation Overrides -->
+          <div class="trans-subpanel" style="margin-top: 2rem;">
+            <div class="trans-subpanel__header">
+              <div>
+                <h3 class="trans-subpanel__title">✍️ 2. 模组人工纠偏 / 手动指定翻译 (Mod Overrides)</h3>
+                <p class="trans-subpanel__desc">
+                  为单个模组指定精准的中文名称、一句话简介与详细介绍 Markdown。已人工校对的模组在前台切换为中文时将 100% 优先显示手工译文，未指定的模组则走术语保护的智能机翻。
+                </p>
+              </div>
+              <div class="trans-subpanel__actions">
+                <button type="button" id="btn-batch-draft-mt" class="btn-subaction">⚡ 一键获取全模组机翻草稿建议</button>
+              </div>
+            </div>
+
+            <div class="trans-filter-toolbar">
+              <input type="search" id="trans-search-input" class="workspace-search-input" placeholder="按模组名称或 slug 搜索...">
+              <div class="workspace-filter-chips" id="trans-filter-chips">
+                <button type="button" class="filter-chip active" data-trans-filter="all">全部 (<span id="trans-chip-all-count">0</span>)</button>
+                <button type="button" class="filter-chip" data-trans-filter="manual">✨ 已人工校对 (<span id="trans-chip-manual-count">0</span>)</button>
+                <button type="button" class="filter-chip" data-trans-filter="untranslated">⏳ 待人工纠偏 (<span id="trans-chip-untranslated-count">0</span>)</button>
+              </div>
+            </div>
+
+            <div id="mod-translations-list" class="mod-translations-list"></div>
           </div>
         </section>
       </div>

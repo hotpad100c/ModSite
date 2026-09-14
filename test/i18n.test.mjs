@@ -71,3 +71,63 @@ test("i18n: isPlaceholderDesc 准确识别模板占位简介", () => {
   assert.equal(isPlaceholderDesc("This is an example description! Tell everyone what your mod is about!"), true);
   assert.equal(isPlaceholderDesc("A real mod description for testing"), false);
 });
+
+test("i18n: 术语表 (Glossary) 能够将 Minecraft 专有名词精准映射为规范中文", () => {
+  const glossary = [
+    { term: "Redstone Dust", translation: "红石粉" },
+    { term: "Fake Player", translation: "假人" },
+    { term: "ScheduledTick", translation: "计划刻" }
+  ];
+
+  const raw = "Shows Redstone Dust updates and Fake Player actions with ScheduledTick.";
+  const { masked, placeholders } = maskText(raw, glossary);
+
+  // Masked string should protect the glossary terms
+  assert.ok(!masked.includes("Redstone Dust"));
+  assert.ok(!masked.includes("Fake Player"));
+  assert.ok(!masked.includes("ScheduledTick"));
+
+  // Simulate machine translation
+  let simulatedMT = masked
+    .replace("Shows", "展示")
+    .replace("updates and", "更新与")
+    .replace("actions with", "动作与");
+
+  const unmasked = unmaskText(simulatedMT, placeholders);
+  assert.ok(unmasked.includes("红石粉"), "成功将 Redstone Dust 替换为规范术语 红石粉");
+  assert.ok(unmasked.includes("假人"), "成功将 Fake Player 替换为规范术语 假人");
+  assert.ok(unmasked.includes("计划刻"), "成功将 ScheduledTick 替换为规范术语 计划刻");
+});
+
+test("i18n: getProjectTranslation 优先采用人工校对译文", async () => {
+  const { getProjectTranslation } = await import("../site/i18n.js");
+
+  const project = {
+    slug: "carpetgui",
+    name: "CarpetGUI",
+    description: "A simple client-side GUI for carpet mod.",
+    longDescription: "# CarpetGUI\n\nConfigure rules visually."
+  };
+
+  const overrides = {
+    carpetgui: {
+      name_zh: "CarpetGUI 客户端图形界面",
+      description_zh: "Carpet 模组的简易客户端设置面板",
+      longDescription_zh: "# CarpetGUI\n\n以可视化图形界面轻松配置规则。"
+    }
+  };
+
+  // When lang is zh and override exists
+  const transZh = getProjectTranslation(project, "zh", overrides);
+  assert.equal(transZh.hasManual, true);
+  assert.equal(transZh.name, "CarpetGUI 客户端图形界面");
+  assert.equal(transZh.description, "Carpet 模组的简易客户端设置面板");
+  assert.ok(transZh.longDescription.includes("可视化图形界面"));
+
+  // When lang is en, keep original English
+  const transEn = getProjectTranslation(project, "en", overrides);
+  assert.equal(transEn.hasManual, false);
+  assert.equal(transEn.name, "CarpetGUI");
+  assert.equal(transEn.description, "A simple client-side GUI for carpet mod.");
+});
+

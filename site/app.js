@@ -1,4 +1,4 @@
-import { t, getCurrentLang, setupLanguageSwitcher, translateBatch, isPlaceholderDesc } from "./i18n.js";
+import { t, getCurrentLang, setupLanguageSwitcher, translateBatch, isPlaceholderDesc, getProjectTranslation, loadTranslationsData } from "./i18n.js";
 
 const projectsRoot = document.querySelector("#projects");
 const search = document.querySelector("#search");
@@ -43,7 +43,9 @@ const renderProject = (project, lang) => {
   heading.append(projectIcon(project));
 
   const text = element("div");
-  text.append(element("h2", "", project.name));
+  const trans = getProjectTranslation(project, lang);
+  const displayName = lang === "zh" && trans.name_zh ? trans.name_zh : project.name;
+  text.append(element("h2", "", displayName));
 
   const latest = project.releases[0];
   if (latest) {
@@ -52,9 +54,12 @@ const renderProject = (project, lang) => {
   heading.append(text);
   body.append(heading);
 
-  if (project.description) {
-    let descText = project.description;
-    if (isPlaceholderDesc(descText)) {
+  const baseDesc = project.description;
+  if (baseDesc || trans.description_zh) {
+    let descText = baseDesc;
+    if (lang === "zh" && trans.description_zh) {
+      descText = trans.description_zh;
+    } else if (isPlaceholderDesc(descText)) {
       descText = t("noSummaryAvailable", {}, lang);
     } else if (lang === "zh" && translatedDescriptions.has(project.slug)) {
       descText = translatedDescriptions.get(project.slug);
@@ -76,7 +81,7 @@ const renderProject = (project, lang) => {
 };
 
 const searchableText = (project) =>
-  [project.name, project.description, ...project.releases.flatMap((release) => [release.version, ...release.gameVersions, ...release.loaders])].join(" ").toLocaleLowerCase();
+  [project.name, project.name_zh, project.description, project.description_zh, ...project.releases.flatMap((release) => [release.version, ...release.gameVersions, ...release.loaders])].filter(Boolean).join(" ").toLocaleLowerCase();
 
 let allProjects = [];
 
@@ -98,7 +103,11 @@ const render = (projects, query = "") => {
 
   // Batch translate descriptions into Chinese if needed
   if (lang === "zh") {
-    const toTranslate = visible.filter((p) => p.description && !isPlaceholderDesc(p.description) && !translatedDescriptions.has(p.slug));
+    const toTranslate = visible.filter((p) => {
+      const trans = getProjectTranslation(p, "zh");
+      if (trans.description_zh) return false;
+      return p.description && !isPlaceholderDesc(p.description) && !translatedDescriptions.has(p.slug);
+    });
     if (toTranslate.length) {
       translateBatch(toTranslate.map((p) => p.description), "zh", "en").then((translations) => {
         if (getCurrentLang() !== "zh") return;
@@ -121,7 +130,8 @@ try {
 
   const [configResponse, catalogResponse] = await Promise.all([
     fetch("./config.json", { cache: "no-store" }),
-    fetch("./catalog.json", { cache: "no-store" })
+    fetch("./catalog.json", { cache: "no-store" }),
+    loadTranslationsData().catch(() => null)
   ]);
   if (!configResponse.ok || !catalogResponse.ok) throw new Error("Unable to load site data");
   const [config, catalog] = await Promise.all([configResponse.json(), catalogResponse.json()]);

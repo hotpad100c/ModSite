@@ -1,3 +1,5 @@
+import { translateText, maskText, unmaskText, applyGlossary, isPlaceholderDesc } from "/i18n.js";
+
 const form = document.querySelector("#publish-form");
 const fileInput = document.querySelector("#files");
 const fileList = document.querySelector("#file-list");
@@ -123,6 +125,30 @@ const workspaceBuildStatusBadge = document.querySelector("#workspace-build-statu
 const workspaceBuildOutput = document.querySelector("#workspace-build-output");
 const workspaceBuildDuration = document.querySelector("#workspace-build-duration");
 const btnCloseBuildDialog = document.querySelector("#btn-close-build-dialog");
+
+// Translation & Glossary Components
+const tabTranslations = document.querySelector("#tab-translations");
+const translationsSection = document.querySelector("#translations-section");
+const glossaryTermInput = document.querySelector("#glossary-term-input");
+const glossaryTransInput = document.querySelector("#glossary-trans-input");
+const btnAddGlossary = document.querySelector("#btn-add-glossary");
+const btnSaveGlossary = document.querySelector("#btn-save-glossary");
+const glossaryCountText = document.querySelector("#glossary-count-text");
+const glossaryStatusMsg = document.querySelector("#glossary-status-msg");
+const glossaryChipsGrid = document.querySelector("#glossary-chips-grid");
+const btnBatchDraftMt = document.querySelector("#btn-batch-draft-mt");
+const transSearchInput = document.querySelector("#trans-search-input");
+const transFilterChips = document.querySelectorAll("#trans-filter-chips .filter-chip");
+const transChipAllCount = document.querySelector("#trans-chip-all-count");
+const transChipManualCount = document.querySelector("#trans-chip-manual-count");
+const transChipUntranslatedCount = document.querySelector("#trans-chip-untranslated-count");
+const modTranslationsList = document.querySelector("#mod-translations-list");
+
+let currentGlossary = [];
+let currentOverrides = {};
+let currentTransFilter = "all";
+let transSearchQuery = "";
+let isBatchTranslatingDrafts = false;
 
 let workspaceProjects = [];
 let currentWorkspaceFilter = "all";
@@ -342,9 +368,13 @@ function loadProjectIntoSingleForm(project) {
   switchMode("single");
   form.elements.project.value = project.slug;
   form.elements.name.value = project.name || "";
+  const ov = currentOverrides[project.slug] || {};
+  if (form.elements.name_zh) form.elements.name_zh.value = project.name_zh || ov.name_zh || "";
   const status = checkProjectCompleteness(project);
   form.elements.description.value = (status.isDescMissing && project.description?.includes("This is an example description")) ? "" : (project.description || "");
+  if (form.elements.description_zh) form.elements.description_zh.value = project.description_zh || ov.description_zh || "";
   form.elements["long-description"].value = project.longDescription || "";
+  if (form.elements.long_description_zh) form.elements.long_description_zh.value = project.longDescription_zh || ov.longDescription_zh || "";
   form.elements.icon.value = project.icon || "";
   form.elements.banner.value = project.banner || "";
   form.elements.authors.value = (project.authors || []).join(", ");
@@ -1059,7 +1089,10 @@ if (btnEditCurrentProject) {
 }
 
 async function refreshProjects() {
-  const response = await fetch("/api/catalog", { cache: "no-store" });
+  const [response] = await Promise.all([
+    fetch("/api/catalog", { cache: "no-store" }),
+    loadTranslations()
+  ]);
   projects = (await response.json()).projects;
   renderProjects();
   updateManageProjectSelect();
@@ -1071,11 +1104,15 @@ async function refreshProjects() {
       selectedManageSlug = null;
       if (manageDetailView) manageDetailView.style.display = "none";
       if (manageCatalogView) manageCatalogView.style.display = "block";
+      renderManageCatalogGrid();
     }
   }
   if (batchQueue.length) {
     updateQueueConflicts();
     renderBatchQueue();
+  }
+  if (tabTranslations && tabTranslations.classList.contains("active")) {
+    renderModTranslationsList();
   }
 }
 
@@ -1087,12 +1124,14 @@ function switchMode(mode) {
   tabModrinth.classList.toggle("active", mode === "modrinth");
   tabWorkspace.classList.toggle("active", mode === "workspace");
   tabShelved.classList.toggle("active", mode === "shelved");
+  if (tabTranslations) tabTranslations.classList.toggle("active", mode === "translations");
 
   form.style.display = mode === "single" ? "grid" : "none";
   batchSection.style.display = mode === "batch" ? "block" : "none";
   manageSection.style.display = mode === "manage" ? "block" : "none";
   modrinthSection.style.display = mode === "modrinth" ? "block" : "none";
   workspaceSection.style.display = (mode === "workspace" || mode === "shelved") ? "block" : "none";
+  if (translationsSection) translationsSection.style.display = mode === "translations" ? "block" : "none";
 
   if (mode === "manage") {
     updateManageProjectSelect();
@@ -1124,6 +1163,8 @@ function switchMode(mode) {
     } else {
       renderWorkspaceProjects();
     }
+  } else if (mode === "translations") {
+    loadAndRenderTranslations();
   }
 }
 
@@ -1133,6 +1174,7 @@ tabManage.addEventListener("click", () => switchMode("manage"));
 tabModrinth.addEventListener("click", () => switchMode("modrinth"));
 tabWorkspace.addEventListener("click", () => switchMode("workspace"));
 tabShelved.addEventListener("click", () => switchMode("shelved"));
+if (tabTranslations) tabTranslations.addEventListener("click", () => switchMode("translations"));
 
 switchToBatchBtn.addEventListener("click", () => {
   switchMode("batch");
@@ -1505,8 +1547,11 @@ updateProjectButton.addEventListener("click", async () => {
     const formData = new FormData();
     formData.append("project", projectSlug);
     formData.append("name", form.elements.name.value.trim());
+    if (form.elements.name_zh) formData.append("name_zh", form.elements.name_zh.value.trim());
     formData.append("description", form.elements.description.value.trim());
+    if (form.elements.description_zh) formData.append("description_zh", form.elements.description_zh.value.trim());
     formData.append("long-description", form.elements["long-description"].value.trim());
+    if (form.elements.long_description_zh) formData.append("long_description_zh", form.elements.long_description_zh.value.trim());
     formData.append("authors", form.elements.authors.value.trim());
     formData.append("source", form.elements.source.value.trim());
     formData.append("updateProjectOnly", "true");
@@ -2325,5 +2370,507 @@ workspaceFilterChips.forEach((chip) => {
     chip.classList.add("active");
     currentWorkspaceFilter = chip.dataset.filter || "all";
     renderWorkspaceProjects();
+  });
+});
+
+/* ==========================================================================
+   Translations & Glossary Terminology System Logic
+   ========================================================================== */
+
+async function loadTranslations() {
+  try {
+    const res = await fetch("/api/translations", { cache: "no-store" });
+    if (!res.ok) throw new Error("获取翻译配置失败");
+    const data = await res.json();
+    currentGlossary = Array.isArray(data.glossary) ? data.glossary : [];
+    currentOverrides = (data.overrides && typeof data.overrides === "object") ? data.overrides : {};
+  } catch (err) {
+    console.warn("加载翻译数据失败:", err);
+  }
+}
+
+async function loadAndRenderTranslations() {
+  await loadTranslations();
+  renderGlossaryChips();
+  renderModTranslationsList();
+}
+
+function renderGlossaryChips() {
+  if (!glossaryChipsGrid) return;
+  glossaryChipsGrid.replaceChildren();
+
+  if (glossaryCountText) {
+    glossaryCountText.textContent = `共 ${currentGlossary.length} 条规范术语`;
+  }
+
+  if (!currentGlossary.length) {
+    const empty = document.createElement("p");
+    empty.className = "empty";
+    empty.style.padding = "1rem";
+    empty.textContent = "暂无术语规则，请在上方输入添加。";
+    glossaryChipsGrid.append(empty);
+    return;
+  }
+
+  currentGlossary.forEach((item, idx) => {
+    const chip = document.createElement("div");
+    chip.className = "glossary-chip";
+
+    const termSpan = document.createElement("span");
+    termSpan.className = "glossary-chip__term";
+    termSpan.textContent = item.term;
+
+    const arrowSpan = document.createElement("span");
+    arrowSpan.className = "glossary-chip__arrow";
+    arrowSpan.textContent = "➔";
+
+    const transSpan = document.createElement("span");
+    transSpan.className = "glossary-chip__trans";
+    transSpan.textContent = item.translation;
+
+    const delBtn = document.createElement("button");
+    delBtn.type = "button";
+    delBtn.className = "glossary-chip__del";
+    delBtn.title = "删除该术语";
+    delBtn.textContent = "✕";
+    delBtn.addEventListener("click", async () => {
+      currentGlossary.splice(idx, 1);
+      renderGlossaryChips();
+      await saveGlossary(true);
+    });
+
+    chip.append(termSpan, arrowSpan, transSpan, delBtn);
+    glossaryChipsGrid.append(chip);
+  });
+}
+
+async function addGlossaryTerm() {
+  if (!glossaryTermInput || !glossaryTransInput) return;
+  const term = glossaryTermInput.value.trim();
+  const translation = glossaryTransInput.value.trim();
+
+  if (!term || !translation) {
+    if (glossaryStatusMsg) {
+      glossaryStatusMsg.style.color = "#ffb4ab";
+      glossaryStatusMsg.textContent = "英文术语与规范翻译均不能为空";
+    }
+    return;
+  }
+
+  const existingIdx = currentGlossary.findIndex((item) => item.term.toLowerCase() === term.toLowerCase());
+  if (existingIdx !== -1) {
+    currentGlossary[existingIdx].translation = translation;
+  } else {
+    currentGlossary.unshift({ term, translation });
+  }
+
+  glossaryTermInput.value = "";
+  glossaryTransInput.value = "";
+  renderGlossaryChips();
+  await saveGlossary(false);
+  glossaryTermInput.focus();
+}
+
+async function saveGlossary(silent = false) {
+  if (btnSaveGlossary) btnSaveGlossary.disabled = true;
+  if (glossaryStatusMsg && !silent) {
+    glossaryStatusMsg.style.color = "var(--accent)";
+    glossaryStatusMsg.textContent = "正在保存术语表…";
+  }
+
+  try {
+    const res = await fetch("/api/translations/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ glossary: currentGlossary })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "保存术语表失败");
+
+    if (glossaryStatusMsg) {
+      glossaryStatusMsg.style.color = "var(--accent-hover)";
+      glossaryStatusMsg.textContent = `✔ 术语表已保存 (${currentGlossary.length} 条)`;
+      if (!silent) {
+        setTimeout(() => {
+          if (glossaryStatusMsg && glossaryStatusMsg.textContent.startsWith("✔")) {
+            glossaryStatusMsg.textContent = "";
+          }
+        }, 4000);
+      }
+    }
+  } catch (err) {
+    if (glossaryStatusMsg) {
+      glossaryStatusMsg.style.color = "#ffb4ab";
+      glossaryStatusMsg.textContent = `❌ 保存失败: ${err.message}`;
+    }
+  } finally {
+    if (btnSaveGlossary) btnSaveGlossary.disabled = false;
+  }
+}
+
+function hasManualTranslation(proj) {
+  const ov = currentOverrides[proj.slug];
+  const name_zh = ov?.name_zh !== undefined ? ov.name_zh : (proj.name_zh || "");
+  const desc_zh = ov?.description_zh !== undefined ? ov.description_zh : (proj.description_zh || "");
+  const long_zh = ov?.longDescription_zh !== undefined ? ov.longDescription_zh : (proj.longDescription_zh || "");
+  return Boolean((name_zh && name_zh.trim()) || (desc_zh && desc_zh.trim()) || (long_zh && long_zh.trim()));
+}
+
+function updateTransCounts() {
+  let manualCount = 0;
+  let untranslatedCount = 0;
+
+  projects.forEach((proj) => {
+    if (hasManualTranslation(proj)) {
+      manualCount++;
+    } else {
+      untranslatedCount++;
+    }
+  });
+
+  const total = projects.length;
+  if (transChipAllCount) transChipAllCount.textContent = total;
+  if (transChipManualCount) transChipManualCount.textContent = manualCount;
+  if (transChipUntranslatedCount) transChipUntranslatedCount.textContent = untranslatedCount;
+}
+
+function renderModTranslationsList() {
+  if (!modTranslationsList) return;
+  updateTransCounts();
+  modTranslationsList.replaceChildren();
+
+  const query = transSearchQuery.trim().toLowerCase();
+  const visible = projects.filter((proj) => {
+    const isManual = hasManualTranslation(proj);
+    if (currentTransFilter === "manual" && !isManual) return false;
+    if (currentTransFilter === "untranslated" && isManual) return false;
+
+    if (query) {
+      const matchSlug = proj.slug.toLowerCase().includes(query);
+      const matchName = (proj.name || "").toLowerCase().includes(query);
+      const matchNameZh = (proj.name_zh || (currentOverrides[proj.slug]?.name_zh || "")).toLowerCase().includes(query);
+      if (!matchSlug && !matchName && !matchNameZh) return false;
+    }
+    return true;
+  });
+
+  if (!visible.length) {
+    const emptyP = document.createElement("p");
+    emptyP.className = "empty";
+    emptyP.textContent = "未找到符合筛选条件的模组。";
+    modTranslationsList.append(emptyP);
+    return;
+  }
+
+  visible.forEach((proj) => {
+    const card = document.createElement("div");
+    card.dataset.slug = proj.slug;
+    const isManual = hasManualTranslation(proj);
+    card.className = "trans-mod-card" + (isManual ? " has-manual" : "");
+
+    // Header
+    const header = document.createElement("div");
+    header.className = "trans-mod-card__header";
+
+    const titleBox = document.createElement("div");
+    titleBox.className = "trans-mod-card__title-box";
+
+    let iconElem;
+    if (proj.icon) {
+      iconElem = document.createElement("img");
+      iconElem.className = "trans-mod-card__icon";
+      iconElem.src = proj.icon;
+      iconElem.alt = "";
+    } else {
+      iconElem = document.createElement("div");
+      iconElem.className = "trans-mod-card__icon trans-mod-card__icon--fallback";
+      iconElem.textContent = proj.name.slice(0, 1).toUpperCase();
+    }
+
+    const titleInfo = document.createElement("div");
+    const titleName = document.createElement("h4");
+    titleName.className = "trans-mod-card__name";
+    titleName.textContent = proj.name;
+    const titleSlug = document.createElement("span");
+    titleSlug.className = "trans-mod-card__slug";
+    titleSlug.textContent = proj.slug;
+    titleInfo.append(titleName, titleSlug);
+    titleBox.append(iconElem, titleInfo);
+
+    const badge = document.createElement("span");
+    badge.className = isManual ? "batch-badge batch-badge--success" : "batch-badge batch-badge--pending";
+    badge.textContent = isManual ? "✨ 已有人工校对" : "⏳ 纯自动机翻";
+
+    header.append(titleBox, badge);
+
+    // Original English Reference Box
+    const origBox = document.createElement("div");
+    origBox.className = "trans-mod-card__orig-snippet";
+    const origLabel = document.createElement("div");
+    origLabel.className = "trans-mod-card__orig-label";
+    origLabel.textContent = "📄 英文原文（供对照参考）：";
+    const origText = document.createElement("div");
+    const rawEnglish = (proj.description && !isPlaceholderDesc(proj.description)) ? proj.description : (proj.longDescription || "暂无英文简介");
+    origText.textContent = rawEnglish.length > 200 ? rawEnglish.slice(0, 200) + "…" : rawEnglish;
+    origBox.append(origLabel, origText);
+
+    // Form inputs
+    const fields = document.createElement("div");
+    fields.className = "trans-mod-card__fields";
+
+    const ov = currentOverrides[proj.slug] || {};
+    const valNameZh = ov.name_zh !== undefined ? ov.name_zh : (proj.name_zh || "");
+    const valDescZh = ov.description_zh !== undefined ? ov.description_zh : (proj.description_zh || "");
+    const valLongZh = ov.longDescription_zh !== undefined ? ov.longDescription_zh : (proj.longDescription_zh || "");
+
+    const nameZhLabel = document.createElement("label");
+    nameZhLabel.innerHTML = `模组中文名称 <small>用于列表与详情页标题</small>`;
+    const nameZhInput = document.createElement("input");
+    nameZhInput.type = "text";
+    nameZhInput.className = "workspace-input trans-name-zh";
+    nameZhInput.value = valNameZh;
+    nameZhInput.placeholder = `示例: ${proj.name} 拓展`;
+    nameZhLabel.append(nameZhInput);
+
+    const descZhLabel = document.createElement("label");
+    descZhLabel.className = "wide";
+    descZhLabel.innerHTML = `中文一句话简介 <small>用于前台模组卡片展示</small>`;
+    const descZhTextarea = document.createElement("textarea");
+    descZhTextarea.rows = 2;
+    descZhTextarea.className = "workspace-input trans-desc-zh";
+    descZhTextarea.value = valDescZh;
+    descZhTextarea.placeholder = `输入精准中文简介…`;
+    descZhLabel.append(descZhTextarea);
+
+    const longZhLabel = document.createElement("label");
+    longZhLabel.className = "wide";
+    longZhLabel.innerHTML = `中文详细介绍 Markdown <small>可选，详情页正文中文展示</small>`;
+    const longZhTextarea = document.createElement("textarea");
+    longZhTextarea.rows = 4;
+    longZhTextarea.className = "workspace-input trans-long-desc-zh";
+    longZhTextarea.value = valLongZh;
+    longZhTextarea.placeholder = `中文详细介绍 Markdown…`;
+    longZhLabel.append(longZhTextarea);
+
+    fields.append(nameZhLabel, descZhLabel, longZhLabel);
+
+    // Footer actions
+    const actions = document.createElement("div");
+    actions.className = "trans-mod-card__actions";
+
+    const btnGroup = document.createElement("div");
+    btnGroup.className = "trans-mod-card__btn-group";
+
+    const draftBtn = document.createElement("button");
+    draftBtn.type = "button";
+    draftBtn.className = "btn-subaction";
+    draftBtn.textContent = "⚡ 一键机翻建议 (草稿)";
+    draftBtn.title = "结合术语表自动生成高质量机翻并填入输入框，不会直接保存";
+
+    const saveBtn = document.createElement("button");
+    saveBtn.type = "button";
+    saveBtn.className = "btn-primary";
+    saveBtn.textContent = "💾 保存此模组翻译";
+
+    const clearBtn = document.createElement("button");
+    clearBtn.type = "button";
+    clearBtn.className = "btn-subaction";
+    clearBtn.style.color = "#ffb4ab";
+    clearBtn.textContent = "🗑️ 清空纠偏";
+    clearBtn.title = "清空人工翻译，恢复全自动机翻";
+
+    btnGroup.append(draftBtn, saveBtn, clearBtn);
+
+    const statusMsg = document.createElement("span");
+    statusMsg.className = "trans-status-msg";
+
+    actions.append(btnGroup, statusMsg);
+
+    // Action listeners
+    draftBtn.addEventListener("click", async () => {
+      draftBtn.disabled = true;
+      draftBtn.textContent = "正在机翻…";
+      statusMsg.style.color = "var(--accent)";
+      statusMsg.textContent = "正在调用 Microsoft Translator 结合术语表翻译…";
+
+      try {
+        if (proj.description && !isPlaceholderDesc(proj.description)) {
+          const transDesc = await translateText(proj.description, "zh", "en", currentGlossary);
+          if (transDesc) descZhTextarea.value = transDesc;
+        }
+
+        if (proj.longDescription && !isPlaceholderDesc(proj.longDescription)) {
+          const transLong = await translateText(proj.longDescription, "zh", "en", currentGlossary);
+          if (transLong) longZhTextarea.value = transLong;
+        }
+
+        statusMsg.style.color = "var(--accent-hover)";
+        statusMsg.textContent = "✔ 已填入智能机翻建议草稿，请核对后点击【保存】";
+      } catch (err) {
+        statusMsg.style.color = "#ffb4ab";
+        statusMsg.textContent = `机翻失败: ${err.message}`;
+      } finally {
+        draftBtn.disabled = false;
+        draftBtn.textContent = "⚡ 一键机翻建议 (草稿)";
+      }
+    });
+
+    saveBtn.addEventListener("click", async () => {
+      saveBtn.disabled = true;
+      statusMsg.style.color = "var(--accent)";
+      statusMsg.textContent = "正在保存…";
+
+      const name_zh = nameZhInput.value.trim();
+      const description_zh = descZhTextarea.value.trim();
+      const longDescription_zh = longZhTextarea.value.trim();
+
+      const modOverride = { name_zh, description_zh, longDescription_zh };
+      currentOverrides[proj.slug] = modOverride;
+
+      try {
+        const res = await fetch("/api/translations/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            overrides: { [proj.slug]: modOverride },
+            syncToCatalog: true
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "保存失败");
+
+        proj.name_zh = name_zh;
+        proj.description_zh = description_zh;
+        proj.longDescription_zh = longDescription_zh;
+
+        const manualNow = hasManualTranslation(proj);
+        card.classList.toggle("has-manual", manualNow);
+        badge.className = manualNow ? "batch-badge batch-badge--success" : "batch-badge batch-badge--pending";
+        badge.textContent = manualNow ? "✨ 已有人工校对" : "⏳ 纯自动机翻";
+
+        statusMsg.style.color = "var(--accent-hover)";
+        statusMsg.textContent = "✔ 已成功保存并同步至前台网站";
+        updateTransCounts();
+        setTimeout(() => {
+          if (statusMsg && statusMsg.textContent.startsWith("✔")) statusMsg.textContent = "";
+        }, 3000);
+      } catch (err) {
+        statusMsg.style.color = "#ffb4ab";
+        statusMsg.textContent = `❌ 保存失败: ${err.message}`;
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
+
+    clearBtn.addEventListener("click", async () => {
+      if (!window.confirm(`确定清空模组 "${proj.name}" 的人工纠偏译文并恢复全自动机翻？`)) return;
+      delete currentOverrides[proj.slug];
+      nameZhInput.value = "";
+      descZhTextarea.value = "";
+      longZhTextarea.value = "";
+      proj.name_zh = "";
+      proj.description_zh = "";
+      proj.longDescription_zh = "";
+
+      try {
+        await fetch("/api/translations/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            overrides: { [proj.slug]: { name_zh: "", description_zh: "", longDescription_zh: "" } },
+            syncToCatalog: true
+          })
+        });
+        card.classList.remove("has-manual");
+        badge.className = "batch-badge batch-badge--pending";
+        badge.textContent = "⏳ 纯自动机翻";
+        statusMsg.style.color = "var(--muted)";
+        statusMsg.textContent = "已恢复为全自动机翻";
+        updateTransCounts();
+      } catch (err) {
+        statusMsg.style.color = "#ffb4ab";
+        statusMsg.textContent = `清空失败: ${err.message}`;
+      }
+    });
+
+    card.append(header, origBox, fields, actions);
+    modTranslationsList.append(card);
+  });
+}
+
+async function batchDraftMtAll() {
+  if (isBatchTranslatingDrafts) return;
+  const unhandled = projects.filter((p) => !hasManualTranslation(p) && p.description && !isPlaceholderDesc(p.description));
+  if (!unhandled.length) {
+    alert("当前所有模组均已有人工校对，或无有效英文正文！");
+    return;
+  }
+
+  const proceed = window.confirm(`将为未校对的 ${unhandled.length} 个模组并发获取智能机翻草稿建议并填入卡片。\n\n不会直接覆盖已有人工翻译，机翻填入后可逐一修改并点击保存。是否继续？`);
+  if (!proceed) return;
+
+  isBatchTranslatingDrafts = true;
+  if (btnBatchDraftMt) {
+    btnBatchDraftMt.disabled = true;
+    btnBatchDraftMt.textContent = `正在生成 0/${unhandled.length}…`;
+  }
+
+  let finished = 0;
+  for (const proj of unhandled) {
+    try {
+      const transDesc = await translateText(proj.description, "zh", "en", currentGlossary);
+      const descInput = modTranslationsList ? modTranslationsList.querySelector(`.trans-mod-card[data-slug="${proj.slug}"] .trans-desc-zh`) : null;
+      if (descInput && transDesc) {
+        descInput.value = transDesc;
+      }
+    } catch {}
+    finished++;
+    if (btnBatchDraftMt) {
+      btnBatchDraftMt.textContent = `正在生成 ${finished}/${unhandled.length}…`;
+    }
+  }
+
+  isBatchTranslatingDrafts = false;
+  if (btnBatchDraftMt) {
+    btnBatchDraftMt.disabled = false;
+    btnBatchDraftMt.textContent = "⚡ 一键获取全模组机翻草稿建议";
+  }
+  alert(`已完成 ${finished} 个模组的智能机翻草稿填入，请逐项核对后点击【保存】！`);
+}
+
+// Bind Glossary & Translation controls
+if (btnAddGlossary) btnAddGlossary.addEventListener("click", addGlossaryTerm);
+if (glossaryTermInput) {
+  glossaryTermInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addGlossaryTerm();
+    }
+  });
+}
+if (glossaryTransInput) {
+  glossaryTransInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addGlossaryTerm();
+    }
+  });
+}
+if (btnSaveGlossary) btnSaveGlossary.addEventListener("click", () => saveGlossary(false));
+if (btnBatchDraftMt) btnBatchDraftMt.addEventListener("click", batchDraftMtAll);
+
+if (transSearchInput) {
+  transSearchInput.addEventListener("input", (e) => {
+    transSearchQuery = e.target.value;
+    renderModTranslationsList();
+  });
+}
+
+transFilterChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    transFilterChips.forEach((c) => c.classList.remove("active"));
+    chip.classList.add("active");
+    currentTransFilter = chip.dataset.transFilter || "all";
+    renderModTranslationsList();
   });
 });

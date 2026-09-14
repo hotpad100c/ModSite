@@ -612,6 +612,13 @@ h1 {
   color: var(--muted);
 }
 
+.content-trans-badge.is-manual {
+  background: rgba(169, 132, 255, 0.25);
+  border-color: var(--accent);
+  color: #fff;
+  text-shadow: 0 0 10px rgba(169, 132, 255, 0.7);
+}
+
 .content-trans-hint {
   color: var(--muted);
   font-size: 0.78rem;
