@@ -1,39 +1,6 @@
 {
   "projects": [
     {
-      "slug": "26w14afix",
-      "name": "26w14afix",
-      "description": "This is an example description! Tell everyone what your mod is about!",
-      "longDescription": "",
-      "icon": "https://dl.ryan100c.party/images/26w14afix-icon.png",
-      "banner": "",
-      "source": "https://github.com/FabricMC/fabric-example-mod",
-      "authors": [
-        "Me!"
-      ],
-      "releases": [
-        {
-          "version": "1.0.0",
-          "publishedAt": "2026-09-14T11:06:34.229Z",
-          "gameVersions": [
-            "26w14a"
-          ],
-          "loaders": [
-            "Fabric"
-          ],
-          "notes": "",
-          "files": [
-            {
-              "name": "26w14afix-1.0.0.jar",
-              "size": 11904,
-              "sha256": "4f88a5c7572b36a9896c58f024755d1db0498a32f1f3721c7c295812e93c6769",
-              "url": "https://dl.ryan100c.party/releases/26w14afix/1.0.0/4f88a5c7572b-26w14afix-1.0.0.jar"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "slug": "breakseverything",
       "name": "BreaksEverything",
       "description": "This is an example description! Tell everyone what your mod is about!",
@@ -2498,8 +2465,8 @@
     {
       "slug": "simulatica",
       "name": "simulatica",
-      "description": "Simulate minecraft inside Litematica!",
-      "longDescription": "",
+      "description": "Simulate blocks and entities in Litematica projections !",
+      "longDescription": "# Simulatica\r\n\r\n## What Is This\r\n\r\n> Simulatica is **Simulation + Litematica**. It is designed to run block and entity logic within Litematica projections.\r\n\r\n## How To Use\r\n- `/simulatica start <litematica file name>` — Start simulating a projection\r\n\r\n- `/simulatica stop <litematica file name>` — Stop simulating a projection\r\n\r\n- `/simulatica execute <Command to execute in simulated space>` — Execute a command within the simulated space\r\n\r\n> Once a simulation has started, switch to **mode 10/10** to interact with the projection.\r\n\r\n## How Does It Work\r\n\r\nOnce at least one simulation has started, a local integrated server is created on the client thread. It initializes a completely empty dimension and loads the target projection to be simulated into it.\r\n\r\nNote that this means:\r\n\r\n* Projections being simulated cannot overlap.\r\n* Adjacent or near by projections can affect each other during simulation.\r\n* Client-side lag may increase.\r\n* If the simulated integrated server becomes laggy, the client will also be affected.",
       "icon": "https://dl.ryan100c.party/images/simulatica-icon.png",
       "banner": "",
       "source": "https://github.com/hotpad100c/simulatica",
