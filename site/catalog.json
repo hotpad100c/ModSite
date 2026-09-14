@@ -1,6 +1,72 @@
 {
   "projects": [
     {
+      "slug": "26w14afix",
+      "name": "26w14afix",
+      "description": "This is an example description! Tell everyone what your mod is about!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/26w14afix-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Me!"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-14T11:06:34.229Z",
+          "gameVersions": [
+            "26w14a"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "26w14afix-1.0.0.jar",
+              "size": 11904,
+              "sha256": "4f88a5c7572b36a9896c58f024755d1db0498a32f1f3721c7c295812e93c6769",
+              "url": "https://dl.ryan100c.party/releases/26w14afix/1.0.0/4f88a5c7572b-26w14afix-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "breakseverything",
+      "name": "BreaksEverything",
+      "description": "This is an example description! Tell everyone what your mod is about!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/breakseverything-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Me!"
+      ],
+      "releases": [
+        {
+          "version": "1.0.1",
+          "publishedAt": "2026-09-14T11:06:43.208Z",
+          "gameVersions": [
+            "1.21.11"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "breakseverything-1.0.1.jar",
+              "size": 14914,
+              "sha256": "a847adcf819b55a589f05954059a09e9b36a41a340f85cfc179c7dd5e7bba0d8",
+              "url": "https://dl.ryan100c.party/releases/breakseverything/1.0.1/a847adcf819b-breakseverything-1.0.1.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "carpetgui",
       "name": "CarpetGUI",
       "description": "An easy to use GUI for CarpetMod",
@@ -926,6 +992,73 @@
       ]
     },
     {
+      "slug": "eiddumper",
+      "name": "EIDDumper",
+      "description": "This is an example description! Tell everyone what your mod is about!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/eiddumper-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Me!"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-14T11:10:41.649Z",
+          "gameVersions": [
+            "1.21.1",
+            "*"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "eiddumper-1.0.0.jar",
+              "size": 15562,
+              "sha256": "7259ebf2ffb8bc14bc64aacd82ff48e619e85b0e61dec68cec1125dcd489087a",
+              "url": "https://dl.ryan100c.party/releases/eiddumper/1.0.0/7259ebf2ffb8-eiddumper-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "entitymovementvisualizer",
+      "name": "EntityMovementVisualizer",
+      "description": "This is an example description! Tell everyone what your mod is about!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/entitymovementvisualizer-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Me!"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-14T11:10:35.274Z",
+          "gameVersions": [
+            "26.1.2"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "entitymovementvisualizer-1.0.0.jar",
+              "size": 12969,
+              "sha256": "a0630d4baabed7bf5826d5e3a31d2685fc1c836814f5e423cbd1269307a5ca74",
+              "url": "https://dl.ryan100c.party/releases/entitymovementvisualizer/1.0.0/a0630d4baabe-entitymovementvisualizer-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "explosionvisualizer",
       "name": "ExplosionVisualizer",
       "description": "Use real-time 3D rendering to display various information about the explosion",
@@ -1288,6 +1421,39 @@
               "size": 48344,
               "sha256": "cc07ad44ef8fc157dfec7f3f238aa66243e3d672144998c43b03351f4da2e243",
               "url": "https://dl.ryan100c.party/releases/growingworld/1.0.1/cc07ad44ef8f-growingworld-1.0.1.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "itemflowtracker",
+      "name": "ItemFlowTracker",
+      "description": "Server-side tracker that highlights marked items and the containers they flow into.",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/itemflowtracker-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Me!"
+      ],
+      "releases": [
+        {
+          "version": "1.0.2-26.2",
+          "publishedAt": "2026-09-14T11:09:41.163Z",
+          "gameVersions": [
+            "26.2"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "itemflowtracker-1.0.2-26.2.jar",
+              "size": 53696,
+              "sha256": "9af08afcce3340abbe194d2d26c007c0921ca562cebf3ba1f833038b7e341caa",
+              "url": "https://dl.ryan100c.party/releases/itemflowtracker/1.0.2-26.2/9af08afcce33-itemflowtracker-1.0.2-26.2.jar"
             }
           ]
         }
@@ -2374,7 +2540,7 @@
       "releases": [
         {
           "version": "1.0.0",
-          "publishedAt": "2026-09-14T11:04:18.491Z",
+          "publishedAt": "2026-09-14T11:10:49.636Z",
           "gameVersions": [
             "1.21"
           ],
@@ -2625,6 +2791,39 @@
               "size": 74745,
               "sha256": "342a9212dac616c9f5dc081b5db699be4351a09b4fc4ec0f7c0480f50d7c53e6",
               "url": "https://dl.ryan100c.party/releases/visualdust/1.0.0/342a9212dac6-visualdust-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "waystodie",
+      "name": "WaysToDie",
+      "description": "This is an example description! Tell everyone what your mod is about!",
+      "longDescription": "",
+      "icon": "https://dl.ryan100c.party/images/waystodie-icon.png",
+      "banner": "",
+      "source": "https://github.com/FabricMC/fabric-example-mod",
+      "authors": [
+        "Me!"
+      ],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-09-14T11:04:23.431Z",
+          "gameVersions": [
+            "1.21.11"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "waystodie-1.0.0.jar",
+              "size": 61943,
+              "sha256": "10a5eb7cd2f1c1cc6a21631ed60e5bf7e6883d68879ad39a5d9210efeedc3001",
+              "url": "https://dl.ryan100c.party/releases/waystodie/1.0.0/10a5eb7cd2f1-waystodie-1.0.0.jar"
             }
           ]
         }

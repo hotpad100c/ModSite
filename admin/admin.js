@@ -46,10 +46,30 @@ const batchQueueList = document.querySelector("#batch-queue-list");
 // Manage Releases Components
 const tabManage = document.querySelector("#tab-manage");
 const manageSection = document.querySelector("#manage-section");
+const manageCatalogView = document.querySelector("#manage-catalog-view");
+const manageDetailView = document.querySelector("#manage-detail-view");
 const manageProjectSelect = document.querySelector("#manage-project-select");
 const manageProjectBadge = document.querySelector("#manage-project-badge");
 const manageReleasesList = document.querySelector("#manage-releases-list");
 const btnDeleteProject = document.querySelector("#btn-delete-project");
+const manageProjectsGrid = document.querySelector("#manage-projects-grid");
+const manageSearchInput = document.querySelector("#manage-search-input");
+const manageFilterChips = document.querySelectorAll("#manage-filter-chips .filter-chip");
+const manageTotalCount = document.querySelector("#manage-total-count");
+const manageIncompleteCount = document.querySelector("#manage-incomplete-count");
+const manageMissingDescCount = document.querySelector("#manage-missing-desc-count");
+const manageMissingBannerCount = document.querySelector("#manage-missing-banner-count");
+const manageCompleteCount = document.querySelector("#manage-complete-count");
+const manageChipAllCount = document.querySelector("#manage-chip-all-count");
+const manageChipIncompleteCount = document.querySelector("#manage-chip-incomplete-count");
+const manageChipDescCount = document.querySelector("#manage-chip-desc-count");
+const manageChipBannerCount = document.querySelector("#manage-chip-banner-count");
+const manageChipCompleteCount = document.querySelector("#manage-chip-complete-count");
+const btnBackToManageGrid = document.querySelector("#btn-back-to-manage-grid");
+const btnEditCurrentProject = document.querySelector("#btn-edit-current-project");
+const manageDetailIcon = document.querySelector("#manage-detail-icon");
+const manageDetailName = document.querySelector("#manage-detail-name");
+const manageDetailSlug = document.querySelector("#manage-detail-slug");
 
 // Modrinth Sync Components
 const tabModrinth = document.querySelector("#tab-modrinth");
@@ -117,6 +137,10 @@ let isModrinthSyncing = false;
 let projects = [];
 let batchQueue = [];
 let isBatchUploading = false;
+
+let currentManageFilter = "all";
+let manageSearchQuery = "";
+let selectedManageSlug = null;
 
 const size = (bytes) => (bytes / 1024 / 1024).toFixed(2) + " MB";
 
@@ -290,26 +314,280 @@ function renderProjects() {
     button.append(name, meta);
     button.addEventListener("click", () => {
       if (tabManage.classList.contains("active")) {
-        manageProjectSelect.value = project.slug;
-        renderManageReleases(project.slug);
+        openProjectReleasesDetail(project.slug);
         return;
       }
-      switchMode("single");
-      form.elements.project.value = project.slug;
-      form.elements.name.value = project.name || "";
-      form.elements.description.value = project.description || "";
-      form.elements["long-description"].value = project.longDescription || "";
-      form.elements.icon.value = project.icon || "";
-      form.elements.banner.value = project.banner || "";
-      form.elements.authors.value = (project.authors || []).join(", ");
-      form.elements.source.value = project.source || "";
-      iconFileInput.value = "";
-      bannerFileInput.value = "";
-      updateImageHints();
-      form.elements.version.focus();
+      loadProjectIntoSingleForm(project);
     });
     root.append(button);
   });
+}
+
+function checkProjectCompleteness(project) {
+  const desc = (project.description || "").trim();
+  const isDescMissing = !desc || desc.includes("This is an example description! Tell everyone what your mod is about!");
+  const banner = (project.banner || "").trim();
+  const isBannerMissing = !banner;
+  const isIncomplete = isDescMissing || isBannerMissing;
+
+  return {
+    isDescMissing,
+    isBannerMissing,
+    isIncomplete,
+    isComplete: !isIncomplete
+  };
+}
+
+function loadProjectIntoSingleForm(project) {
+  switchMode("single");
+  form.elements.project.value = project.slug;
+  form.elements.name.value = project.name || "";
+  const status = checkProjectCompleteness(project);
+  form.elements.description.value = (status.isDescMissing && project.description?.includes("This is an example description")) ? "" : (project.description || "");
+  form.elements["long-description"].value = project.longDescription || "";
+  form.elements.icon.value = project.icon || "";
+  form.elements.banner.value = project.banner || "";
+  form.elements.authors.value = (project.authors || []).join(", ");
+  form.elements.source.value = project.source || "";
+  iconFileInput.value = "";
+  bannerFileInput.value = "";
+  updateImageHints();
+
+  if (status.isDescMissing) {
+    form.elements.description.focus();
+  } else if (status.isBannerMissing) {
+    bannerFileInput.focus();
+  } else {
+    form.elements.version.focus();
+  }
+}
+
+function updateManageCounts() {
+  let incompleteCount = 0;
+  let missingDescCount = 0;
+  let missingBannerCount = 0;
+  let completeCount = 0;
+
+  projects.forEach((proj) => {
+    const status = checkProjectCompleteness(proj);
+    if (status.isIncomplete) incompleteCount++;
+    if (status.isDescMissing) missingDescCount++;
+    if (status.isBannerMissing) missingBannerCount++;
+    if (status.isComplete) completeCount++;
+  });
+
+  const total = projects.length;
+  if (manageTotalCount) manageTotalCount.textContent = total;
+  if (manageIncompleteCount) manageIncompleteCount.textContent = incompleteCount;
+  if (manageMissingDescCount) manageMissingDescCount.textContent = missingDescCount;
+  if (manageMissingBannerCount) manageMissingBannerCount.textContent = missingBannerCount;
+  if (manageCompleteCount) manageCompleteCount.textContent = completeCount;
+
+  if (manageChipAllCount) manageChipAllCount.textContent = total;
+  if (manageChipIncompleteCount) manageChipIncompleteCount.textContent = incompleteCount;
+  if (manageChipDescCount) manageChipDescCount.textContent = missingDescCount;
+  if (manageChipBannerCount) manageChipBannerCount.textContent = missingBannerCount;
+  if (manageChipCompleteCount) manageChipCompleteCount.textContent = completeCount;
+}
+
+function createFallbackIcon(name) {
+  const fallback = document.createElement("div");
+  fallback.className = "manage-project-card__icon manage-project-card__icon--fallback";
+  fallback.textContent = (name || "?").slice(0, 1).toUpperCase();
+  return fallback;
+}
+
+function renderManageCatalogGrid() {
+  updateManageCounts();
+  if (!manageProjectsGrid) return;
+  manageProjectsGrid.replaceChildren();
+
+  const query = (manageSearchQuery || "").trim().toLowerCase();
+
+  const filtered = projects.filter((proj) => {
+    const status = checkProjectCompleteness(proj);
+
+    if (currentManageFilter === "incomplete" && !status.isIncomplete) return false;
+    if (currentManageFilter === "missing-desc" && !status.isDescMissing) return false;
+    if (currentManageFilter === "missing-banner" && !status.isBannerMissing) return false;
+    if (currentManageFilter === "complete" && !status.isComplete) return false;
+
+    if (query) {
+      const matchName = (proj.name || "").toLowerCase().includes(query);
+      const matchSlug = (proj.slug || "").toLowerCase().includes(query);
+      const matchDesc = (proj.description || "").toLowerCase().includes(query);
+      const matchAuthors = (proj.authors || []).some((a) => a.toLowerCase().includes(query));
+      if (!matchName && !matchSlug && !matchDesc && !matchAuthors) return false;
+    }
+
+    return true;
+  });
+
+  if (!filtered.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.style.gridColumn = "1 / -1";
+    empty.style.padding = "2.5rem 1rem";
+    empty.style.textAlign = "center";
+    empty.textContent = query
+      ? `未搜索到匹配 "${query}" 的模组。`
+      : "当前筛选分类下暂无模组。";
+    manageProjectsGrid.append(empty);
+    return;
+  }
+
+  filtered.forEach((project) => {
+    const status = checkProjectCompleteness(project);
+    const card = document.createElement("div");
+    card.className = `manage-project-card ${status.isIncomplete ? "is-incomplete" : "is-complete"}`;
+
+    // Top section
+    const top = document.createElement("div");
+    top.className = "manage-project-card__top";
+
+    if (project.icon) {
+      const iconImg = document.createElement("img");
+      iconImg.className = "manage-project-card__icon";
+      iconImg.src = project.icon;
+      iconImg.alt = project.name;
+      iconImg.loading = "lazy";
+      iconImg.onerror = () => {
+        iconImg.replaceWith(createFallbackIcon(project.name));
+      };
+      top.append(iconImg);
+    } else {
+      top.append(createFallbackIcon(project.name));
+    }
+
+    const info = document.createElement("div");
+    info.className = "manage-project-card__info";
+
+    const titleH3 = document.createElement("h3");
+    titleH3.className = "manage-project-card__title";
+    titleH3.textContent = project.name;
+    titleH3.title = project.name;
+
+    const slugCode = document.createElement("code");
+    slugCode.className = "manage-project-card__slug";
+    slugCode.textContent = project.slug;
+
+    const badgesBox = document.createElement("div");
+    badgesBox.className = "manage-project-card__badges";
+
+    if (status.isComplete) {
+      const b = document.createElement("span");
+      b.className = "manage-badge manage-badge--complete";
+      b.textContent = "✔ 资料完备";
+      badgesBox.append(b);
+    } else {
+      if (status.isDescMissing) {
+        const b = document.createElement("span");
+        b.className = "manage-badge manage-badge--missing";
+        b.textContent = "⚠️ 缺简介";
+        badgesBox.append(b);
+      }
+      if (status.isBannerMissing) {
+        const b = document.createElement("span");
+        b.className = "manage-badge manage-badge--missing";
+        b.textContent = "⚠️ 缺横幅";
+        badgesBox.append(b);
+      }
+    }
+
+    const releaseBadge = document.createElement("span");
+    releaseBadge.className = "manage-badge manage-badge--releases";
+    releaseBadge.textContent = `📦 ${project.releases?.length || 0} 个版本`;
+    badgesBox.append(releaseBadge);
+
+    info.append(titleH3, slugCode, badgesBox);
+    top.append(info);
+    card.append(top);
+
+    // Banner box
+    const bannerBox = document.createElement("div");
+    bannerBox.className = "manage-project-card__banner-box";
+    if (project.banner && project.banner.trim()) {
+      const bannerImg = document.createElement("img");
+      bannerImg.className = "manage-project-card__banner-img";
+      bannerImg.src = project.banner.trim();
+      bannerImg.alt = `${project.name} banner`;
+      bannerImg.loading = "lazy";
+      bannerImg.onerror = () => {
+        bannerBox.innerHTML = '<div class="manage-project-card__banner-missing"><span>⚠️ 横幅图片加载失败</span></div>';
+      };
+      bannerBox.append(bannerImg);
+    } else {
+      const missingBanner = document.createElement("div");
+      missingBanner.className = "manage-project-card__banner-missing";
+      missingBanner.innerHTML = "<span>🖼️ 缺少横幅图片 (Banner)</span>";
+      bannerBox.append(missingBanner);
+    }
+    card.append(bannerBox);
+
+    // Description snippet
+    if (status.isDescMissing) {
+      const missingDesc = document.createElement("div");
+      missingDesc.className = "manage-project-card__desc manage-project-card__desc--missing";
+      missingDesc.textContent = (!project.description || !project.description.trim())
+        ? "⚠️ 模组简介未填写，建议补全"
+        : "⚠️ 模组简介仍为模板占位符，建议补全";
+      card.append(missingDesc);
+    } else {
+      const descEl = document.createElement("div");
+      descEl.className = "manage-project-card__desc";
+      descEl.textContent = project.description;
+      card.append(descEl);
+    }
+
+    // Footer actions
+    const footer = document.createElement("div");
+    footer.className = "manage-project-card__footer";
+
+    const editBtn = document.createElement("button");
+    editBtn.type = "button";
+    editBtn.className = `btn-manage-edit ${status.isIncomplete ? "btn-manage-edit--warn" : ""}`;
+    editBtn.textContent = status.isIncomplete ? "⚠️ 补全资料" : "📝 编辑资料";
+    editBtn.addEventListener("click", () => {
+      loadProjectIntoSingleForm(project);
+    });
+
+    const releasesBtn = document.createElement("button");
+    releasesBtn.type = "button";
+    releasesBtn.className = "btn-manage-releases";
+    releasesBtn.textContent = `📦 管理版本与文件 (${project.releases?.length || 0}) ↗`;
+    releasesBtn.addEventListener("click", () => {
+      openProjectReleasesDetail(project.slug);
+    });
+
+    footer.append(editBtn, releasesBtn);
+    card.append(footer);
+
+    manageProjectsGrid.append(card);
+  });
+}
+
+function openProjectReleasesDetail(slug) {
+  selectedManageSlug = slug;
+  manageProjectSelect.value = slug;
+  const project = projects.find((p) => p.slug === slug);
+  if (!project) return;
+
+  if (manageCatalogView) manageCatalogView.style.display = "none";
+  if (manageDetailView) manageDetailView.style.display = "block";
+
+  if (manageDetailName) manageDetailName.textContent = project.name;
+  if (manageDetailSlug) manageDetailSlug.textContent = project.slug;
+  if (manageDetailIcon) {
+    if (project.icon) {
+      manageDetailIcon.src = project.icon;
+      manageDetailIcon.style.display = "block";
+    } else {
+      manageDetailIcon.style.display = "none";
+    }
+  }
+
+  renderManageReleases(slug);
+  window.scrollTo({ top: manageSection.offsetTop - 30, behavior: "smooth" });
 }
 
 function updateManageProjectSelect() {
@@ -335,8 +613,6 @@ function updateManageProjectSelect() {
   } else if (projects.length === 1) {
     manageProjectSelect.value = projects[0].slug;
   }
-
-  renderManageReleases(manageProjectSelect.value);
 }
 
 function renderManageReleases(slug) {
@@ -344,11 +620,10 @@ function renderManageReleases(slug) {
 
   if (!slug) {
     btnDeleteProject.style.display = "none";
-    manageProjectBadge.className = "batch-badge batch-badge--pending";
-    manageProjectBadge.textContent = "请选择模组";
+    if (manageProjectBadge) manageProjectBadge.style.display = "none";
     const emptyP = document.createElement("p");
     emptyP.className = "empty";
-    emptyP.textContent = "请先在上方选择一个模组以浏览其版本列表。";
+    emptyP.textContent = "请先选择一个模组以浏览其版本列表。";
     manageReleasesList.append(emptyP);
     return;
   }
@@ -356,9 +631,19 @@ function renderManageReleases(slug) {
   const project = projects.find((p) => p.slug === slug);
   if (!project) {
     btnDeleteProject.style.display = "none";
-    manageProjectBadge.className = "batch-badge batch-badge--error";
-    manageProjectBadge.textContent = "未找到模组";
+    if (manageProjectBadge) manageProjectBadge.style.display = "none";
     return;
+  }
+
+  if (manageDetailName) manageDetailName.textContent = project.name;
+  if (manageDetailSlug) manageDetailSlug.textContent = project.slug;
+  if (manageDetailIcon) {
+    if (project.icon) {
+      manageDetailIcon.src = project.icon;
+      manageDetailIcon.style.display = "block";
+    } else {
+      manageDetailIcon.style.display = "none";
+    }
   }
 
   btnDeleteProject.style.display = "inline-block";
@@ -380,7 +665,10 @@ function renderManageReleases(slug) {
       if (!res.ok) throw new Error(data.error || "删除模组失败");
 
       showResult(true, data.message || "模组已成功删除");
+      selectedManageSlug = null;
       manageProjectSelect.value = "";
+      if (manageDetailView) manageDetailView.style.display = "none";
+      if (manageCatalogView) manageCatalogView.style.display = "block";
       await refreshProjects();
     } catch (err) {
       showResult(false, err.message);
@@ -390,8 +678,11 @@ function renderManageReleases(slug) {
     }
   };
 
-  manageProjectBadge.className = "batch-badge batch-badge--success";
-  manageProjectBadge.textContent = `${project.name} · ${project.releases.length} 个版本`;
+  if (manageProjectBadge) {
+    manageProjectBadge.style.display = "inline-block";
+    manageProjectBadge.className = "batch-badge batch-badge--success";
+    manageProjectBadge.textContent = `${project.releases.length} 个版本`;
+  }
 
   if (!project.releases || project.releases.length === 0) {
     const emptyP = document.createElement("p");
@@ -733,11 +1024,55 @@ manageProjectSelect.addEventListener("change", () => {
   renderManageReleases(manageProjectSelect.value);
 });
 
+if (manageSearchInput) {
+  manageSearchInput.addEventListener("input", (e) => {
+    manageSearchQuery = e.target.value;
+    renderManageCatalogGrid();
+  });
+}
+
+manageFilterChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    manageFilterChips.forEach((c) => c.classList.remove("active"));
+    chip.classList.add("active");
+    currentManageFilter = chip.dataset.manageFilter;
+    renderManageCatalogGrid();
+  });
+});
+
+if (btnBackToManageGrid) {
+  btnBackToManageGrid.addEventListener("click", () => {
+    selectedManageSlug = null;
+    if (manageDetailView) manageDetailView.style.display = "none";
+    if (manageCatalogView) manageCatalogView.style.display = "block";
+    renderManageCatalogGrid();
+  });
+}
+
+if (btnEditCurrentProject) {
+  btnEditCurrentProject.addEventListener("click", () => {
+    if (!selectedManageSlug) return;
+    const project = projects.find((p) => p.slug === selectedManageSlug);
+    if (!project) return;
+    loadProjectIntoSingleForm(project);
+  });
+}
+
 async function refreshProjects() {
   const response = await fetch("/api/catalog", { cache: "no-store" });
   projects = (await response.json()).projects;
   renderProjects();
   updateManageProjectSelect();
+  renderManageCatalogGrid();
+  if (selectedManageSlug) {
+    if (projects.some((p) => p.slug === selectedManageSlug)) {
+      renderManageReleases(selectedManageSlug);
+    } else {
+      selectedManageSlug = null;
+      if (manageDetailView) manageDetailView.style.display = "none";
+      if (manageCatalogView) manageCatalogView.style.display = "block";
+    }
+  }
   if (batchQueue.length) {
     updateQueueConflicts();
     renderBatchQueue();
@@ -761,6 +1096,14 @@ function switchMode(mode) {
 
   if (mode === "manage") {
     updateManageProjectSelect();
+    if (selectedManageSlug && projects.some((p) => p.slug === selectedManageSlug)) {
+      openProjectReleasesDetail(selectedManageSlug);
+    } else {
+      selectedManageSlug = null;
+      if (manageDetailView) manageDetailView.style.display = "none";
+      if (manageCatalogView) manageCatalogView.style.display = "block";
+      renderManageCatalogGrid();
+    }
   } else if (mode === "modrinth") {
     if (!modrinthProjects.length) {
       fetchModrinthProjects();

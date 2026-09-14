@@ -161,25 +161,58 @@
           <div class="panel-heading">
             <span class="step">📦</span>
             <div>
-              <h2>已有版本与文件维护</h2>
-              <p>管理所选模组的历史发布版本。支持移除某个版本、移除版本内的某个文件、或向已有版本追加新文件（自动计算哈希并上传至 R2）。</p>
+              <h2>模组目录与版本文件维护</h2>
+              <p>全览所有已收录的模组卡片，清晰查阅哪些模组缺失简介或横幅；支持一键跳转资料补全，并对各模组的历史版本与安装包进行维护、增删或版本修正。</p>
             </div>
           </div>
 
-          <div class="manage-project-bar">
-            <label><strong>选择要维护的模组：</strong>
-              <select id="manage-project-select" class="manage-select">
-                <option value="">-- 请选择模组 --</option>
-              </select>
-            </label>
-            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-              <span id="manage-project-badge" class="batch-badge batch-badge--pending">请选择模组</span>
-              <button type="button" id="btn-delete-project" class="btn-delete-danger" style="display: none;">🗑️ 删除此模组项目</button>
+          <!-- Hidden select kept for backward-compatibility if needed -->
+          <select id="manage-project-select" style="display: none;"></select>
+
+          <!-- 1. Cards Grid View (Default) -->
+          <div id="manage-catalog-view" class="manage-catalog-view">
+            <div class="manage-control-bar">
+              <div class="workspace-metrics">
+                <span class="metric-item">收录总数: <strong id="manage-total-count">0</strong></span>
+                <span class="metric-item">待补全资料: <strong id="manage-incomplete-count">0</strong></span>
+                <span class="metric-item">缺简介: <strong id="manage-missing-desc-count">0</strong></span>
+                <span class="metric-item">缺横幅: <strong id="manage-missing-banner-count">0</strong></span>
+                <span class="metric-item">资料完备: <strong id="manage-complete-count">0</strong></span>
+              </div>
+              <div class="workspace-filter-toolbar">
+                <input type="search" id="manage-search-input" class="workspace-search-input" placeholder="搜索已收录模组名称、ID 或简介...">
+                <div class="workspace-filter-chips" id="manage-filter-chips">
+                  <button type="button" class="filter-chip active" data-manage-filter="all">全部 (<span id="manage-chip-all-count">0</span>)</button>
+                  <button type="button" class="filter-chip filter-chip--warn" data-manage-filter="incomplete">⚠️ 待补全 (<span id="manage-chip-incomplete-count">0</span>)</button>
+                  <button type="button" class="filter-chip" data-manage-filter="missing-desc">缺简介 (<span id="manage-chip-desc-count">0</span>)</button>
+                  <button type="button" class="filter-chip" data-manage-filter="missing-banner">缺横幅 (<span id="manage-chip-banner-count">0</span>)</button>
+                  <button type="button" class="filter-chip" data-manage-filter="complete">✔ 资料完备 (<span id="manage-chip-complete-count">0</span>)</button>
+                </div>
+              </div>
             </div>
+
+            <div id="manage-projects-grid" class="manage-projects-grid"></div>
           </div>
 
-          <div id="manage-releases-list" class="manage-releases-list">
-            <p class="empty">请先在上方选择一个模组以浏览其版本列表。</p>
+          <!-- 2. Detail Releases View (Shown when a mod is clicked) -->
+          <div id="manage-detail-view" class="manage-detail-view" style="display: none;">
+            <div class="manage-detail-header">
+              <button type="button" id="btn-back-to-manage-grid" class="btn-subaction">← 返回模组卡片列表</button>
+              <div class="manage-detail-title-box">
+                <img id="manage-detail-icon" class="manage-detail-icon" style="display: none;" alt="icon">
+                <div>
+                  <h3 id="manage-detail-name">模组名称</h3>
+                  <code id="manage-detail-slug">slug</code>
+                </div>
+              </div>
+              <div class="manage-detail-actions">
+                <span id="manage-project-badge" class="batch-badge batch-badge--success" style="display: none;"></span>
+                <button type="button" id="btn-edit-current-project" class="btn-workspace-load">📝 补全/编辑资料</button>
+                <button type="button" id="btn-delete-project" class="btn-delete-danger">🗑️ 删除此模组项目</button>
+              </div>
+            </div>
+
+            <div id="manage-releases-list" class="manage-releases-list"></div>
           </div>
         </section>
 
