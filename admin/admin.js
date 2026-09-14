@@ -72,6 +72,39 @@ const modrinthProgressPercent = document.querySelector("#modrinth-progress-perce
 const modrinthProgressBar = document.querySelector("#modrinth-progress-bar");
 const modrinthGrid = document.querySelector("#modrinth-grid");
 
+// Workspace Scanner Components
+const tabWorkspace = document.querySelector("#tab-workspace");
+const workspaceSection = document.querySelector("#workspace-section");
+const workspaceDirInput = document.querySelector("#workspace-dir-input");
+const btnScanWorkspace = document.querySelector("#btn-scan-workspace");
+const workspaceControl = document.querySelector("#workspace-control");
+const workspaceTotalCount = document.querySelector("#workspace-total-count");
+const workspaceBuiltCount = document.querySelector("#workspace-built-count");
+const workspaceUnbuiltCount = document.querySelector("#workspace-unbuilt-count");
+const workspaceUnpublishedCount = document.querySelector("#workspace-unpublished-count");
+const workspaceSearchInput = document.querySelector("#workspace-search-input");
+const workspaceFilterChips = document.querySelectorAll(".workspace-filter-chips .filter-chip");
+const chipAllCount = document.querySelector("#chip-all-count");
+const chipBuiltCount = document.querySelector("#chip-built-count");
+const chipUnbuiltCount = document.querySelector("#chip-unbuilt-count");
+const chipUnpublishedCount = document.querySelector("#chip-unpublished-count");
+const chipPublishedCount = document.querySelector("#chip-published-count");
+const workspaceGrid = document.querySelector("#workspace-grid");
+
+const workspaceBuildDialog = document.querySelector("#workspace-build-dialog");
+const workspaceBuildTitle = document.querySelector("#workspace-build-title");
+const workspaceBuildSubtitle = document.querySelector("#workspace-build-subtitle");
+const workspaceBuildStatusBadge = document.querySelector("#workspace-build-status-badge");
+const workspaceBuildOutput = document.querySelector("#workspace-build-output");
+const workspaceBuildDuration = document.querySelector("#workspace-build-duration");
+const btnCloseBuildDialog = document.querySelector("#btn-close-build-dialog");
+
+let workspaceProjects = [];
+let currentWorkspaceFilter = "all";
+let workspaceSearchQuery = "";
+let isWorkspaceScanning = false;
+let isBuildingProject = false;
+
 let modrinthProjects = [];
 let selectedModrinthIds = new Set();
 let isModrinthSyncing = false;
@@ -712,17 +745,23 @@ function switchMode(mode) {
   tabBatch.classList.toggle("active", mode === "batch");
   tabManage.classList.toggle("active", mode === "manage");
   tabModrinth.classList.toggle("active", mode === "modrinth");
+  tabWorkspace.classList.toggle("active", mode === "workspace");
 
   form.style.display = mode === "single" ? "grid" : "none";
   batchSection.style.display = mode === "batch" ? "block" : "none";
   manageSection.style.display = mode === "manage" ? "block" : "none";
   modrinthSection.style.display = mode === "modrinth" ? "block" : "none";
+  workspaceSection.style.display = mode === "workspace" ? "block" : "none";
 
   if (mode === "manage") {
     updateManageProjectSelect();
   } else if (mode === "modrinth") {
     if (!modrinthProjects.length) {
       fetchModrinthProjects();
+    }
+  } else if (mode === "workspace") {
+    if (!workspaceProjects.length) {
+      fetchWorkspaceProjects();
     }
   }
 }
@@ -731,6 +770,7 @@ tabSingle.addEventListener("click", () => switchMode("single"));
 tabBatch.addEventListener("click", () => switchMode("batch"));
 tabManage.addEventListener("click", () => switchMode("manage"));
 tabModrinth.addEventListener("click", () => switchMode("modrinth"));
+tabWorkspace.addEventListener("click", () => switchMode("workspace"));
 
 switchToBatchBtn.addEventListener("click", () => {
   switchMode("batch");
@@ -1460,4 +1500,398 @@ modrinthDeselectAllBtn.addEventListener("click", () => {
 });
 modrinthSyncBtn.addEventListener("click", () => {
   executeModrinthSync([...selectedModrinthIds]);
+});
+
+// ==========================================================================
+// Workspace Engineering Scanner & Build Logic
+// ==========================================================================
+
+const savedWorkspaceDir = localStorage.getItem("workspace_dir");
+if (savedWorkspaceDir) workspaceDirInput.value = savedWorkspaceDir;
+
+async function fetchWorkspaceProjects() {
+  if (isWorkspaceScanning) return;
+  const dir = workspaceDirInput.value.trim() || "c:\\coding";
+  localStorage.setItem("workspace_dir", dir);
+
+  isWorkspaceScanning = true;
+  btnScanWorkspace.disabled = true;
+  btnScanWorkspace.textContent = "🔍 正在扫描工程...";
+  workspaceGrid.innerHTML = `<div class="empty" style="grid-column: 1 / -1; padding: 2.5rem; text-align: center; color: var(--muted);"><span style="display:inline-block; font-size: 1.5rem; animation: pulse 1s infinite;">🔍</span><p style="margin-top:0.5rem;">正在遍历目录 ${dir} 并分析 Gradle 模组工程与构建包...</p></div>`;
+
+  try {
+    const res = await fetch(`/api/workspace/projects?dir=${encodeURIComponent(dir)}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "扫描工程失败");
+
+    workspaceProjects = data.projects || [];
+    workspaceControl.style.display = "flex";
+    updateWorkspaceCounts();
+    renderWorkspaceProjects();
+  } catch (err) {
+    showResult(false, err.message);
+    workspaceGrid.innerHTML = `<div class="empty" style="grid-column: 1 / -1; color: #ffb4ab;"><p>扫描出错: ${err.message}</p></div>`;
+  } finally {
+    isWorkspaceScanning = false;
+    btnScanWorkspace.disabled = false;
+    btnScanWorkspace.textContent = "🔍 扫描本地工程";
+  }
+}
+
+function updateWorkspaceCounts() {
+  const total = workspaceProjects.length;
+  const built = workspaceProjects.filter((p) => p.builtJars && p.builtJars.length > 0).length;
+  const unbuilt = total - built;
+  const published = workspaceProjects.filter((p) => p.isPublished).length;
+  const unpublished = total - published;
+
+  workspaceTotalCount.textContent = total;
+  workspaceBuiltCount.textContent = built;
+  workspaceUnbuiltCount.textContent = unbuilt;
+  workspaceUnpublishedCount.textContent = unpublished;
+
+  if (chipAllCount) chipAllCount.textContent = total;
+  if (chipBuiltCount) chipBuiltCount.textContent = built;
+  if (chipUnbuiltCount) chipUnbuiltCount.textContent = unbuilt;
+  if (chipUnpublishedCount) chipUnpublishedCount.textContent = unpublished;
+  if (chipPublishedCount) chipPublishedCount.textContent = published;
+}
+
+function renderWorkspaceProjects() {
+  workspaceGrid.replaceChildren();
+
+  const query = workspaceSearchQuery.trim().toLowerCase();
+  const filtered = workspaceProjects.filter((p) => {
+    if (currentWorkspaceFilter === "built" && (!p.builtJars || p.builtJars.length === 0)) return false;
+    if (currentWorkspaceFilter === "unbuilt" && p.builtJars && p.builtJars.length > 0) return false;
+    if (currentWorkspaceFilter === "published" && !p.isPublished) return false;
+    if (currentWorkspaceFilter === "unpublished" && p.isPublished) return false;
+
+    if (query) {
+      const matchName = (p.name || "").toLowerCase().includes(query);
+      const matchId = (p.id || "").toLowerCase().includes(query);
+      const matchFolder = (p.folderName || "").toLowerCase().includes(query);
+      const matchDesc = (p.description || "").toLowerCase().includes(query);
+      const matchJar = (p.primaryJar?.name || "").toLowerCase().includes(query);
+      if (!matchName && !matchId && !matchFolder && !matchDesc && !matchJar) return false;
+    }
+    return true;
+  });
+
+  if (!filtered.length) {
+    const emptyDiv = document.createElement("div");
+    emptyDiv.className = "empty";
+    emptyDiv.style.gridColumn = "1 / -1";
+    emptyDiv.style.padding = "2.5rem";
+    emptyDiv.style.textAlign = "center";
+    emptyDiv.textContent = query || currentWorkspaceFilter !== "all"
+      ? "没有找到符合当前筛选条件的本地工程。"
+      : "该目录下未检测到任何包含 gradle.properties 或 build.gradle 的 Minecraft 模组工程。";
+    workspaceGrid.append(emptyDiv);
+    return;
+  }
+
+  filtered.forEach((p) => {
+    const card = document.createElement("div");
+    const hasBuilt = p.builtJars && p.builtJars.length > 0;
+    card.className = `workspace-card status-${hasBuilt ? "built" : "unbuilt"}`;
+
+    // Top: icon + titles
+    const top = document.createElement("div");
+    top.className = "workspace-card__top";
+
+    let iconElem;
+    if (p.iconDataUrl) {
+      iconElem = document.createElement("img");
+      iconElem.className = "workspace-card__icon";
+      iconElem.src = p.iconDataUrl;
+      iconElem.alt = p.name;
+    } else {
+      iconElem = document.createElement("div");
+      iconElem.className = "workspace-card__icon workspace-card__icon--fallback";
+      iconElem.textContent = (p.name || p.id || "M").slice(0, 1).toUpperCase();
+    }
+
+    const titleBox = document.createElement("div");
+    titleBox.className = "workspace-card__title-box";
+
+    const title = document.createElement("div");
+    title.className = "workspace-card__title";
+    title.textContent = p.name || p.id;
+    title.title = p.name || p.id;
+
+    const idElem = document.createElement("code");
+    idElem.className = "workspace-card__id";
+    idElem.textContent = p.id;
+
+    const folderElem = document.createElement("span");
+    folderElem.className = "workspace-card__folder";
+    folderElem.textContent = `📁 ${p.folderName}`;
+    folderElem.title = p.dirPath;
+
+    titleBox.append(title, idElem, folderElem);
+    top.append(iconElem, titleBox);
+
+    // Badges Row
+    const badgesRow = document.createElement("div");
+    badgesRow.className = "workspace-card__badges";
+
+    // Published status badge
+    const pubBadge = document.createElement("span");
+    if (p.isPublished) {
+      pubBadge.className = "batch-badge batch-badge--success";
+      pubBadge.textContent = `网站已发布 (${p.publishedReleasesCount}版本)`;
+    } else {
+      pubBadge.className = "batch-badge batch-badge--pending";
+      pubBadge.textContent = "未在网站收录";
+    }
+    badgesRow.append(pubBadge);
+
+    // Build status badge
+    const buildBadge = document.createElement("span");
+    if (hasBuilt) {
+      buildBadge.className = "batch-badge batch-badge--success";
+      buildBadge.textContent = `✔ 已构建 (${p.builtJars.length}个产物)`;
+    } else {
+      buildBadge.className = "batch-badge batch-badge--error";
+      buildBadge.textContent = "⚠️ 未构建";
+    }
+    badgesRow.append(buildBadge);
+
+    // Meta Details
+    const meta = document.createElement("div");
+    meta.className = "workspace-card__meta";
+
+    const rowVer = document.createElement("div");
+    rowVer.className = "workspace-card__meta-row";
+    rowVer.innerHTML = `<span>解析版本:</span><strong class="workspace-card__meta-val">${p.version || "1.0.0"}</strong>`;
+
+    const rowGame = document.createElement("div");
+    rowGame.className = "workspace-card__meta-row";
+    const gameListStr = (p.gameVersions || []).join(", ") || "未指定";
+    rowGame.innerHTML = `<span>Minecraft:</span><span class="workspace-card__meta-val" title="${gameListStr}">${gameListStr}</span>`;
+
+    const rowLoader = document.createElement("div");
+    rowLoader.className = "workspace-card__meta-row";
+    rowLoader.innerHTML = `<span>加载器:</span><span class="workspace-card__meta-val">${(p.loaders || ["Fabric"]).join(", ")}</span>`;
+
+    if (p.authors && p.authors.length) {
+      const rowAuthor = document.createElement("div");
+      rowAuthor.className = "workspace-card__meta-row";
+      rowAuthor.innerHTML = `<span>作者:</span><span class="workspace-card__meta-val" title="${p.authors.join(", ")}">${p.authors.join(", ")}</span>`;
+      meta.append(rowVer, rowGame, rowLoader, rowAuthor);
+    } else {
+      meta.append(rowVer, rowGame, rowLoader);
+    }
+
+    // Built Jar Preview Box
+    if (hasBuilt && p.primaryJar) {
+      const jarBox = document.createElement("div");
+      jarBox.className = "workspace-card__jar-box";
+
+      const jarTitle = document.createElement("div");
+      jarTitle.className = "workspace-card__jar-title";
+      jarTitle.innerHTML = `<span>📦 编译产物 (.jar)</span><span>${size(p.primaryJar.size)}</span>`;
+
+      const jarName = document.createElement("div");
+      jarName.className = "workspace-card__jar-name";
+      jarName.textContent = p.primaryJar.name;
+      jarName.title = p.primaryJar.path;
+
+      const jarMeta = document.createElement("div");
+      jarMeta.className = "workspace-card__jar-meta";
+      const mtimeStr = p.primaryJar.mtime ? new Date(p.primaryJar.mtime).toLocaleString("zh-CN") : "";
+      jarMeta.textContent = `生成时间: ${mtimeStr}`;
+
+      jarBox.append(jarTitle, jarName, jarMeta);
+      meta.append(jarBox);
+    }
+
+    // Footer Actions
+    const footer = document.createElement("div");
+    footer.className = "workspace-card__footer";
+
+    const buildBtn = document.createElement("button");
+    buildBtn.type = "button";
+    buildBtn.className = "btn-workspace-build";
+    buildBtn.textContent = hasBuilt ? "🔨 重新构建" : "🔨 一键构建";
+    buildBtn.title = "执行 gradlew.bat build -x test";
+    buildBtn.addEventListener("click", () => triggerBuildProject(p));
+
+    const loadBtn = document.createElement("button");
+    loadBtn.type = "button";
+    loadBtn.className = "btn-workspace-load";
+    loadBtn.textContent = "📝 载入发布表单";
+    loadBtn.title = "将此模组信息填入发布页面";
+    loadBtn.addEventListener("click", () => loadProjectIntoForm(p));
+
+    const publishBtn = document.createElement("button");
+    publishBtn.type = "button";
+    publishBtn.className = "btn-workspace-publish";
+    publishBtn.textContent = "⚡ 直接发布";
+    publishBtn.title = hasBuilt ? "直接将此 jar 文件登记并发布至清单" : "尚未构建 jar 包，请先执行构建";
+    publishBtn.disabled = !hasBuilt;
+    publishBtn.addEventListener("click", () => directPublishProject(p));
+
+    footer.append(buildBtn, loadBtn, publishBtn);
+
+    card.append(top, badgesRow, meta, footer);
+    workspaceGrid.append(card);
+  });
+}
+
+let buildTimer = null;
+async function triggerBuildProject(project) {
+  if (isBuildingProject) return;
+  isBuildingProject = true;
+
+  workspaceBuildDialog.showModal();
+  workspaceBuildTitle.textContent = `Gradle 构建 - ${project.name || project.id}`;
+  workspaceBuildSubtitle.textContent = `目录: ${project.dirPath} | 任务: gradlew.bat build -x test`;
+  workspaceBuildStatusBadge.className = "batch-badge batch-badge--pending";
+  workspaceBuildStatusBadge.textContent = "🔨 构建执行中…";
+  workspaceBuildOutput.textContent = `> cd "${project.dirPath}"\n> gradlew.bat build -x test\n\n正在启动 Gradle 构建进程，请稍候...\n`;
+  btnCloseBuildDialog.disabled = true;
+
+  const startTime = performance.now();
+  workspaceBuildDuration.textContent = "计时: 0.0 秒";
+  if (buildTimer) clearInterval(buildTimer);
+  buildTimer = setInterval(() => {
+    const elapsed = ((performance.now() - startTime) / 1000).toFixed(1);
+    workspaceBuildDuration.textContent = `计时: ${elapsed} 秒`;
+  }, 300);
+
+  try {
+    const res = await fetch("/api/workspace/build", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ projectPath: project.dirPath, task: "build -x test" })
+    });
+    const data = await res.json();
+
+    if (buildTimer) clearInterval(buildTimer);
+    const duration = ((performance.now() - startTime) / 1000).toFixed(1);
+    workspaceBuildDuration.textContent = `总耗时: ${duration} 秒`;
+
+    workspaceBuildOutput.textContent = data.output || (data.code === 0 ? "BUILD SUCCESSFUL (无控制台文本输出)" : "BUILD FAILED");
+    workspaceBuildOutput.scrollTop = workspaceBuildOutput.scrollHeight;
+
+    if (data.code === 0) {
+      workspaceBuildStatusBadge.className = "batch-badge batch-badge--success";
+      workspaceBuildStatusBadge.textContent = "✔ 构建成功";
+      if (data.project) {
+        Object.assign(project, data.project);
+        updateWorkspaceCounts();
+        renderWorkspaceProjects();
+      }
+    } else {
+      workspaceBuildStatusBadge.className = "batch-badge batch-badge--error";
+      workspaceBuildStatusBadge.textContent = `❌ 构建失败 (退出码 ${data.code})`;
+    }
+  } catch (err) {
+    if (buildTimer) clearInterval(buildTimer);
+    workspaceBuildStatusBadge.className = "batch-badge batch-badge--error";
+    workspaceBuildStatusBadge.textContent = "❌ 请求失败";
+    workspaceBuildOutput.textContent += `\n执行出错: ${err.message}`;
+  } finally {
+    isBuildingProject = false;
+    btnCloseBuildDialog.disabled = false;
+  }
+}
+
+function loadProjectIntoForm(project) {
+  switchMode("single");
+  projectInput.value = project.id;
+  if (form.elements.name) form.elements.name.value = project.name || "";
+  if (form.elements.description) form.elements.description.value = project.description || "";
+  if (form.elements.version) form.elements.version.value = project.version || "";
+  if (form.elements.game) form.elements.game.value = (project.gameVersions || []).join(",");
+  if (form.elements.loader) form.elements.loader.value = (project.loaders || ["Fabric"]).join(",");
+  if (form.elements.authors) form.elements.authors.value = (project.authors || []).join(", ");
+  if (form.elements.source) form.elements.source.value = project.source || "";
+
+  if (project.iconDataUrl) {
+    iconPreview.innerHTML = `<img src="${project.iconDataUrl}" style="max-width:100%;max-height:100%;object-fit:contain;">`;
+  }
+
+  multiJarTip.style.display = "block";
+  if (project.primaryJar) {
+    multiJarTip.innerHTML = `✨ 已从本地工程 <strong>${project.name}</strong> 载入基础资料！检测到编译产物：<strong>${project.primaryJar.name}</strong> (${size(project.primaryJar.size)})。可在下方选择该 jar 上传或使用【💻 本地工程探测】页面的【⚡ 直接发布】。`;
+  } else {
+    multiJarTip.innerHTML = `✨ 已从本地工程 <strong>${project.name}</strong> 载入基础资料！`;
+  }
+
+  updateImageHints();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function directPublishProject(project) {
+  if (!project.primaryJar) {
+    return showResult(false, "该工程暂无编译产物，请先点击【🔨 一键构建】！");
+  }
+
+  const proceed = window.confirm(
+    `确定将本地工程 "${project.name}" 的构建产物直接发布至 ModSite 网站？\n\n` +
+    `模组名称: ${project.name} (${project.id})\n` +
+    `发布版本: ${project.version}\n` +
+    `构建包: ${project.primaryJar.name} (${size(project.primaryJar.size)})\n` +
+    `适用游戏: ${(project.gameVersions || []).join(",") || "未指定"}\n` +
+    `加载器: ${(project.loaders || ["Fabric"]).join(",")}`
+  );
+  if (!proceed) return;
+
+  try {
+    const payload = {
+      project: project.id,
+      name: project.name,
+      description: project.description,
+      version: project.version,
+      game: (project.gameVersions || []).join(","),
+      loader: (project.loaders || ["Fabric"]).join(","),
+      authors: (project.authors || []).join(", "),
+      source: project.source || "",
+      jarPath: project.primaryJar.path,
+      iconDataUrl: project.iconDataUrl || "",
+      allowOverwrite: true
+    };
+
+    const res = await fetch("/api/workspace/publish-direct", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "发布失败");
+
+    showResult(true, `模组 [${project.name}] 版本 ${project.version} 已成功直接发布！\n\n${data.message || ""}`);
+    await refreshProjects();
+    project.isPublished = true;
+    project.publishedReleasesCount = (project.publishedReleasesCount || 0) + 1;
+    project.latestPublishedVersion = project.version;
+    updateWorkspaceCounts();
+    renderWorkspaceProjects();
+  } catch (err) {
+    showResult(false, err.message);
+  }
+}
+
+btnScanWorkspace.addEventListener("click", fetchWorkspaceProjects);
+workspaceDirInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    fetchWorkspaceProjects();
+  }
+});
+workspaceSearchInput.addEventListener("input", (e) => {
+  workspaceSearchQuery = e.target.value;
+  renderWorkspaceProjects();
+});
+
+workspaceFilterChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    workspaceFilterChips.forEach((c) => c.classList.remove("active"));
+    chip.classList.add("active");
+    currentWorkspaceFilter = chip.dataset.filter || "all";
+    renderWorkspaceProjects();
+  });
 });

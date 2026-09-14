@@ -21,6 +21,7 @@
         <button type="button" id="tab-batch" class="mode-tab">⚡ 批量极速解析上传</button>
         <button type="button" id="tab-manage" class="mode-tab">📦 版本维护与文件管理</button>
         <button type="button" id="tab-modrinth" class="mode-tab">🌐 Modrinth 同步</button>
+        <button type="button" id="tab-workspace" class="mode-tab">💻 本地工程探测</button>
       </div>
     </div>
 
@@ -235,6 +236,46 @@
             <div id="modrinth-grid" class="modrinth-grid"></div>
           </div>
         </section>
+
+        <section id="workspace-section" class="panel" style="display: none;">
+          <div class="panel-heading">
+            <span class="step">💻</span>
+            <div>
+              <h2>本地工程探测与构建</h2>
+              <p>智能扫描本地目录，自动识别包含 gradle.properties、build.gradle 等特征的 Minecraft 模组工程，检测编译产物 (.jar)、模组图标及元数据，支持一键执行 Gradle 构建与快速发布。</p>
+            </div>
+          </div>
+
+          <div class="workspace-query-bar">
+            <label><strong>工程根目录：</strong>
+              <input type="text" id="workspace-dir-input" class="workspace-input" value="c:\coding" placeholder="例如: c:\coding">
+            </label>
+            <button type="button" id="btn-scan-workspace" class="btn-primary">🔍 扫描本地工程</button>
+          </div>
+
+          <div id="workspace-control" class="workspace-control" style="display: none;">
+            <div class="workspace-control__header">
+              <div class="workspace-metrics">
+                <span class="metric-item">总计工程: <strong id="workspace-total-count">0</strong></span>
+                <span class="metric-item">包含构建包: <strong id="workspace-built-count">0</strong></span>
+                <span class="metric-item">未构建: <strong id="workspace-unbuilt-count">0</strong></span>
+                <span class="metric-item">未在网站发布: <strong id="workspace-unpublished-count">0</strong></span>
+              </div>
+              <div class="workspace-filter-toolbar">
+                <input type="search" id="workspace-search-input" class="workspace-search-input" placeholder="搜索模组名称、ID 或目录名...">
+                <div class="workspace-filter-chips">
+                  <button type="button" class="filter-chip active" data-filter="all">全部 (<span id="chip-all-count">0</span>)</button>
+                  <button type="button" class="filter-chip" data-filter="built">已构建 (<span id="chip-built-count">0</span>)</button>
+                  <button type="button" class="filter-chip" data-filter="unbuilt">未构建 (<span id="chip-unbuilt-count">0</span>)</button>
+                  <button type="button" class="filter-chip" data-filter="unpublished">未发布 (<span id="chip-unpublished-count">0</span>)</button>
+                  <button type="button" class="filter-chip" data-filter="published">已发布 (<span id="chip-published-count">0</span>)</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="workspace-grid" class="workspace-grid"></div>
+          </div>
+        </section>
       </div>
 
       <aside>
@@ -251,6 +292,21 @@
       <h2 id="result-title">操作结果</h2>
       <pre id="result-output"></pre>
       <form method="dialog"><button>关闭</button></form>
+    </dialog>
+
+    <dialog id="workspace-build-dialog" class="workspace-build-dialog">
+      <div class="workspace-build-dialog__header">
+        <div>
+          <h2 id="workspace-build-title">Gradle 构建控制台</h2>
+          <p id="workspace-build-subtitle" class="dialog-subtitle"></p>
+        </div>
+        <span id="workspace-build-status-badge" class="batch-badge batch-badge--pending">准备中</span>
+      </div>
+      <pre id="workspace-build-output" class="workspace-build-output">等待构建任务输出...</pre>
+      <div class="workspace-build-dialog__footer">
+        <span id="workspace-build-duration" class="build-duration-text"></span>
+        <form method="dialog"><button id="btn-close-build-dialog">关闭窗口</button></form>
+      </div>
     </dialog>
   </body>
 </html>

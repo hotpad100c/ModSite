@@ -6,6 +6,8 @@ import { spawn } from "node:child_process";
 import { tmpdir } from "node:os";
 import { inspectFabricJar } from "./fabric.mjs";
 import { removeRelease, removeReleaseFile, addReleaseFile, removeProject, updateReleaseGameVersions, syncModrinthProject, fileRecord, upload } from "./publish.mjs";
+import { scanWorkspace, inspectProjectDir, executeGradleBuild } from "./scanner.mjs";
+
 
 const ROOT = resolve(import.meta.dirname, "..");
 const ADMIN_ROOT = resolve(ROOT, "admin");
@@ -407,6 +409,148 @@ async function syncModrinthProjectsHandler(request, response) {
   });
 }
 
+async function getWorkspaceProjectsHandler(request, response) {
+  const url = new URL(request.url, "http://127.0.0.1");
+  const targetDir = url.searchParams.get("dir")?.trim() || "c:\\coding";
+
+  try {
+    const catalog = JSON.parse(await readFile(CATALOG_PATH, "utf8"));
+    const result = await scanWorkspace(targetDir, catalog.projects || []);
+    return json(response, 200, result);
+  } catch (error) {
+    return json(response, 400, { error: error.message });
+  }
+}
+
+async function buildWorkspaceProjectHandler(request, response) {
+  const webRequest = new Request("http://127.0.0.1" + request.url, {
+    method: "POST",
+    headers: request.headers,
+    body: Readable.toWeb(request),
+    duplex: "half"
+  });
+
+  let payload;
+  const contentType = request.headers["content-type"] || "";
+  if (contentType.includes("application/json")) {
+    payload = await webRequest.json();
+  } else {
+    const form = await webRequest.formData();
+    payload = {
+      projectPath: form.get("projectPath"),
+      task: form.get("task") || "build -x test"
+    };
+  }
+
+  const { projectPath, task = "build -x test" } = payload || {};
+  if (!projectPath) {
+    return json(response, 400, { error: "缺少 projectPath 参数" });
+  }
+
+  try {
+    const buildResult = await executeGradleBuild(projectPath, task);
+    const catalog = JSON.parse(await readFile(CATALOG_PATH, "utf8"));
+    const updatedProject = await inspectProjectDir(projectPath, catalog.projects || []);
+    return json(response, 200, {
+      code: buildResult.code,
+      output: buildResult.output,
+      project: updatedProject
+    });
+  } catch (error) {
+    return json(response, 500, { error: error.message });
+  }
+}
+
+async function publishDirectWorkspaceHandler(request, response) {
+  await loadEnv();
+  const webRequest = new Request("http://127.0.0.1" + request.url, {
+    method: "POST",
+    headers: request.headers,
+    body: Readable.toWeb(request),
+    duplex: "half"
+  });
+
+  let payload;
+  const contentType = request.headers["content-type"] || "";
+  if (contentType.includes("application/json")) {
+    payload = await webRequest.json();
+  } else {
+    const form = await webRequest.formData();
+    payload = {
+      project: form.get("project"),
+      name: form.get("name"),
+      description: form.get("description"),
+      longDescription: form.get("longDescription"),
+      version: form.get("version"),
+      game: form.get("game"),
+      loader: form.get("loader"),
+      authors: form.get("authors"),
+      source: form.get("source"),
+      notes: form.get("notes"),
+      jarPath: form.get("jarPath"),
+      iconDataUrl: form.get("iconDataUrl"),
+      allowOverwrite: form.get("allowOverwrite") === "true" || form.get("overwrite") === "true",
+      dryRun: form.get("dryRun") === "true"
+    };
+  }
+
+  const {
+    project,
+    name,
+    description,
+    longDescription,
+    version,
+    game,
+    loader,
+    authors,
+    source,
+    notes,
+    jarPath,
+    iconDataUrl,
+    allowOverwrite = true,
+    dryRun = false
+  } = payload || {};
+
+  if (!project || !version || !jarPath) {
+    return json(response, 400, { error: "缺少项目标识 (project)、版本号 (version) 或构建包路径 (jarPath)" });
+  }
+
+  const directory = await mkdtemp(join(tmpdir(), "modsite-direct-"));
+  try {
+    const args = [resolve(ROOT, "scripts/publish.mjs"), "--project", project, "--version", version];
+    if (name) args.push("--name", name);
+    if (description) args.push("--description", description);
+    if (longDescription) args.push("--long-description", longDescription);
+    if (game) args.push("--game", game);
+    if (loader) args.push("--loader", loader);
+    if (authors) args.push("--authors", authors);
+    if (source) args.push("--source", source);
+    if (notes) args.push("--notes", notes);
+    if (allowOverwrite) args.push("--allow-overwrite");
+    if (dryRun) args.push("--dry-run");
+
+    if (iconDataUrl && iconDataUrl.startsWith("data:image/")) {
+      try {
+        const base64Content = iconDataUrl.replace(/^data:image\/\w+;base64,/, "");
+        const iconBuf = Buffer.from(base64Content, "base64");
+        const tempIconPath = join(directory, "icon.png");
+        await writeFile(tempIconPath, iconBuf);
+        args.push("--icon-file", tempIconPath);
+      } catch {}
+    }
+
+    args.push(resolve(jarPath));
+
+    const result = await run(process.execPath, args);
+    if (result.code !== 0) {
+      return json(response, 400, { error: result.output.trim() || "发布失败" });
+    }
+    return json(response, 200, { message: result.output.trim() });
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+}
+
 async function serveFile(request, response) {
   const parsedUrl = new URL(request.url, "http://127.0.0.1");
   const pathname = decodeURIComponent(parsedUrl.pathname);
@@ -511,6 +655,9 @@ const server = createServer(async (request, response) => {
     if (request.method === "POST" && request.url === "/api/release/game-versions/update") return await updateGameVersionsHandler(request, response);
     if (request.method === "GET" && request.url.startsWith("/api/modrinth/projects")) return await getModrinthProjectsHandler(request, response);
     if (request.method === "POST" && request.url === "/api/modrinth/sync") return await syncModrinthProjectsHandler(request, response);
+    if (request.method === "GET" && request.url.startsWith("/api/workspace/projects")) return await getWorkspaceProjectsHandler(request, response);
+    if (request.method === "POST" && request.url === "/api/workspace/build") return await buildWorkspaceProjectHandler(request, response);
+    if (request.method === "POST" && request.url === "/api/workspace/publish-direct") return await publishDirectWorkspaceHandler(request, response);
     if (request.method === "POST" && request.url === "/api/deploy") {
       const wrangler = resolve(ROOT, "node_modules/wrangler/bin/wrangler.js");
       const result = await run(process.execPath, [wrangler, "pages", "deploy", "site", "--project-name", "modsite"]);
