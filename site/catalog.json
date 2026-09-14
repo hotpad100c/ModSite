@@ -4,12 +4,12 @@
       "slug": "breakseverything",
       "name": "BreaksEverything",
       "description": "This is an example description! Tell everyone what your mod is about!",
-      "longDescription": "",
+      "longDescription": "/gamerule breakseverything:breaking_speed\r\n/gamerule breakseverything:breaking_radius",
       "icon": "https://dl.ryan100c.party/images/breakseverything-icon.png",
-      "banner": "",
+      "banner": "https://dl.ryan100c.party/images/breakseverything-banner.png",
       "source": "https://github.com/FabricMC/fabric-example-mod",
       "authors": [
-        "Me!"
+        "Ryan100C"
       ],
       "releases": [
         {
@@ -31,7 +31,8 @@
             }
           ]
         }
-      ]
+      ],
+      "description_zh": "Extended Vein Mining (Ultra-Wide Area)"
     },
     {
       "slug": "carpetgui",
