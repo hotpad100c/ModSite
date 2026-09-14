@@ -787,6 +787,60 @@
       ]
     },
     {
+      "slug": "cauldronfix",
+      "name": "CauldronFix",
+      "description": "Makes cauldron even better for Mojang!",
+      "longDescription": "# Description\nCauldronsFix adds a more refined cauldron system to Minecraft.\n# Blocks Overview\n(All images taken with isorender)\n![Overview](https://cdn.modrinth.com/data/cached_images/8699247932eaefe579351b3e3ccb9828fbf4757f.png)\n## Cauldrons containing solids\n\n![Cauldron Full Of Obsidian](https://cdn.modrinth.com/data/cached_images/a67e5c393e6ac562fbdebb38b0d0ae682d26ff8f.png)\n<details>\n<summary>Cauldron Full Of Obsidian</summary>\n  \n  Minable:Yes\n\n  Tool: >= Diamond pickaxe\n  <details>\n  <summary>Drops</summary>\n    \n    Normal: Obsidian(Leave empty cauldron in place)\n    \n    Silk_touch: A Cauldron Full Of Obsidian\n    \n    Explosion: Caudron(Leave obsidian in place)\n  </details>\n  \n  Produced when water appears above a lava cauldron\n\n  Craft recipe: Obsidian + Cauldron (shapeless)\n\n  Immovable\n\n  Gravity-affected block\n\n  Redstone Comparator output:30\n</details>\n\n![Cauldron Full Of Stone](https://cdn.modrinth.com/data/cached_images/e387e19fd1f0556daefa43cba76004970340a1d3.png)\n<details>\n<summary>Cauldron Full Of Stone</summary>\n  \n  Minable:Yes\n\n  Can interact with Mace\n\n  Tool: >= Wooden pickaxe\n  <details>\n  <summary>Drops</summary>\n    \n    Normal: Stone(Leave empty cauldron in place)\n    \n    Silk_touch: A Cauldron Full Of Stone\n    \n    Explosion: Caudron & Stone\n  </details>\n  \n  Produced when lava appears above a level3 water cauldron\n\n  Craft recipe: Stone + Cauldron (shapeless)\n\n  Movable\n\n  Redstone Comparator output:15\n</details>\n\n![Cauldron Full Of Cobblestones](https://cdn.modrinth.com/data/cached_images/0aa8253583f49c672d6ab21af29598fccb3a2885.png)\n<details>\n<summary>Cauldron Full Of Cobblestones</summary>\n  \n  Minable:Yes\n\n  Can interact with Mace\n\n  Tool: >= Wooden pickaxe\n  <details>\n  <summary>Drops</summary>\n    \n    Normal: Cobblestone(Leave empty cauldron in place)\n    \n    Silk_touch: A Cauldron Full Of Cobblestones\n    \n    Explosion: Caudron & Cobblestone\n  </details>\n  \n  Produced when lava appears above a level2 water cauldron\n\n  Craft recipe: Cobblestone + Cauldron (shapeless)\n\n  Movable\n\n  Redstone Comparator output:10\n</details>\n\n![Replace this with a description](https://cdn.modrinth.com/data/cached_images/155b270053a289364393906983b793562a861844.png)\n<details>\n<summary>Cauldron Half Full Of Cobblestones</summary>\n  \n  Minable:Yes\n\n  Tool: >= Wooden pickaxe\n  <details>\n  <summary>Drops</summary>\n    \n    Normal: Cobblestone Slab(Leave empty cauldron in place)\n    \n    Silk_touch: A Cauldron HAlf Full Of Cobblestones\n    \n    Explosion: Caudron & Cobblestone Slab\n  </details>\n  \n  Produced when lava appears above a level1 water cauldron\n\n  Craft recipe: -\n\n  Movable\n\n  Redstone Comparator output:5\n</details>\n\n![Replace this with a description](https://cdn.modrinth.com/data/cached_images/c043f7ba8590ddf77cb074b78385f6d16c9a63fc.png)\n<details>\n<summary>Cauldron Full Of Gravel</summary>\n  \n  Minable:Yes\n\n  Can interact with Mace\n  \n  Can interact with Shovel like items\n\n  Tool: >= Wooden pickaxe\n  <details>\n  <summary>Drops</summary>\n    \n    Normal: Gravel(Leave empty cauldron in place)\n    \n    Silk_touch: A Cauldron Full Of Gravel\n    \n    Explosion: Caudron & Gravel\n  </details>\n  \n  Produced when interact with **Cauldron Full Of Cobblestones** using Mace\n\n  Recipe: Cauldron Full Of Gravel -> Gravel x2\n\n  Movable\n\n  Redstone Comparator output:3\n</details>\n\n![Replace this with a description](https://cdn.modrinth.com/data/cached_images/309079b3b983398eb8242ebe3ee4d2ff7214338e.png)\n<details>\n<summary>Cauldron Full Of Burnt</summary>\n  \n  Minable:Yes\n\n  Can interact with Shovel like items\n\n  Tool: >= Wooden pickaxe\n  <details>\n  <summary>Drops</summary>\n    \n    Normal: Coal(Leave empty cauldron in place)\n    \n    Silk_touch: A Cauldron Full Of Burnt\n    \n    Explosion: Caudron & Coal\n  </details>\n  \n  Produced when lava appears above Milk Cauldron/Honey Cauldron\n\n  Recipe: Cauldron Full Of Gravel -> Gravel x2\n\n  Movable\n\n  Redstone Comparator output:6\n</details>\n\n## Cauldrons containing liquids\n\n![Replace this with a description](https://cdn.modrinth.com/data/cached_images/42e39539df50f1c2b1050c2a4e9a3c12afe4cda7.png)\n<details>\n<summary>Honey Cauldron</summary>\n  \n  Minable:Yes(Irritate near by bees)\n\n \n\n  Tool: >= Wooden pickaxe\n  <details>\n  <summary>Drops</summary>\n    \n    Normal: Cauldron\n    \n    Silk_touch: Cauldron\n    \n    Explosion: Caudron\n  </details>\n\n  <details>\n  <summary>Effects when standing inside</summary>\n    \n    Slowness III(00:05)\n    \n    Regeneration III(00:05)\n    \n    Haste III(00:05)\n\n    Saturation III(00:05)\n  </details>\n\n  Movable\n\n  Redstone Comparator output: Level(1~3)\n</details>\n\n![Replace this with a description](https://cdn.modrinth.com/data/cached_images/2247ebcf561c67726fa5ceb0750dda8ace7328cb.png)\n<details>\n<summary>Dragons breath Cauldron</summary>\n  \n  Minable:Yes(Summon dragon's breath effect cloud)\n\n \n\n  Tool: >= Wooden pickaxe\n  <details>\n  <summary>Drops</summary>\n    \n    Normal: Cauldron\n    \n    Silk_touch: Cauldron\n    \n    Explosion: Caudron\n  </details>\n\n  <details>\n  <summary>Effects when standing inside</summary>\n    \n    Speed VI(00:05)\n    \n    Haste IV(00:05)\n    \n    Jump Boost III(00:05)\n\n    Strength VI(00:05)\n\n    Damage: 1heart/tick(All entities)\n    \n  </details>\n\n  Movable\n\n  Explodes when there is lava above\n\n  Summon dragon's breath effect cloud when there is water above\n  \n  Redstone Comparator output: Level(1~3) x 4\n</details>\n\n![Replace this with a description](https://cdn.modrinth.com/data/cached_images/9d137ef854f1216706558414cc3558fb2a78224b.png)\n<details>\n<summary>Milk Cauldron</summary>\n  \n  Minable:Yes\n\n \n\n  Tool: >= Wooden pickaxe\n  <details>\n  <summary>Drops</summary>\n    \n    Normal: Cauldron\n    \n    Silk_touch: Cauldron\n    \n    Explosion: Caudron\n  </details>\n\n  <details>\n  <summary>Remove effects when standing inside</summary>\n    \n    Poisen\n\n    Wither\n\n    Weakness\n    \n  </details>\n\n  Movable\n  \n  Redstone Comparator output: 1\n</details>\n\n# Other changes\n- Now the dispenser can interact with cauldrons\n  ![Replace this with a description](https://cdn.modrinth.com/data/cached_images/9cef58e8b9a56dc2d3f38d848a28e09196bf6589.gif)",
+      "icon": "https://cdn.modrinth.com/data/jEXj32z7/a8ff47f522d84a218a5dfedd66aebb5c46a2d291_96.webp",
+      "banner": "https://cdn.modrinth.com/data/jEXj32z7/images/6bbbed5e64c7685d4b0f3a1709c21be61b1c7aa9.png",
+      "source": "https://github.com/hotpad100c/cauldronfix",
+      "authors": [],
+      "releases": [
+        {
+          "version": "fabric1.21+0.15.6-1.3.0",
+          "publishedAt": "2024-11-11T12:29:48.339909Z",
+          "gameVersions": [
+            "1.21",
+            "1.21.1"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "cauldronfix-fabric1.21+0.15.6-1.3.0.jar",
+              "size": 222722,
+              "sha256": "",
+              "sha512": "ad92dc1c10a23011ed73ba8f403ebede648a52c5440033b93621f32556ca6c793b2b776da2ffcb4d7cb4e1e7f8bfc4904d1309020e2e97fd1a24309170fc1ab7",
+              "url": "https://cdn.modrinth.com/data/jEXj32z7/versions/eR95X7T8/cauldronfix-fabric1.21%2B0.15.6-1.3.0.jar"
+            }
+          ]
+        },
+        {
+          "version": "fabric1.21+0.15.6-1.1.0",
+          "publishedAt": "2024-10-14T01:20:09.463463Z",
+          "gameVersions": [
+            "1.21",
+            "1.21.1"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "Initial version...",
+          "files": [
+            {
+              "name": "cauldronfix-fabric1.21+0.15.6-1.1.0.jar",
+              "size": 120456,
+              "sha256": "",
+              "sha512": "61e3f7ca3dab317691d33e94ecc3971d95a0fc8e28a9b41876f85229318b67a20842f23a86811c2340308a182eeecf34a41645195442bf8e8611063bc506f477",
+              "url": "https://cdn.modrinth.com/data/jEXj32z7/versions/oE3b4W1b/cauldronfix-fabric1.21%2B0.15.6-1.1.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "colorfulcollars",
       "name": "ColorfulCollars",
       "description": "Freely blend colors of your pet's collar",
@@ -1052,6 +1106,53 @@
       ]
     },
     {
+      "slug": "flashbackoutlinefix",
+      "name": "FlashbackOutlineFix",
+      "description": "Fixed container block outline issue for flashback",
+      "longDescription": "# Fixed in Flashback v0.3.0 1.21.9 & 1.21.10\n\nFlashback uses spectator mode to render videos, which causes block outlines to appear when the camera passes through container blocks. This mod fixes that issue.\n![:D](https://cdn.modrinth.com/data/cached_images/ee15987da8c3d69600fc9e99b4ce6edfdc961b63_0.webp)",
+      "icon": "https://cdn.modrinth.com/data/unwLsDh8/174b5070d5c99274f816b84121713a6b3d32ed1a_96.webp",
+      "banner": "https://cdn.modrinth.com/data/unwLsDh8/images/7c8c3cb0da0287409905c0357d88e94e462fad78.png",
+      "source": "",
+      "authors": [],
+      "releases": [
+        {
+          "version": "1.0.0",
+          "publishedAt": "2025-07-24T03:39:57.801717Z",
+          "gameVersions": [
+            "1.21",
+            "1.21.1",
+            "1.21.2",
+            "1.21.3",
+            "1.21.4",
+            "1.21.5",
+            "1.21.6",
+            "1.21.7",
+            "1.21.8"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "flashbackblockoutlinefix-1.0.0.jar",
+              "size": 9328,
+              "sha256": "",
+              "sha512": "aa81d26aa81281db86fd880da9dd45fa061ad03d8c32a35c3123b893d146f766da74c6449ac0135a070c48a87934fdc2b63e96c9a299aad199ee87df63a19e6f",
+              "url": "https://cdn.modrinth.com/data/unwLsDh8/versions/YjSA7usx/flashbackblockoutlinefix-1.0.0.jar"
+            },
+            {
+              "name": "flashbackblockoutlinefix-1.0.0-sources.jar",
+              "size": 6304,
+              "sha256": "",
+              "sha512": "25d95dd84d7340d1cd93b2a6d62cca0f981d2750431c8b895cc47c3e896f2be0d6ece912f7d3151ad314541afa9ab4bec48f3dc1502997e306669b39096214f2",
+              "url": "https://cdn.modrinth.com/data/unwLsDh8/versions/YjSA7usx/flashbackblockoutlinefix-1.0.0-sources.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "glowmyblocks",
       "name": "GowingBlockOutlines",
       "description": "Make blocks glow like entities",
@@ -1083,8 +1184,9 @@
         },
         {
           "version": "1.3.0",
-          "publishedAt": "2025-12-14T07:14:06.821984Z",
+          "publishedAt": "2026-08-17T13:44:53.066918Z",
           "gameVersions": [
+            "1.21.11",
             "1.21",
             "1.21.1"
           ],
@@ -1160,8 +1262,11 @@
         },
         {
           "version": "1.0.0",
-          "publishedAt": "2025-09-07T06:01:47.662080Z",
+          "publishedAt": "2025-09-07T06:20:56.488027Z",
           "gameVersions": [
+            "1.21",
+            "1.21.1",
+            "1.21.2",
             "1.21.4",
             "1.21.5",
             "1.21.6",
@@ -1176,6 +1281,13 @@
           ],
           "notes": "",
           "files": [
+            {
+              "name": "keepmyscroll-1.0.0-1.21.jar",
+              "size": 16240,
+              "sha256": "",
+              "sha512": "607c1764006f47ffe9811ee328a5f3d79724dc01dcec1fe152cea5f5ad0cac5baa81985d37aea38b9ceb613a267ed47b22a51de06a653909a1399e5c4008b3d9",
+              "url": "https://cdn.modrinth.com/data/axukUHes/versions/gL2BG9FG/keepmyscroll-1.0.0-1.21.jar"
+            },
             {
               "name": "keepmyscroll-1.0.0.jar",
               "size": 16246,
@@ -1422,8 +1534,12 @@
       "releases": [
         {
           "version": "1.2.0",
-          "publishedAt": "2026-04-09T11:18:22.058409Z",
+          "publishedAt": "2026-09-12T12:42:28.535543Z",
           "gameVersions": [
+            "1.21.9",
+            "1.21.10",
+            "1.21.11",
+            "26.2-snapshot-1",
             "26.1",
             "26.1.1"
           ],
@@ -1432,6 +1548,34 @@
           ],
           "notes": "",
           "files": [
+            {
+              "name": "ryansrenderingkit-1.2.0+1.21.9.jar",
+              "size": 212287,
+              "sha256": "",
+              "sha512": "0036f44e1291abdb8065ca3589cf73f7f953c9d0bab2a1743cb0e5eaa7b924151401388c7a7232c2922b4dadb8a7f5d0d221c0c9547d352459cf777315c23f3f",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/qtAiU8y9/ryansrenderingkit-1.2.0%2B1.21.9.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.2.0+1.21.10.jar",
+              "size": 211324,
+              "sha256": "",
+              "sha512": "8155d9c7626c5e66eda7932eef44021ae33d5b8713ac0455af732240402c8079f5948c5175e14b3a7829e655cd46b76740f2617438d2dbbfa7d0ea36a8f871a4",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/DI0CMG9Q/ryansrenderingkit-1.2.0%2B1.21.10.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.2.0+1.21.11.jar",
+              "size": 210699,
+              "sha256": "",
+              "sha512": "4cecc68997c75cc2f40e8335b6991f8825ef397519df797c6e2b15f928cffb0f6ae7dd0fb757814a7830b66ad45e34cb839d3bd5005968a7db7b84d4ce6f4ba7",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/jhEIHre6/ryansrenderingkit-1.2.0%2B1.21.11.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.2.0+26.2.jar",
+              "size": 213444,
+              "sha256": "",
+              "sha512": "bf8cd72aa25801ea7d84215944d84b03a8d57523600c3ef8ce084a17d33640860eae39975841f87323b1abe799927bd1b0f9fd9ff682473a5b444e9a86ab17aa",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/M1Fbd1Pw/ryansrenderingkit-1.2.0%2B26.2.jar"
+            },
             {
               "name": "ryansrenderingkit-1.2.0+26.1.jar",
               "size": 213692,
@@ -1443,8 +1587,36 @@
         },
         {
           "version": "1.1.0",
-          "publishedAt": "2026-04-03T11:06:44.029157Z",
+          "publishedAt": "2026-04-04T05:43:15.965103Z",
           "gameVersions": [
+            "26.1-snapshot-1",
+            "1.21.11",
+            "1.21.10",
+            "1.21.9",
+            "1.21.6",
+            "1.21.7",
+            "1.21.8",
+            "1.21.5",
+            "1.21.4",
+            "1.21.2",
+            "1.21.3",
+            "1.21",
+            "1.21.1",
+            "1.20.3",
+            "1.20.4",
+            "1.20.5",
+            "1.20.6",
+            "1.20",
+            "1.20.1",
+            "1.20.2",
+            "1.19",
+            "1.19.1",
+            "1.19.2",
+            "1.19.3",
+            "1.19.4",
+            "1.18",
+            "1.18.1",
+            "1.18.2",
             "1.17",
             "1.17.1"
           ],
@@ -1453,6 +1625,97 @@
           ],
           "notes": "",
           "files": [
+            {
+              "name": "ryansrenderingkit-1.1.0+26.1.jar",
+              "size": 213188,
+              "sha256": "",
+              "sha512": "3d46b9b7f88b44e601cd5721b870388363f57ee839cce5783f90d6cccc1dcb0f0ee42966d4dd1ccbfc85d162c172d364d86679148f6690edf0eb88c94276e26e",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/pcyTgHS5/ryansrenderingkit-1.1.0%2B26.1.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.21.11.jar",
+              "size": 211064,
+              "sha256": "",
+              "sha512": "2b38472da7a60546e6ea6df7595e41b4ecad0662eeb911ef6a2e31c2d9fd116fb3a89241019b5df7075b846a7208545c050e5c1bfeb7c69da0d88dc279a625a9",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/MoD2EPMm/ryansrenderingkit-1.1.0%2B1.21.11.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.21.10.jar",
+              "size": 211480,
+              "sha256": "",
+              "sha512": "f5a1e5924051403096c0c7d80c2bc0cedf74f787f878468df4141b68992b791e74d6ce33e08c442bd76716d5bc592f95fd1d925acb85c6f90442dc97cdfa3538",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/ZBEtpMly/ryansrenderingkit-1.1.0%2B1.21.10.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.21.9.jar",
+              "size": 212443,
+              "sha256": "",
+              "sha512": "2d9c48093367c76276ed4e5f6d805e5577007398291209bcf1c3f69aee58fbc7924288fbcc57a99ba4f85f9941b6b89f2b83357248d57899bf749a1bcf543821",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/I9Ejgy4g/ryansrenderingkit-1.1.0%2B1.21.9.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.21.6.jar",
+              "size": 210792,
+              "sha256": "",
+              "sha512": "8d93f1ffd21ee24480e4cf8f5a7d8cf3c2e86d88aacbdf0ab95c47e0258aa79a0cba658fb6113db86ae3f461f8a505f9c7f5872eaed21117e1cbbe5caae8db23",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/7rivn6zk/ryansrenderingkit-1.1.0%2B1.21.6.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.21.5.jar",
+              "size": 210610,
+              "sha256": "",
+              "sha512": "75f3eeb521af194c0c21c34d030ff3acda5579db8a5ad517f55a5d978409fc5559a80c33f0beb81c7014a51a091dfb0507eb7c1b51a4395e172f888aa2066074",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/HiGTqUhA/ryansrenderingkit-1.1.0%2B1.21.5.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.21.4.jar",
+              "size": 207686,
+              "sha256": "",
+              "sha512": "17654d101f57268172ae2b8395e5cd7dbac16eda0ba02b630b5d52bd58fadd0832e6e79225f237f69f1867bac936dda534307ad04a4d7be41e718fa2d46b029a",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/ya1UjdDd/ryansrenderingkit-1.1.0%2B1.21.4.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.21.3.jar",
+              "size": 207685,
+              "sha256": "",
+              "sha512": "25b06b213a623ce668d0fd8b787e92d2b8aa40f01f4de2e4c57c8d7e53569098be5835927a4ed180a44f4fbab60c05060a5a09d5fdd853de92f5e5e82bbaa6ad",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/BxpreXQU/ryansrenderingkit-1.1.0%2B1.21.3.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.21.1.jar",
+              "size": 207962,
+              "sha256": "",
+              "sha512": "e83e3380ace8817043c60fa5890657ca4815f423ceed90639f90b6d4903fbb87a7c7fa6bdcf2b0d2cb202aec7a9f2f2072bfd7d0f84ebb384bb43b53fd7ddcdc",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/qPjSB31C/ryansrenderingkit-1.1.0%2B1.21.1.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.20.6.jar",
+              "size": 206729,
+              "sha256": "",
+              "sha512": "51b588520f0dac17ad725ba826ce6fdf6a1a356981e5258ea428b26a37bf1ee4344e584a0109b089ff1dbe36bffb2c931717d868e54ce6fa20d574cfc0e354da",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/Hu96n3s3/ryansrenderingkit-1.1.0%2B1.20.6.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.20.1.jar",
+              "size": 207165,
+              "sha256": "",
+              "sha512": "f8959dece9dc11ac1ac5fe21571245a95caa6efd768a0a95f2230ca419137ccac2a4a156f2fbd7244b6b7bd3c36d0e6d20d5fb0e2c02401917f97f6cd0c9853a",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/PY9CHYV3/ryansrenderingkit-1.1.0%2B1.20.1.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.19.4.jar",
+              "size": 207530,
+              "sha256": "",
+              "sha512": "f99bd72445870faa59a2972eb2307fe301c1a1a13c58003b639b88cf7e7107f9cbebdb9b56a6e12c8670554958eb2422875a0075599296482812d01db59bc5e9",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/BR2aQ4TG/ryansrenderingkit-1.1.0%2B1.19.4.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.1.0+1.18.2.jar",
+              "size": 905299,
+              "sha256": "",
+              "sha512": "f36631f57b5422b86ef3551c640ab0de63b36e082372ad342b5d1a209156245c6fc8965b1028c29eb7381b3a4793460bbcda159f576d0a590e14a63ccb4309e9",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/6S4LImda/ryansrenderingkit-1.1.0%2B1.18.2.jar"
+            },
             {
               "name": "ryansrenderingkit-1.1.0+1.17.1.jar",
               "size": 905304,
@@ -1464,8 +1727,16 @@
         },
         {
           "version": "1.0.6",
-          "publishedAt": "2026-02-05T09:18:50.089398Z",
+          "publishedAt": "2026-02-05T09:27:06.103154Z",
           "gameVersions": [
+            "1.21.6",
+            "1.21.7",
+            "1.21.8",
+            "1.21.4",
+            "1.21.2",
+            "1.21.3",
+            "1.21",
+            "1.21.1",
             "1.21.5"
           ],
           "loaders": [
@@ -1473,6 +1744,34 @@
           ],
           "notes": "",
           "files": [
+            {
+              "name": "ryansrenderingkit-1.0.6+1.21.6.jar",
+              "size": 211760,
+              "sha256": "",
+              "sha512": "0a307926b5d6dde9317c463fcb9bf5801df8aedd2c701d5ac4dc8be63e11e3ae60771db8d34a3174b35c09e2565a0993ef525c4d02ad10023b0c3f6d320ffe8f",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/1Qv9HODN/ryansrenderingkit-1.0.6%2B1.21.6.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.0.6+1.21.4.jar",
+              "size": 208070,
+              "sha256": "",
+              "sha512": "13d594b4b94cdc868dba981b3e4319bfb788896be0667c3a6bda8a2b76b8c5f9ec4acfd6f10ae8b80ae9b9306d007f767d8081b415a3fe174dd4dd5c3ebeb8ab",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/t3jToJkA/ryansrenderingkit-1.0.6%2B1.21.4.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.0.6+1.21.3.jar",
+              "size": 208071,
+              "sha256": "",
+              "sha512": "c61022d54d316d36d84ab905c0294dab365f194e90e5f84dee91e876b0f012ae72f628a4fd5d76ec379e7ed82f5bc128d5d1afe79038c244f08aa14f5ebcdbce",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/3kKRdARs/ryansrenderingkit-1.0.6%2B1.21.3.jar"
+            },
+            {
+              "name": "ryansrenderingkit-1.0.6+1.21.1.jar",
+              "size": 208270,
+              "sha256": "",
+              "sha512": "c4e8c231304e6123d446a4e4aa25a5799827dbf28d46bf1ae56b9394ab7d7b7e36d472fcb6af800ef435371e5c501c74e7346f8469f92d5f167062d4b49a1e83",
+              "url": "https://cdn.modrinth.com/data/CdJaAf0y/versions/CxgN3gXx/ryansrenderingkit-1.0.6%2B1.21.1.jar"
+            },
             {
               "name": "ryansrenderingkit-1.0.6+1.21.5.jar",
               "size": 211571,
@@ -1519,8 +1818,11 @@
         },
         {
           "version": "1.0.0-SNAPSHOT",
-          "publishedAt": "2026-06-27T06:55:42.039037Z",
+          "publishedAt": "2026-06-27T06:57:16.613338Z",
           "gameVersions": [
+            "1.21.10",
+            "1.21.9",
+            "1.21.8",
             "1.21.7"
           ],
           "loaders": [
@@ -1528,6 +1830,27 @@
           ],
           "notes": "",
           "files": [
+            {
+              "name": "scheduled-tick-visualizer-v1.0.0-mc1.21.10-SNAPSHOT.jar",
+              "size": 1924984,
+              "sha256": "",
+              "sha512": "a4c2d671fd40fae5726794b5aa17640e5d284c5854a0f98b48b30b12c76b8a32f7a41eeea991439ead474f3d0c9aa50a0ebbee706da73e09ccf8b06d3891a3e1",
+              "url": "https://cdn.modrinth.com/data/4bMS6SlB/versions/GvkYqgVB/scheduled-tick-visualizer-v1.0.0-mc1.21.10-SNAPSHOT.jar"
+            },
+            {
+              "name": "scheduled-tick-visualizer-v1.0.0-mc1.21.9-SNAPSHOT.jar",
+              "size": 1924986,
+              "sha256": "",
+              "sha512": "2eccffe9db3b8d0cb05c34edd4824e9ce48a48d700a61e32d90ea543100e6ecc8be5b2b98cc98e889c1c7b3e2799b8f8c385ed32e24718eccb7855318040877f",
+              "url": "https://cdn.modrinth.com/data/4bMS6SlB/versions/E2cen2dk/scheduled-tick-visualizer-v1.0.0-mc1.21.9-SNAPSHOT.jar"
+            },
+            {
+              "name": "scheduled-tick-visualizer-v1.0.0-mc1.21.8-SNAPSHOT.jar",
+              "size": 1924945,
+              "sha256": "",
+              "sha512": "7325dcae56fbb368cd2f440fb386d47fe99ee0f523dbcc8ac7a0e0e6e5bfec6170e8ddc60b6481ad31ff0597b6329910b6f8fbf7e6173a828a67d47a42796cc7",
+              "url": "https://cdn.modrinth.com/data/4bMS6SlB/versions/2J3Zygon/scheduled-tick-visualizer-v1.0.0-mc1.21.8-SNAPSHOT.jar"
+            },
             {
               "name": "scheduled-tick-visualizer-v1.0.0-mc1.21.7-SNAPSHOT.jar",
               "size": 1924946,
@@ -1559,29 +1882,8 @@
           ]
         },
         {
-          "version": "1.3.0+1.21-fabric",
-          "publishedAt": "2025-04-06T08:54:21.660152Z",
-          "gameVersions": [
-            "1.21",
-            "1.21.1"
-          ],
-          "loaders": [
-            "Fabric"
-          ],
-          "notes": "# Bug Fix\n- [https://github.com/hotpad100c/scheduledtickvisulizer/commit/0ae841e7d3a94cb5aaa82dee0d6d38d7a7f6bdaa]-(https://github.com/hotpad100c/scheduledtickvisulizer/commit/0ae841e7d3a94cb5aaa82dee0d6d38d7a7f6bdaa)\n\n- No longer sending packets to players who didnt install this mod when running on a server\n\n# New Features\n- **Simplify informations option**\n\n->\nSimplify the information to:\n\n```\n{SubTickOrder}@{TriggerTime}[priority(if priority < 0)]\n```\n\n\n![Replace this with a description](https://cdn.modrinth.com/data/cached_images/e262a486d20fb38118d7c965c7c56f7acde24a5c.png)\n ![Replace this with a description](https://cdn.modrinth.com/data/cached_images/b683d7fa7e4538b02136829eac77a52e866b3461_0.webp)\n- **Execution order simulate**\n  \n  -> Use a white box to mark the execution sequence\n ![Replace this with a description](https://cdn.modrinth.com/data/cached_images/d1536bb89f69c365a760ed3ab229ab807e6c16dd.png)\n ![Replace this with a description](https://cdn.modrinth.com/data/cached_images/b76e7935eeab1248cd73f3603c32edf5b339ec3b_0.webp)",
-          "files": [
-            {
-              "name": "scheduledtickvisualizer-1.3.0+1.21-fabric.jar",
-              "size": 1929047,
-              "sha256": "",
-              "sha512": "c6a05541325d70fab048a08b435c24c919d6461e19f758e1f51bacee45e49116c1c35c912cf05fb60ce87e34fa4e06161a45060e66c4f25126dbb5d96df4b496",
-              "url": "https://cdn.modrinth.com/data/4bMS6SlB/versions/Yfh8PzB9/scheduledtickvisualizer-1.3.0%2B1.21-fabric.jar"
-            }
-          ]
-        },
-        {
           "version": "1.3.0+1.21.4-fabric",
-          "publishedAt": "2025-01-03T03:56:06.931278Z",
+          "publishedAt": "2025-05-13T03:54:14.483746Z",
           "gameVersions": [
             "1.21.4"
           ],
@@ -1590,6 +1892,13 @@
           ],
           "notes": "",
           "files": [
+            {
+              "name": "scheduledtickvisualizer-1.3.0+1.24-fabric.jar",
+              "size": 1925722,
+              "sha256": "",
+              "sha512": "b9ab1eb4a21ef40f11decdac6dea056be4e02d1b6323a478b450204d79e489ac799efcf7220b9e589f5dc0e56e7ec871801ce88b0540b376d68a731ad0ab1aaa",
+              "url": "https://cdn.modrinth.com/data/4bMS6SlB/versions/PPGi4zB3/scheduledtickvisualizer-1.3.0%2B1.24-fabric.jar"
+            },
             {
               "name": "scheduledtickvisualizer-1.3.0+1.21.4-fabric.jar",
               "size": 1925683,
@@ -1601,7 +1910,7 @@
         },
         {
           "version": "1.3.0+1.20.1-fabric",
-          "publishedAt": "2024-12-07T04:43:35.071282Z",
+          "publishedAt": "2025-04-27T03:36:09.095151Z",
           "gameVersions": [
             "1.20.1",
             "1.20.2",
@@ -1621,6 +1930,27 @@
               "sha256": "",
               "sha512": "bd1bb45e7ba676f833589223e5ce98e78606ca226d3eebd18510e8d4d3945a906ff2d63786f40864e957aff5f62c1183ac4606cde7302e423147af5976ed7980",
               "url": "https://cdn.modrinth.com/data/4bMS6SlB/versions/IcUxyDzT/scheduledtickvisualizer-1.3.0%2B1.20.1-fabric.jar"
+            }
+          ]
+        },
+        {
+          "version": "1.3.0+1.21-fabric",
+          "publishedAt": "2025-04-06T08:54:21.660152Z",
+          "gameVersions": [
+            "1.21",
+            "1.21.1"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "# Bug Fix\n- [https://github.com/hotpad100c/scheduledtickvisulizer/commit/0ae841e7d3a94cb5aaa82dee0d6d38d7a7f6bdaa]-(https://github.com/hotpad100c/scheduledtickvisulizer/commit/0ae841e7d3a94cb5aaa82dee0d6d38d7a7f6bdaa)\n\n- No longer sending packets to players who didnt install this mod when running on a server\n\n# New Features\n- **Simplify informations option**\n\n->\nSimplify the information to:\n\n```\n{SubTickOrder}@{TriggerTime}[priority(if priority < 0)]\n```\n\n\n![Replace this with a description](https://cdn.modrinth.com/data/cached_images/e262a486d20fb38118d7c965c7c56f7acde24a5c.png)\n ![Replace this with a description](https://cdn.modrinth.com/data/cached_images/b683d7fa7e4538b02136829eac77a52e866b3461_0.webp)\n- **Execution order simulate**\n  \n  -> Use a white box to mark the execution sequence\n ![Replace this with a description](https://cdn.modrinth.com/data/cached_images/d1536bb89f69c365a760ed3ab229ab807e6c16dd.png)\n ![Replace this with a description](https://cdn.modrinth.com/data/cached_images/b76e7935eeab1248cd73f3603c32edf5b339ec3b_0.webp)",
+          "files": [
+            {
+              "name": "scheduledtickvisualizer-1.3.0+1.21-fabric.jar",
+              "size": 1929047,
+              "sha256": "",
+              "sha512": "c6a05541325d70fab048a08b435c24c919d6461e19f758e1f51bacee45e49116c1c35c912cf05fb60ce87e34fa4e06161a45060e66c4f25126dbb5d96df4b496",
+              "url": "https://cdn.modrinth.com/data/4bMS6SlB/versions/Yfh8PzB9/scheduledtickvisualizer-1.3.0%2B1.21-fabric.jar"
             }
           ]
         },
@@ -1735,6 +2065,177 @@
       ]
     },
     {
+      "slug": "tmwin",
+      "name": "TMWIN",
+      "description": "Tell Me What I Need : Display the litematica material list in the crafting table screen.",
+      "longDescription": "# TMWIN: TellMeWhatINeed\n\n![Replace this with a description](https://cdn.modrinth.com/data/cached_images/2656294d38bcce4b08dd85ab69f8017a1aed99b6.png)\n\n**A Handy Little Helper for Litematica Projections!**\n\n## Overview\n\n`TMWIN: TellMeWhatINeed` is a simple yet powerful Minecraft mod designed for players using [Litematica](https://www.curseforge.com/minecraft/mc-mods/litematica). It automatically reads Schematic placements within your render distance and displays their material list right in the crafting table, making it easier than ever to gather resources!~~~~\n\n## Mod Showcase Video\n\n<iframe width=\"560\" height=\"315\" src=\"https://www.youtube-nocookie.com/embed/QJ_J98CprXM\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe>\n\n## Key Features\n- **Auto-Scan**: Detects Litematica projections in your render distance in real-time.\n- ![Replace this with a description](https://cdn.modrinth.com/data/cached_images/170b947d99d4bcc4d9e14c647920ec9fc8d99b25.png)\n- **Material Display**: Shows a complete material list directly in the crafting table interface.\n- ![Replace this with a description](https://cdn.modrinth.com/data/cached_images/6d9c9038d24c2f0bee2a820112905f2a0021f2b9.png)\n- **Material Breakdown**: Breakdown material into its base material.\n- ![Replace this with a description](https://cdn.modrinth.com/data/cached_images/12b443c97f21b087242513c166cf0410e614275a.png)\n## How to Use\n\n1. Load a Litematica projection in-game.\n2. Open a crafting table.\n3. Click the button with a blue book icon.\n![Replace this with a description](https://cdn.modrinth.com/data/cached_images/c11c35e3349bac9c1fc181df64a74f59ae6ecc56.png)\n4. `TMWIN` will automatically display the materials needed for the projection.\n![Replace this with a description](https://cdn.modrinth.com/data/cached_images/de86290fd7b0681c37c2096504c645fed3c0c325.png)\n## Compatibility\n\n- **Minecraft Version**: 1.20.6 ~ 1.21.4 (More versions in development)\n- **Required Mods**: Litematica, Fabric API\n- **Loader**: Fabric\n",
+      "icon": "https://cdn.modrinth.com/data/C6MLLE28/2656294d38bcce4b08dd85ab69f8017a1aed99b6.png",
+      "banner": "https://cdn.modrinth.com/data/C6MLLE28/images/6eaab6c4b8d8ad3e1f9ee046bb2f0e9a8b38178e.png",
+      "source": "https://github.com/hotpad100c/tellmewhatineed",
+      "authors": [],
+      "releases": [
+        {
+          "version": "1.0.0+mc1.21",
+          "publishedAt": "2025-10-19T11:36:15.531664Z",
+          "gameVersions": [
+            "1.21",
+            "1.21.1",
+            "1.21.2"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "tellmewhatineed-1.0.0+mc1.21.jar",
+              "size": 79513,
+              "sha256": "",
+              "sha512": "6fe03b5526ec3f69d3d8f3d2db7189c5179f10ba715261e5afa625856cf0f658545e9366811b47fc396f9659647135a169a44eaf4aeace6cb20272570d4770c2",
+              "url": "https://cdn.modrinth.com/data/C6MLLE28/versions/1aTxy5s9/tellmewhatineed-1.0.0%2Bmc1.21.jar"
+            }
+          ]
+        },
+        {
+          "version": "1.0.0+mc1.21.3",
+          "publishedAt": "2025-04-13T04:12:54.384926Z",
+          "gameVersions": [
+            "1.21.2",
+            "1.21.3"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "tellmewhatineed-1.0.0+mc1.21.3.jar",
+              "size": 69766,
+              "sha256": "",
+              "sha512": "cfeff2afdb54af6e810393bab529cdf682f3cbb6a760d4d21527712c59b801add4514a9215d0799c5b504b3ef182ae99668acd7539d2f48ab4b8050d78394098",
+              "url": "https://cdn.modrinth.com/data/C6MLLE28/versions/q8zAuwps/tellmewhatineed-1.0.0%2Bmc1.21.3.jar"
+            }
+          ]
+        },
+        {
+          "version": "1.0.0+mc1.20.6",
+          "publishedAt": "2025-04-13T04:12:08.225208Z",
+          "gameVersions": [
+            "1.20.5",
+            "1.20.6"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "tellmewhatineed-1.0.0+mc1.20.6.jar",
+              "size": 76681,
+              "sha256": "",
+              "sha512": "e87f9a90d4d46c9f24bd81aca1dd4488b3271ebe72e15a6483acf511c3ca79725f9e63e0f7b939d1750ba99d2fe9f794c7d85afd1c898880bac91d8e23fa46a1",
+              "url": "https://cdn.modrinth.com/data/C6MLLE28/versions/8tOSClEw/tellmewhatineed-1.0.0%2Bmc1.20.6.jar"
+            }
+          ]
+        },
+        {
+          "version": "1.0.0+mc1.20.4",
+          "publishedAt": "2025-04-13T04:11:43.279804Z",
+          "gameVersions": [
+            "1.20.3",
+            "1.20.4"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "tellmewhatineed-1.0.0+mc1.20.4.jar",
+              "size": 248138,
+              "sha256": "",
+              "sha512": "aad4fbd35312d059d3650bebb68daaa6776ce1c2e73de0d7ecd87972c6c652dece73e9d45be33c2de880f8652a49f147a100470dc6709291615b0bfddad408ab",
+              "url": "https://cdn.modrinth.com/data/C6MLLE28/versions/bsYdVJOF/tellmewhatineed-1.0.0%2Bmc1.20.4.jar"
+            }
+          ]
+        },
+        {
+          "version": "1.0.0+mc1.20.2",
+          "publishedAt": "2025-04-13T04:11:16.889504Z",
+          "gameVersions": [
+            "1.20.2"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "tellmewhatineed-1.0.0+mc1.20.2.jar",
+              "size": 248131,
+              "sha256": "",
+              "sha512": "3134fa437dabd83874fcb31d8ed01a7fafe3ae3ff06838606965c62ed11d34eb26d2edf36146593b2a1a7ac428ff63e88a2fbe3d4d36a106c153f53a2daeb238",
+              "url": "https://cdn.modrinth.com/data/C6MLLE28/versions/TWMWVgIE/tellmewhatineed-1.0.0%2Bmc1.20.2.jar"
+            }
+          ]
+        },
+        {
+          "version": "1.0.0+mc1.21.4",
+          "publishedAt": "2025-03-21T07:57:44.705190Z",
+          "gameVersions": [
+            "1.21.3",
+            "1.21.4"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "tellmewhatineed-1.0.0+mc1.21.4.jar",
+              "size": 69889,
+              "sha256": "",
+              "sha512": "f2f042dd4aa43788920288ec5bfdcad813c2295abc1724eac113dbbe3cf18976c74fab9a0b9eff8e99c591831b19b56c8b77ea7f484003bd4ac3c3bc3a770c2c",
+              "url": "https://cdn.modrinth.com/data/C6MLLE28/versions/x0RVOswy/tellmewhatineed-1.0.0%2Bmc1.21.4.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "trajectory",
+      "name": "Trajectory",
+      "description": "Trajectory prediction of projectiles！",
+      "longDescription": "A simple mod that showes trajectory prediction of projectiles using particles..",
+      "icon": "https://cdn.modrinth.com/data/F1C8EHRy/d532569e41c4cd7d92625e7b238f020ee7565a03_96.webp",
+      "banner": "https://cdn.modrinth.com/data/F1C8EHRy/images/13ac0e08d4616ec4992fd50f98b7a99c9fc96cdc.png",
+      "source": "https://github.com/hotpad100c/Trajectory",
+      "authors": [],
+      "releases": [
+        {
+          "version": "1.1.0",
+          "publishedAt": "2024-09-03T12:02:40.243604Z",
+          "gameVersions": [
+            "1.21",
+            "1.21.1"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "trajectory-1.1.0.jar",
+              "size": 42448,
+              "sha256": "",
+              "sha512": "ce653d9c626d34038121a44a0b09b812dc25c241eccbb05f0351780cc25b25cd42a97eb843c7dcccc99b7fb0d831e033465e5484007b8cfac543dc2b6b9e9157",
+              "url": "https://cdn.modrinth.com/data/F1C8EHRy/versions/3ApwPmX6/trajectory-1.1.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "visualdust",
       "name": "VisualDust",
       "description": "Visualize dust update order in-world.",
@@ -1779,18 +2280,113 @@
       "releases": [
         {
           "version": "1.3.10.1-SNAPSHOT",
-          "publishedAt": "2026-09-11T15:22:28.818852Z",
+          "publishedAt": "2026-09-11T15:31:23.516909Z",
           "gameVersions": [
-            "1.20.3",
-            "1.20.4",
+            "26.3-snapshot-9",
+            "26.2",
+            "26.1",
+            "26.1.1",
+            "26.1.2",
+            "1.21.11",
+            "1.21.9",
+            "1.21.10",
+            "1.21.6",
+            "1.21.7",
+            "1.21.8",
+            "1.21.5",
+            "1.21.4",
+            "1.21.2",
+            "1.21.3",
+            "1.21",
+            "1.21.1",
             "1.20.5",
-            "1.20.6"
+            "1.20.6",
+            "1.20.3",
+            "1.20.4"
           ],
           "loaders": [
+            "Legacy-fabric",
             "Fabric"
           ],
           "notes": "# Changelog\n\n## Unreleased\n\n### Sapling growth statistics\n\nVanilla tree generation is random, so two saplings of the same species rarely produce the same\nshape, and there is no easy way to see what a species actually generates. The new\n`saplingGrowthStatistics` rule samples every tree that grows from a sapling and turns those samples\ninto readable statistics.\n\n- New rule **`saplingGrowthStatistics`** (off by default; categories `[YACA]`, `[feature]`,\n  `[treefarm]`). While it is enabled, a tree grown from a sapling **places no blocks**: the growth\n  is recorded instead, storing the blocks it would have placed together with their offsets from the\n  sapling, grouped per species.\n- New command **`/treeStats`** (gamemaster permission) - per-species overview: trees sampled, total\n  logs, average logs per tree, leaves and beehives.\n- **`/treeStats export`** writes an interactive page to `run/tree-growth-stats.html`: a rotatable\n  and zoomable 3D view of the sampled blocks, per-block visibility toggles, a layer-by-layer\n  profile table and the per-species overview. The page follows the browser language\n  (English / 简体中文 / Русский) and falls back to English.\n- **`/treeStats grow <pos> <times>`** force-grows the sapling at the given position N times to\n  collect samples quickly, with progress shown on a boss bar; **`/treeStats stop`** cancels a\n  running sampling.\n- **`/treeStats reset`** clears all collected data.",
           "files": [
+            {
+              "name": "yetanothercarpetaddition-v1.3.10.1-mc26.3-snapshot-9-SNAPSHOT.jar",
+              "size": 1153686,
+              "sha256": "",
+              "sha512": "07724ccac25516eb03babb91abef6b2050e4b005f172ccea0ded6bd04b8cb4aec72cb10bc0429d2beb4b00687976fd08b9d7d9f104cfbfa2a4e4dfd1e5aaf097",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/f6QxDZnh/yetanothercarpetaddition-v1.3.10.1-mc26.3-snapshot-9-SNAPSHOT.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.10.1-mc26.2-SNAPSHOT.jar",
+              "size": 1152774,
+              "sha256": "",
+              "sha512": "1c684766f5494c16a7767d03847acc2a707c10050c9a98be014b08c742888ded641b4ec12979f110d722b6d3325f6bf3fbb62ef23099b7cb960f00cc40ddbb11",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/PH0cAHjq/yetanothercarpetaddition-v1.3.10.1-mc26.2-SNAPSHOT.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.10.1-mc26.1.2-SNAPSHOT.jar",
+              "size": 1155432,
+              "sha256": "",
+              "sha512": "afa964cc66dd73c90d95e71f5c2f05feaf81874da22aefdd947fb4972bbb7d6af8c59c8a6d38c65c954b2e7d44846242d82afd9bd447338f126a4b03bdc82cc4",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/4NdkkqIG/yetanothercarpetaddition-v1.3.10.1-mc26.1.2-SNAPSHOT.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.10.1-mc1.21.11-SNAPSHOT.jar",
+              "size": 698083,
+              "sha256": "",
+              "sha512": "e8e2d61ff19bc2ecf671010ecbeb6d0b0e12ab0d3c300547de776b815038731652b5a25a5a42cf0cb0cdde2ffa5a4f38da577600084be2161fd73f19f4149272",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/LRKzEPtt/yetanothercarpetaddition-v1.3.10.1-mc1.21.11-SNAPSHOT.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.10.1-mc1.21.9-SNAPSHOT.jar",
+              "size": 703225,
+              "sha256": "",
+              "sha512": "0d35f5fa44da2f2bd5f018144c67c7cdc6993fe6890fd2d9ea73c7aefea9187601793d4dd17cea72b5333a6495d78522b8d355190f99650957d2a27d5b554569",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/zhpGkzkg/yetanothercarpetaddition-v1.3.10.1-mc1.21.9-SNAPSHOT.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.10.1-mc1.21.6-SNAPSHOT.jar",
+              "size": 702487,
+              "sha256": "",
+              "sha512": "e9b617e2d085d46afe64e4772e0c4a45d12eef1b1f983363d931772ef878050acf2e21a08a278f34f0e24f3880a6f18baf329bf4c4a9bdc66c0950455f852fac",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/S3JXwB77/yetanothercarpetaddition-v1.3.10.1-mc1.21.6-SNAPSHOT.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.10.1-mc1.21.5-SNAPSHOT.jar",
+              "size": 701668,
+              "sha256": "",
+              "sha512": "1d814fca821765c8dff194356783a0d55135eb4768423c83dfde137804b6ceca79ffb8d512fb04e8762a3103b3d40318bd90407b98931aeb17c33554e641b555",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/yhzCXsP0/yetanothercarpetaddition-v1.3.10.1-mc1.21.5-SNAPSHOT.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.10.1-mc1.21.4-SNAPSHOT.jar",
+              "size": 700506,
+              "sha256": "",
+              "sha512": "dda1b54ed5d580c4e770b3c2dec3680e737f36f2e975ad88eb05f0eaeb2ebbc364d0567c6a644c939b48f25edc3a25819de1ae8cf49e1e7a032b96839ca96da5",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/aqmJ0lEA/yetanothercarpetaddition-v1.3.10.1-mc1.21.4-SNAPSHOT.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.10.1-mc1.21.3-SNAPSHOT.jar",
+              "size": 700525,
+              "sha256": "",
+              "sha512": "93951651087413c285817a7878b99836e54655f29104c52789e30b04cb86195f7fb53f837999853bd1f2c69cac8719d050647a55b5c171bea2767018253214d9",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/QjxM4xfu/yetanothercarpetaddition-v1.3.10.1-mc1.21.3-SNAPSHOT.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.10.1-mc1.21.1-SNAPSHOT.jar",
+              "size": 699614,
+              "sha256": "",
+              "sha512": "98ab53cbe9cc51c9c8b6c759b899006472f94eab63f39bd5b597c44cff468d6921a8ce23893a639c7781e6f2e0a1a6992c700f8ab382b231cc62ee7b54b725bc",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/qYdw74sQ/yetanothercarpetaddition-v1.3.10.1-mc1.21.1-SNAPSHOT.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.10.1-mc1.20.6-SNAPSHOT.jar",
+              "size": 698472,
+              "sha256": "",
+              "sha512": "d16cf7207bc7eb83464028f3109640315619eb127c2caf5d3b1fb4d81402cdaa2bb9e2d4e59019cb7c3caaded3e59c256f07b2da316b63cb07f99ad64206a94b",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/Zulfy3qB/yetanothercarpetaddition-v1.3.10.1-mc1.20.6-SNAPSHOT.jar"
+            },
             {
               "name": "yetanothercarpetaddition-v1.3.10.1-mc1.20.4-SNAPSHOT.jar",
               "size": 697113,
@@ -1802,8 +2398,9 @@
         },
         {
           "version": "1.3.10-SNAPSHOT",
-          "publishedAt": "2026-09-11T05:28:41.081981Z",
+          "publishedAt": "2026-09-11T05:29:07.967411Z",
           "gameVersions": [
+            "26.2",
             "26.1",
             "26.1.1",
             "26.1.2"
@@ -1813,6 +2410,13 @@
           ],
           "notes": "",
           "files": [
+            {
+              "name": "yetanothercarpetaddition-v1.3.10-mc26.2-SNAPSHOT.jar",
+              "size": 1113298,
+              "sha256": "",
+              "sha512": "be2bab96f05926791b48356ef2be0b49c3fb48752f6d7e63c1407e5a32ec1f80794028998d1781db8538be14a082c059c7caeeaa831dc813a189b760b9eda4f0",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/TmhgraXs/yetanothercarpetaddition-v1.3.10-mc26.2-SNAPSHOT.jar"
+            },
             {
               "name": "yetanothercarpetaddition-v1.3.10-mc26.1.2-SNAPSHOT.jar",
               "size": 1115956,
@@ -1844,8 +2448,21 @@
         },
         {
           "version": "1.3.9+build.103",
-          "publishedAt": "2025-11-09T12:39:14.205346Z",
+          "publishedAt": "2025-11-09T12:42:03.650433Z",
           "gameVersions": [
+            "1.21.9",
+            "1.21.10",
+            "1.21.6",
+            "1.21.7",
+            "1.21.8",
+            "1.21.5",
+            "1.21.4",
+            "1.21.2",
+            "1.21.3",
+            "1.21",
+            "1.21.1",
+            "1.20.5",
+            "1.20.6",
             "1.20.3",
             "1.20.4"
           ],
@@ -1854,6 +2471,55 @@
           ],
           "notes": "",
           "files": [
+            {
+              "name": "yetanothercarpetaddition-v1.3.9-mc1.21.9+build.103.jar",
+              "size": 635071,
+              "sha256": "",
+              "sha512": "18b2cd0ffd74e66db78284ac240a5038475464b66a2b7eb0b1ada1e239910eb6a208f5e131ea25e67a90f194be3e6496ac1e450261f12ea5dd1a84662fe6e782",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/w6wPf6TC/yetanothercarpetaddition-v1.3.9-mc1.21.9%2Bbuild.103.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.9-mc1.21.6+build.103.jar",
+              "size": 634446,
+              "sha256": "",
+              "sha512": "2cd66bb19afc34ca87f287353346000537ce1982e9d113d73200d08a735fd4c8dda5b9ad5b96b048281d5d47afed171202322c495bf8b7fdbd6861749c6a456a",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/xqfT6UTQ/yetanothercarpetaddition-v1.3.9-mc1.21.6%2Bbuild.103.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.9-mc1.21.5+build.103.jar",
+              "size": 633777,
+              "sha256": "",
+              "sha512": "8dbc474cda81d78875dcfebceb2e79d5e15955aee3c9be631de1865c6b3823578b7bcf7bd67de38148b793b6a8364ad86d06be033a86a0a70480b36bfd76950f",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/N2ytPFR0/yetanothercarpetaddition-v1.3.9-mc1.21.5%2Bbuild.103.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.9-mc1.21.4+build.103.jar",
+              "size": 632031,
+              "sha256": "",
+              "sha512": "26da0c22b9f89950c5ad878496b3c2bd0943050357c02f105f0e4cad318cf51e21ff8d5084025cf1afa574485bdb069f5063fac404f55cc6c8566cda57ff9634",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/azWv4wrP/yetanothercarpetaddition-v1.3.9-mc1.21.4%2Bbuild.103.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.9-mc1.21.3+build.103.jar",
+              "size": 632082,
+              "sha256": "",
+              "sha512": "89aaa4ff4e6e63bce31f867e8ae77c3da6fdbe84146e2bd81ad3119a0d98fed39b223c315e5c1bffa1a18e871ef2f744cfc121846ad26f363cd2c19f36d7399c",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/SaccdGA8/yetanothercarpetaddition-v1.3.9-mc1.21.3%2Bbuild.103.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.9-mc1.21.1+build.103.jar",
+              "size": 631106,
+              "sha256": "",
+              "sha512": "99524be50327ddee6ffdb438ffecd5c03d4b3427dd1b389e9453a81d75684953a3e8d171cf5d039c8ec718ce1a9002bcd91f867333fd87df06f45bc480411160",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/vRP5458a/yetanothercarpetaddition-v1.3.9-mc1.21.1%2Bbuild.103.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.9-mc1.20.6+build.103.jar",
+              "size": 629837,
+              "sha256": "",
+              "sha512": "4cc09c9bd0fb97ceb9b0d83ccf50d37ef338db0b31619c1a4b73de1298f1f753c28b80e1ac1a50873eda0aa55ab089219bb8c948cc52f3e286917aa75589b33e",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/28Ha3nmd/yetanothercarpetaddition-v1.3.9-mc1.20.6%2Bbuild.103.jar"
+            },
             {
               "name": "yetanothercarpetaddition-v1.3.9-mc1.20.4+build.103.jar",
               "size": 628667,
@@ -1865,16 +2531,69 @@
         },
         {
           "version": "1.3.8.1+build.86",
-          "publishedAt": "2025-09-26T22:52:31.504957Z",
+          "publishedAt": "2025-09-26T22:57:58.692023Z",
           "gameVersions": [
+            "1.21.6",
+            "1.21.7",
+            "1.21.8",
+            "1.21.5",
+            "1.21.4",
+            "1.21.2",
+            "1.21.3",
+            "1.21",
+            "1.21.1",
+            "1.20.5",
+            "1.20.6",
             "1.20.3",
             "1.20.4"
           ],
           "loaders": [
             "Fabric"
           ],
-          "notes": "",
+          "notes": "#1.3.8.1\n\n## Bugs fixed\n\n- Fixed issue with **PPUpdateVisualizer** rule when carpet tis addition's **InstantBlockUpdaterReintroduced** enabled.",
           "files": [
+            {
+              "name": "yetanothercarpetaddition-v1.3.8.1-mc1.21.6+build.86.jar",
+              "size": 627801,
+              "sha256": "",
+              "sha512": "84e1bf14b4bb9f4e5ff75ef7c24ca33e52f15c54b3aded3ed8cd54ee8d3c3dd02eb3c140250f5fd2ea10f57945fbabd109960cf8a065e4530245d8724c1154d9",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/rCIoHs3G/yetanothercarpetaddition-v1.3.8.1-mc1.21.6%2Bbuild.86.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.8.1-mc1.21.5+build.86.jar",
+              "size": 626707,
+              "sha256": "",
+              "sha512": "1f5867e1d1ce585115bd1be3df2bd43a4e93c9bc7752c630963a877afa11b12c77b1f9159d088c85714a0e855783ad477c99834bac809addb62e601dd681cb46",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/fgCmMphs/yetanothercarpetaddition-v1.3.8.1-mc1.21.5%2Bbuild.86.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.8.1-mc1.21.4+build.86.jar",
+              "size": 625421,
+              "sha256": "",
+              "sha512": "65b8554ab672eee0b549e3d7cbeaaf3794827551f415d92aea36ecde3672c2e2ba993d581c64f73ad2706bfc055529adee2ac060ceb3539153f654292a804b58",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/Ec75VMfW/yetanothercarpetaddition-v1.3.8.1-mc1.21.4%2Bbuild.86.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.8.1-mc1.21.3+build.86.jar",
+              "size": 625744,
+              "sha256": "",
+              "sha512": "1f2d7ef2dd9adbba63c220cbb7d9bbd975194ee77f0baa65844c16be0510f8142709e5d9995803743edec95bdb2d344ad58fd9747a31a61290b8b40562112597",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/YxC0guhy/yetanothercarpetaddition-v1.3.8.1-mc1.21.3%2Bbuild.86.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.8.1-mc1.21.1+build.86.jar",
+              "size": 625417,
+              "sha256": "",
+              "sha512": "e825a323a6b038f75dd9b05e2ef769fec5ad9599f733d795efcc0938413090d2cb612d67b7ac97939ec690c39b226879727eafa8c055ae166056023046becb71",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/giYjsE7a/yetanothercarpetaddition-v1.3.8.1-mc1.21.1%2Bbuild.86.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.8.1-mc1.20.6+build.86.jar",
+              "size": 624047,
+              "sha256": "",
+              "sha512": "e1750ecb48e20d7accef7febe5c07495759c0594d6f4e07966484f797fa2d1f270b9a767b0edd63312db6cbfe898db3ddc976af6801ade75aaa32dd8136c76f1",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/wWxZCfi2/yetanothercarpetaddition-v1.3.8.1-mc1.20.6%2Bbuild.86.jar"
+            },
             {
               "name": "yetanothercarpetaddition-v1.3.8.1-mc1.20.4+build.86.jar",
               "size": 621682,
@@ -1886,16 +2605,69 @@
         },
         {
           "version": "1.3.8+build.84",
-          "publishedAt": "2025-09-26T00:14:03.986776Z",
+          "publishedAt": "2025-09-26T00:20:59.527688Z",
           "gameVersions": [
+            "1.21.6",
+            "1.21.7",
+            "1.21.8",
+            "1.21.5",
+            "1.21.4",
+            "1.21.2",
+            "1.21.3",
+            "1.21",
+            "1.21.1",
+            "1.20.5",
+            "1.20.6",
             "1.20.3",
             "1.20.4"
           ],
           "loaders": [
             "Fabric"
           ],
-          "notes": "",
+          "notes": "# New rules added in YACA v1.3.8\n\n- BonemealSuccessProbability\n- UpdateCounter\n- FoliageAttachmentVisualize\n- BeeDecoratorProbability\n- FoliageGenerate\n\nMore description in [README.md](https://github.com/hotpad100c/yetanothercarpetaddition/blob/MultiVersion/README.md)",
           "files": [
+            {
+              "name": "yetanothercarpetaddition-v1.3.8-mc1.21.6+build.84.jar",
+              "size": 627770,
+              "sha256": "",
+              "sha512": "b26d153bfe3b4e8ac377d3f12877d6a5c97990a4aed9e24fa4a193148faf59a92800e96918efb2d492a9b5e1f3dab10ce93fa750527fc42e783c38f83c2db296",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/OUvwbKuM/yetanothercarpetaddition-v1.3.8-mc1.21.6%2Bbuild.84.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.8-mc1.21.5+build.84.jar",
+              "size": 626676,
+              "sha256": "",
+              "sha512": "3ce6125c3026208262a5cb4dc7d0c1cb788bf140c30b236dc97715b5f2c637994dd0e089e2bf9f05a92f1fceb37f309c320222dffe31423c58ad82c7dff2f92c",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/On3bbtn3/yetanothercarpetaddition-v1.3.8-mc1.21.5%2Bbuild.84.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.8-mc1.21.4+build.84.jar",
+              "size": 625390,
+              "sha256": "",
+              "sha512": "4f0924884f084749ff8a8fb3e62fe430f0a1f8f09f0f839d6a485b571e7aa1e624182f2a2ca6355642457e5dbb3496e5555e988eee5f192fdb2f1674e080cf74",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/JO7yod1o/yetanothercarpetaddition-v1.3.8-mc1.21.4%2Bbuild.84.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.8-mc1.21.3+build.84.jar",
+              "size": 625712,
+              "sha256": "",
+              "sha512": "9af8c89e3648dfa9be439f54a285ee4c9e2cf74fed7ca40d3eff927ca4d151c7cc0119a9c12e4e5df820ffd92587b64698d91b8fc4063bcd05fd56fe37658be9",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/MgQxymm8/yetanothercarpetaddition-v1.3.8-mc1.21.3%2Bbuild.84.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.8-mc1.21.1+build.84.jar",
+              "size": 625378,
+              "sha256": "",
+              "sha512": "f608b0f55a7c19e605823130c49834313d53a98267d7e5e7fa1930904425c397b6ad5e544675d0bfe97a5106eaff31420a48ecd6bc54887a55158ea6cf21b81f",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/h6ixomYy/yetanothercarpetaddition-v1.3.8-mc1.21.1%2Bbuild.84.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.8-mc1.20.6+build.84.jar",
+              "size": 624008,
+              "sha256": "",
+              "sha512": "c45b50ff497886e6a5c8a2591c08d738b9a9170c7caed9326b28d39c9c239da8061070fe93cf058aef241a1e9cc83a365789662a5c08cc4049a5a23d00d5b1b8",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/eofh6kXV/yetanothercarpetaddition-v1.3.8-mc1.20.6%2Bbuild.84.jar"
+            },
             {
               "name": "yetanothercarpetaddition-v1.3.8-mc1.20.4+build.84.jar",
               "size": 621642,
@@ -1929,8 +2701,17 @@
         },
         {
           "version": "1.3.7+build.74",
-          "publishedAt": "2025-09-03T03:21:02.441950Z",
+          "publishedAt": "2025-09-03T03:28:05.926998Z",
           "gameVersions": [
+            "1.20.3",
+            "1.20.4",
+            "1.20.5",
+            "1.20.6",
+            "1.21",
+            "1.21.1",
+            "1.21.2",
+            "1.21.3",
+            "1.21.4",
             "1.21.5"
           ],
           "loaders": [
@@ -1938,6 +2719,41 @@
           ],
           "notes": "",
           "files": [
+            {
+              "name": "yetanothercarpetaddition-v1.3.7-mc1.20.4+build.74.jar",
+              "size": 587768,
+              "sha256": "",
+              "sha512": "711127aa0ad9521d21230d89cfff9f072b08be5bc6f6c6db13f741863a329f550ad943675c7ded7f5a66a03d81aa7bf23c3b5bf2e056c9bd96a6734ce382bd9b",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/nejeQzVS/yetanothercarpetaddition-v1.3.7-mc1.20.4%2Bbuild.74.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.7-mc1.20.6+build.74.jar",
+              "size": 590126,
+              "sha256": "",
+              "sha512": "357606c30c397b1a40adf59dd7699d5cbd5e856e1b85e055882800557cedc258bd70013b05dc636eb3ede9af939303cca74386ec374ff9122d86112c53e481cc",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/G8KCP4il/yetanothercarpetaddition-v1.3.7-mc1.20.6%2Bbuild.74.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.7-mc1.21.1+build.74.jar",
+              "size": 591468,
+              "sha256": "",
+              "sha512": "16c94a999797bb81ac28988056ac0625a63c1d4925865c2fa91407ea32511b1f4e53eec6d50bf90b59dc76243cb1a3b779ba07912a61adc1e6813337249af37e",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/mRjfmHga/yetanothercarpetaddition-v1.3.7-mc1.21.1%2Bbuild.74.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.7-mc1.21.3+build.74.jar",
+              "size": 591665,
+              "sha256": "",
+              "sha512": "a7c76d0673452b7afaf7b02b757c737b81626f405834b3474d96500607a35896240376e5c1e91b3cb0e1db6495ee7bbb9450722f83e8f6f26f0cba074cc669ce",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/3WpgvqCL/yetanothercarpetaddition-v1.3.7-mc1.21.3%2Bbuild.74.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.7-mc1.21.4+build.74.jar",
+              "size": 591337,
+              "sha256": "",
+              "sha512": "2212e9462d0d14d7909f42f87a5094f4e54ab102c55d58fd61999129616fea11106d59e6019c2e2dfa81ce162fa1420be108e5e7d0a806c928ec7c2f66741456",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/Wbdvugnk/yetanothercarpetaddition-v1.3.7-mc1.21.4%2Bbuild.74.jar"
+            },
             {
               "name": "yetanothercarpetaddition-v1.3.7-mc1.21.5+build.74.jar",
               "size": 592622,
@@ -1949,8 +2765,16 @@
         },
         {
           "version": "1.3.6+build.35",
-          "publishedAt": "2025-06-24T12:13:01.546138Z",
+          "publishedAt": "2025-06-24T12:14:53.749369Z",
           "gameVersions": [
+            "1.21.5",
+            "1.21.4",
+            "1.21.2",
+            "1.21.3",
+            "1.21",
+            "1.21.1",
+            "1.20.5",
+            "1.20.6",
             "1.20.3",
             "1.20.4"
           ],
@@ -1959,6 +2783,41 @@
           ],
           "notes": "",
           "files": [
+            {
+              "name": "yetanothercarpetaddition-v1.3.6-mc1.21.5+build.35.jar",
+              "size": 571684,
+              "sha256": "",
+              "sha512": "21804e6ae899f2789c29e2ea7a99933da14378d38ced5b8f3941f253c15aaa9ab289e5502a5b87ca53f5a0af473464ec3aef93ea05104df211bf551ace8b3e7b",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/gvUzCWaZ/yetanothercarpetaddition-v1.3.6-mc1.21.5%2Bbuild.35.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.6-mc1.21.4+build.35.jar",
+              "size": 570929,
+              "sha256": "",
+              "sha512": "611985ce90e7e663641698a5b6af258e6932b2d459beb6aac151cfa4bece044d04d09d270c1b1f8da6686d746cb9ea91feb7d0c761b438c53f6a253128fe3c8f",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/Y4KjB25C/yetanothercarpetaddition-v1.3.6-mc1.21.4%2Bbuild.35.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.6-mc1.21.3+build.35.jar",
+              "size": 572817,
+              "sha256": "",
+              "sha512": "93139dd0c05b95800b6f19d865c6875817c3f6f8a75303387739f89cbe74f192aea24b5f2aac97d95f757d36e16819ebd68c49b73e4baad7525d18f8d61a80ec",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/XOpqvjC5/yetanothercarpetaddition-v1.3.6-mc1.21.3%2Bbuild.35.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.6-mc1.21.1+build.35.jar",
+              "size": 572822,
+              "sha256": "",
+              "sha512": "bfbec194e0fbb3c6efc121d11ec7ef2e1d86153404c7a14205e514ae60a6bd7d82356ebec10229e7a89d50729d9f2a5f927d2d9ae5d27932c00c34effeede872",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/ZkgxL8KF/yetanothercarpetaddition-v1.3.6-mc1.21.1%2Bbuild.35.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.6-mc1.20.6+build.35.jar",
+              "size": 572413,
+              "sha256": "",
+              "sha512": "607a3fb9b80763b9f933b90146ff86127cf2fbfa88c39c84b1a679385aa4b1e34caa5e58d0851723222b7979fd8c619269298378320752b5115c29f230b57f31",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/tMawLA7p/yetanothercarpetaddition-v1.3.6-mc1.20.6%2Bbuild.35.jar"
+            },
             {
               "name": "yetanothercarpetaddition-v1.3.6-mc1.20.4+build.35.jar",
               "size": 570229,
@@ -1970,8 +2829,16 @@
         },
         {
           "version": "1.3.5.4+build.14",
-          "publishedAt": "2025-06-05T10:07:42.666023Z",
+          "publishedAt": "2025-06-05T10:09:17.683998Z",
           "gameVersions": [
+            "1.21.5",
+            "1.21.4",
+            "1.21.2",
+            "1.21.3",
+            "1.21",
+            "1.21.1",
+            "1.20.5",
+            "1.20.6",
             "1.20.3",
             "1.20.4"
           ],
@@ -1980,6 +2847,41 @@
           ],
           "notes": "",
           "files": [
+            {
+              "name": "yetanothercarpetaddition-v1.3.5.4-mc1.21.5+build.14.jar",
+              "size": 530477,
+              "sha256": "",
+              "sha512": "9cd6537175988ce50edb79d9316cadab2bcdc3ef1ecb9958c8e0816e8b94558ce1ceb72f76cb28a7fc094b3e4a75575bdb7362001554ee8aa0bb55c1e114388e",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/QvE7zS6H/yetanothercarpetaddition-v1.3.5.4-mc1.21.5%2Bbuild.14.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.5.4-mc1.21.4+build.14.jar",
+              "size": 529299,
+              "sha256": "",
+              "sha512": "b2918401e7f0543540a91e863c419870efb3969d97d30daac9873f4bc3bc46310e8e1e9def69c3ca6a4572e4cdc99efd646dc5f4e9b4a809c5abbc49799af0ae",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/X9dKiMW6/yetanothercarpetaddition-v1.3.5.4-mc1.21.4%2Bbuild.14.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.5.4-mc1.21.3+build.14.jar",
+              "size": 529491,
+              "sha256": "",
+              "sha512": "44834fd5d353049ac55aa114cd4dc99d43a57e42089dae6eb591521c6cc97ffe60aeda124ab076a6e0157c838f42f658008377fcf4b5657968036e5df2d63954",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/C3VqSOSg/yetanothercarpetaddition-v1.3.5.4-mc1.21.3%2Bbuild.14.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.5.4-mc1.21.1+build.14.jar",
+              "size": 529794,
+              "sha256": "",
+              "sha512": "e2c253937bef9aa6902e8f3ff2bc43358d43c25829e63eeeaa6474807642308226688007c58085a76a275a3cecd3674a50561219bf9861095e00165b541f6816",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/tuvfIbDI/yetanothercarpetaddition-v1.3.5.4-mc1.21.1%2Bbuild.14.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-v1.3.5.4-mc1.20.6+build.14.jar",
+              "size": 529344,
+              "sha256": "",
+              "sha512": "0ad29573fd120365acb1df3ce4e42c7aa4ae33f4cfa4ab0e96f44266d867f6311682bea63cbab8d89c0af8933e42b40c35ef008857f21561aebeeb70b6dadbc1",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/2BKvuqNS/yetanothercarpetaddition-v1.3.5.4-mc1.20.6%2Bbuild.14.jar"
+            },
             {
               "name": "yetanothercarpetaddition-v1.3.5.4-mc1.20.4+build.14.jar",
               "size": 528035,
@@ -2033,8 +2935,12 @@
         },
         {
           "version": "1.3.5",
-          "publishedAt": "2025-05-16T03:57:07.012623Z",
+          "publishedAt": "2025-05-17T07:52:05.668518Z",
           "gameVersions": [
+            "1.21.5",
+            "1.21.2",
+            "1.21.3",
+            "1.21.4",
             "1.21",
             "1.21.1"
           ],
@@ -2043,6 +2949,20 @@
           ],
           "notes": "\n### `blockUpdateVisualize` - NC Update Visualization\n\n* **Description**: Displays where NC (Neighbor Changed) updates occur.\n\n### `stateUpdateVisualize` - PP Update Visualization\n\n* **Description**: Displays where PP (Post-processing) updates occur.\n\n### `comparatorUpdateVisualize` - Comparator Update Visualization\n\n* **Description**: Displays where comparator updates occur.\n\n### `UnicodeArgumentSupport` - Unicode Argument Support\n\n* **Description**: Commands now support non-English characters as arguments.\n\n### `commandEnhance` - Command Experience Enhancement\n\n* **Description**: Improves the usability of certain commands.\n\nCurrently supported:\n- Hovering over the feedback of the `/kill` command shows what was killed and how many of each.\n- Hovering over the feedback of the `/data` command shows the specific changes made to the data.\n- The feedback of the `/data get` command is now more readable; clicking on the NBT key name copies the corresponding `/data modify` command.",
           "files": [
+            {
+              "name": "yetanothercarpetaddition-1.21.5-1.3.5.jar",
+              "size": 262912,
+              "sha256": "",
+              "sha512": "8b526a15f4c68157a9bd898bc820a264b8f414a52cd5d4e4a44d6224f04c8892eb3a6cd329bc5f286d4d2e6352c70b79fae8c26227278894560703069abf9b26",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/9T9zChYK/yetanothercarpetaddition-1.21.5-1.3.5.jar"
+            },
+            {
+              "name": "yetanothercarpetaddition-1.21.5-1.3.5-sources.jar",
+              "size": 139647,
+              "sha256": "",
+              "sha512": "0d0f3fe1e6eb4a2edd3adad33da4565bb74079527781f3828b0a9ad35475875b0ece4b0666740bf789fcb9d8194030fb5a71b66c6a979aeed9ea65318e21cd5e",
+              "url": "https://cdn.modrinth.com/data/Iib8xwCx/versions/9T9zChYK/yetanothercarpetaddition-1.21.5-1.3.5-sources.jar"
+            },
             {
               "name": "yetanothercarpetaddition-1.3.5.jar",
               "size": 273087,
