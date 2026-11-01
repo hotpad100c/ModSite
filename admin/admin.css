@@ -20,7 +20,7 @@
   --on-accent: #100524;
   --danger: #ffb4ab;
   --warn: #facc15;
-  --radius: 0.75rem;
+  --radius: 0;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
@@ -45,6 +45,91 @@
   --on-accent: #ffffff;
   --danger: #c62828;
   --warn: #a16207;
+}
+
+/* Angular corners */
+.step {
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
+}
+
+button {
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+
+.secondary {
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+
+.btn-subaction {
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+}
+
+.mode-tab {
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+
+.batch-badge {
+  clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+}
+
+.manage-badge {
+  clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 0 100%);
+}
+
+.btn-manage-edit {
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+}
+
+.btn-manage-releases {
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+}
+
+.btn-delete-danger {
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
+}
+
+.btn-add-file {
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+}
+
+.btn-save-game {
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+}
+
+.modrinth-card {
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+
+.btn-sync-single {
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+}
+
+.filter-chip {
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
+}
+
+.btn-workspace-build {
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+}
+
+.btn-workspace-load {
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+}
+
+.btn-workspace-publish {
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+}
+
+.trans-subpanel {
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+
+.glossary-chip {
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
+}
+
+.trans-mod-card {
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
 }
 
 * {
@@ -2340,7 +2425,8 @@ body {
   width: 2.2rem;
   height: 2.2rem;
   place-items: center;
-  border-radius: 0.6rem;
+  border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
   background: var(--accent);
   color: var(--on-accent);
   font-weight: 900;
@@ -2393,13 +2479,14 @@ body {
 
 .app-shell .mode-tab.active {
   border: 0;
+  border-left: 3px solid var(--accent);
   background: rgba(var(--accent-rgb), 0.15);
   color: var(--accent);
 }
 
 .tab-count {
   min-width: 1.5rem;
-  border-radius: 999px;
+  border-radius: 0;
   padding: 0.05rem 0.45rem;
   background: var(--surface-2);
   color: var(--muted);
@@ -2426,14 +2513,10 @@ body {
   padding: 2rem 2rem 1.25rem;
 }
 
-.app-page > header .eyebrow {
-  display: none;
-}
-
 .app-page h1 {
-  font-size: 1.6rem;
-  letter-spacing: -0.01em;
-  font-weight: 800;
+  font-size: 1.8rem;
+  letter-spacing: -0.03em;
+  font-weight: 900;
 }
 
 .app-page > main {
@@ -2444,10 +2527,10 @@ body {
 }
 
 .app-shell .panel {
-  border: 0;
-  border-radius: 1rem;
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--accent);
+  border-radius: 0;
   background: var(--surface);
-  box-shadow: none;
 }
 
 .app-shell .panel-heading {
@@ -2460,7 +2543,8 @@ body {
 }
 
 .app-shell input, .app-shell textarea, .app-shell select {
-  border: 1px solid transparent;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--line-bright);
   border-radius: var(--radius);
   background: var(--input-bg);
 }
@@ -2471,10 +2555,9 @@ body {
 }
 
 .app-shell button {
-  font-family: inherit;
-  font-weight: 700;
-  letter-spacing: 0;
-  text-transform: none;
+  font-family: ui-monospace, monospace;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
 .app-shell button:hover {
@@ -2523,8 +2606,9 @@ body {
 }
 
 .app-shell .loader-chip {
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: 0;
   padding: 0.35rem 0.8rem;
   background: var(--surface-2);
   color: var(--text);
