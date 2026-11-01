@@ -3,6 +3,32 @@ import { t, getCurrentLang, setupLanguageSwitcher, translateBatch, isPlaceholder
 const projectsRoot = document.querySelector("#projects");
 const search = document.querySelector("#search");
 const count = document.querySelector("#project-count");
+const viewButtons = [...document.querySelectorAll(".view-btn")];
+
+const readView = () => {
+  try {
+    return localStorage.getItem("modsite-view") === "grid" ? "grid" : "list";
+  } catch {
+    return "list";
+  }
+};
+
+const applyView = (view) => {
+  projectsRoot.classList.toggle("mod-grid--list", view === "list");
+  viewButtons.forEach((button) => {
+    const active = button.dataset.view === view;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+};
+
+applyView(readView());
+viewButtons.forEach((button) => button.addEventListener("click", () => {
+  applyView(button.dataset.view);
+  try {
+    localStorage.setItem("modsite-view", button.dataset.view);
+  } catch {}
+}));
 
 const element = (tag, className, text) => {
   const node = document.createElement(tag);
@@ -71,9 +97,13 @@ const renderProject = (project, lang) => {
 
   const meta = element("div", "tags");
   if (latest) {
-    [...latest.gameVersions.map((version) => t("gameVersion", { version }, lang)), ...latest.loaders].forEach((value) => {
-      meta.append(tag(value));
+    latest.gameVersions.forEach((version, index) => {
+      const node = tag(t("gameVersion", { version }, lang));
+      if (index >= 2) node.classList.add("tag--extra");
+      meta.append(node);
     });
+    if (latest.gameVersions.length > 2) meta.append(element("span", "tag tag--more", `+${latest.gameVersions.length - 2}`));
+    latest.loaders.forEach((value) => meta.append(tag(value)));
   }
   if (meta.childElementCount) body.append(meta);
   link.append(body);

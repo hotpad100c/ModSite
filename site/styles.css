@@ -973,3 +973,124 @@ h1 {
     text-align: center;
   }
 }
+
+.toolbar-right {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.view-toggle {
+  display: flex;
+  border: 1px solid var(--line);
+}
+
+.view-btn {
+  border: 0;
+  padding: 0.5rem 0.9rem;
+  background: transparent;
+  color: var(--muted);
+  font: 700 0.78rem var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.view-btn + .view-btn {
+  border-left: 1px solid var(--line);
+}
+
+.view-btn:hover {
+  color: var(--text);
+}
+
+.view-btn.active {
+  background: var(--surface-raised);
+  color: var(--accent);
+}
+
+.tag--more {
+  display: none;
+}
+
+.mod-grid--list .tag--extra {
+  display: none;
+}
+
+.mod-grid--list .tag--more {
+  display: inline-flex;
+}
+
+.mod-grid--list {
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+}
+
+.mod-grid--list .mod-card {
+  flex-direction: row;
+  box-shadow: none;
+}
+
+.mod-grid--list .mod-card:hover {
+  transform: translateX(3px);
+}
+
+.mod-grid--list .mod-card__banner {
+  display: none;
+}
+
+.mod-grid--list .mod-card__body {
+  display: grid;
+  grid-template-columns: minmax(14rem, 18rem) minmax(0, 1fr) auto;
+  gap: 1.25rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.85rem 1.15rem;
+}
+
+.mod-grid--list .mod-card__heading {
+  margin-top: 0;
+}
+
+.mod-grid--list .project-icon {
+  flex-basis: 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  box-shadow: none;
+}
+
+.mod-grid--list .mod-card h2 {
+  font-size: 1.02rem;
+}
+
+.mod-grid--list .mod-card__description {
+  display: -webkit-box;
+  overflow: hidden;
+  min-height: 0;
+  margin: 0;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 0.88rem;
+}
+
+.mod-grid--list .tags {
+  grid-column: 3;
+  justify-content: flex-end;
+  max-width: 16rem;
+  margin-top: 0;
+}
+
+@media (max-width: 42rem) {
+  .toolbar-right {
+    justify-content: space-between;
+  }
+  .mod-grid--list .mod-card__body {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+  .mod-grid--list .tags {
+    grid-column: auto;
+    justify-content: flex-start;
+    max-width: none;
+  }
+}

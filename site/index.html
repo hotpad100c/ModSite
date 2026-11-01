@@ -32,10 +32,16 @@
       <section class="toolbar" aria-label="Filter mods">
         <label class="sr-only" for="search" data-i18n="searchAriaLabel">Search for mods</label>
         <input id="search" type="search" placeholder="Search by name, version, loader…" data-i18n-placeholder="searchPlaceholder" autocomplete="off">
-        <span id="project-count" aria-live="polite"></span>
+        <div class="toolbar-right">
+          <span id="project-count" aria-live="polite"></span>
+          <div class="view-toggle" role="group" aria-label="Display mode" data-i18n-aria-label="viewToggleLabel">
+            <button type="button" class="view-btn" data-view="list" data-i18n="viewList">List</button>
+            <button type="button" class="view-btn" data-view="grid" data-i18n="viewGrid">Grid</button>
+          </div>
+        </div>
       </section>
 
-      <section id="projects" class="mod-grid" aria-live="polite">
+      <section id="projects" class="mod-grid mod-grid--list" aria-live="polite">
         <p class="loading" data-i18n="loadingMods">Loading mods…</p>
       </section>
     </main>
