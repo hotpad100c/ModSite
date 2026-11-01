@@ -17,7 +17,7 @@ const CATALOG_PATH = resolve(ROOT, "site/catalog.json");
 const GLOSSARY_PATH = resolve(ROOT, "site/glossary.json");
 const OVERRIDES_PATH = resolve(ROOT, "site/overrides.json");
 const SHELVED_PATH = resolve(ROOT, ".workspace-shelved.json");
-const PORT = 4173;
+const PORT = Number(process.env.MODSITE_ADMIN_PORT) || 4173;
 const MAX_REQUEST_SIZE = 80 * 1024 * 1024;
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const TYPES = {
@@ -772,7 +772,18 @@ async function serveFile(request, response) {
   response.writeHead(404).end("Not found");
 }
 
+const LOCAL_HOSTS = new Set([`127.0.0.1:${PORT}`, `localhost:${PORT}`]);
+
+// 本地接口没有鉴权：拒绝其他网页（CSRF）和 DNS 重绑定的请求
+function isTrustedRequest(headers) {
+  if (!LOCAL_HOSTS.has(headers.host || "")) return false;
+  if (headers.origin && !LOCAL_HOSTS.has(headers.origin.replace(/^http:\/\//, ""))) return false;
+  const site = headers["sec-fetch-site"];
+  return !site || site === "same-origin" || site === "none";
+}
+
 const server = createServer(async (request, response) => {
+  if (!isTrustedRequest(request.headers)) return response.writeHead(403).end("Forbidden");
   try {
     if (request.method === "GET" && request.url === "/api/catalog") return json(response, 200, JSON.parse(await readFile(CATALOG_PATH, "utf8")));
     if (request.method === "POST" && request.url === "/api/inspect-jar") return await inspectJar(request, response);
