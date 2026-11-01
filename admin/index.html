@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="dark">
+    <meta name="color-scheme" content="dark light">
+    <script>try { if (localStorage.getItem("admin-theme") === "light") document.documentElement.dataset.theme = "light"; } catch {}</script>
     <title>模组发布管理</title>
     <link rel="stylesheet" href="/admin.css">
     <script src="/admin.js" type="module"></script>
@@ -31,6 +32,7 @@
       </div>
       <div class="sidebar-footer">
         <a id="btn-preview-site" class="btn-subaction" href="/site/" target="_blank" rel="noopener">预览本地前台</a>
+        <button id="theme-toggle" class="btn-subaction theme-toggle" type="button">切换亮色</button>
         <button id="deploy" class="secondary" type="button">部署公开网站</button>
       </div>
     </nav>

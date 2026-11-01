@@ -1,17 +1,50 @@
+/* Themes: purple dark by default, light via [data-theme="light"] */
 :root {
   color-scheme: dark;
-  --bg: #16181c;
-  --surface: #26292f;
-  --surface-2: #33363d;
-  --text: #ecf9fb;
-  --muted: #96a2b0;
-  --line: #33363d;
-  --line-bright: #4a4f58;
-  --accent: #1bd96a;
-  --accent-hover: #43e58a;
-  --accent-dim: #11a957;
+  --bg: #0c0916;
+  --surface: #151022;
+  --surface-2: #1f1733;
+  --sidebar-bg: #110c1d;
+  --input-bg: #0b0814;
+  --text: #f6f1ff;
+  --text-strong: #fff;
+  --muted: #a79cbd;
+  --line: #382c52;
+  --line-bright: #584480;
+  --accent: #a984ff;
+  --accent-rgb: 169, 132, 255;
+  --accent-hover: #d4c4ff;
+  --accent-dim: #7b52d9;
+  --accent-soft: #271a3f;
+  --accent-text: #d8c2ff;
+  --on-accent: #100524;
+  --danger: #ffb4ab;
+  --warn: #facc15;
   --radius: 0.75rem;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f5f2fb;
+  --surface: #ffffff;
+  --surface-2: #efe9f9;
+  --sidebar-bg: #ebe4f7;
+  --input-bg: #f8f6fc;
+  --text: #221a33;
+  --text-strong: #120c1f;
+  --muted: #6b5f80;
+  --line: #ddd3ee;
+  --line-bright: #c3b2e3;
+  --accent: #7b4fe0;
+  --accent-rgb: 123, 79, 224;
+  --accent-hover: #6a3dd1;
+  --accent-dim: #9b7be8;
+  --accent-soft: #ece4fc;
+  --accent-text: #5b33bf;
+  --on-accent: #ffffff;
+  --danger: #c62828;
+  --warn: #a16207;
 }
 
 * {
@@ -100,7 +133,7 @@ form {
   place-items: center;
   border-radius: var(--radius);
   background: var(--accent);
-  color: #000000;
+  color: var(--on-accent);
   font-size: 0.82rem;
   font-weight: 900;
   font-family: ui-monospace, monospace;
@@ -136,7 +169,7 @@ label small {
 input, textarea {
   width: 100%;
   border: 1px solid var(--line);
-  border-left: 2px solid #3a3e45;
+  border-left: 2px solid var(--line);
   border-radius: var(--radius);
   padding: 0.75rem 0.85rem;
   background: var(--surface-2);
@@ -150,12 +183,12 @@ input:focus, textarea:focus {
   border-color: var(--accent);
   border-left-color: var(--accent);
   outline: none;
-  box-shadow: 0 0 0 1px var(--accent), 0 0 14px rgba(132, 225, 188, 0.2);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 14px rgba(var(--accent-rgb), 0.2);
 }
 
 .drop-zone {
   place-items: center;
-  border: 1px dashed #3a4b59;
+  border: 1px dashed var(--line);
   border-radius: var(--radius);
   padding: 2rem 1rem;
   background: var(--surface-2);
@@ -166,7 +199,7 @@ input:focus, textarea:focus {
 
 .drop-zone:hover, .drop-zone:focus-within {
   border-color: var(--accent);
-  background: rgba(27, 33, 40, 0.95);
+  background: var(--surface-2);
 }
 
 .drop-zone input {
@@ -192,7 +225,7 @@ input:focus, textarea:focus {
 }
 
 .file-list .invalid {
-  color: #ffb4ab;
+  color: var(--danger);
 }
 
 .actions {
@@ -220,7 +253,7 @@ button {
   border-radius: var(--radius);
   padding: 0.75rem 1.35rem;
   background: var(--accent);
-  color: #000000;
+  color: var(--on-accent);
   font: inherit;
   font-weight: 900;
   font-family: ui-monospace, monospace;
@@ -233,7 +266,7 @@ button {
 button:hover {
   filter: brightness(1.1);
   transform: translateY(-1px);
-  box-shadow: 0 0 16px rgba(27, 217, 106, 0.3);
+  box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.3);
 }
 
 button:disabled {
@@ -252,7 +285,7 @@ button:disabled {
 }
 
 .secondary:hover {
-  background: #3a3e45;
+  background: var(--line);
 }
 
 .sticky {
@@ -324,7 +357,7 @@ dialog pre {
   overflow: auto;
   border-radius: var(--radius);
   border: 1px solid var(--line);
-  border-left: 3px solid #3a3e45;
+  border-left: 3px solid var(--line);
   padding: 1rem;
   background: var(--bg);
   color: var(--muted);
@@ -341,7 +374,7 @@ dialog form {
   flex-direction: column;
   gap: 0.6rem;
   border: 1px solid var(--line);
-  border-left: 3px solid #3a3e45;
+  border-left: 3px solid var(--line);
   border-radius: var(--radius);
   padding: 1rem;
   background: var(--surface-2);
@@ -364,7 +397,7 @@ dialog form {
   place-items: center;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: #1e2025;
+  background: var(--input-bg);
   overflow: hidden;
 }
 
@@ -425,10 +458,10 @@ dialog form {
 }
 
 .btn-subaction {
-  background: #182533;
-  color: #95c6f3;
-  border: 1px solid #28445e;
-  border-left: 3px solid #4893d9;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
   border-radius: var(--radius);
   padding: 0.55rem 1rem;
   font-size: 0.85rem;
@@ -439,9 +472,9 @@ dialog form {
 }
 
 .btn-subaction:hover {
-  background: #203448;
-  color: #bfe0ff;
-  border-color: #4893d9;
+  background: var(--line);
+  color: var(--text);
+  border-color: var(--accent);
 }
 
 .subaction-hint {
@@ -452,10 +485,10 @@ dialog form {
 .jar-parsed-badge {
   margin-bottom: 0.8rem;
   border-radius: var(--radius);
-  border: 1px solid rgba(27, 217, 106, 0.4);
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
   border-left: 4px solid var(--accent);
   padding: 0.75rem 1rem;
-  background: rgba(27, 217, 106, 0.08);
+  background: rgba(var(--accent-rgb), 0.08);
   color: var(--accent);
   font-size: 0.85rem;
   line-height: 1.5;
@@ -464,7 +497,7 @@ dialog form {
 .jar-parsed-badge strong {
   display: block;
   margin-bottom: 0.2rem;
-  color: #fff;
+  color: var(--text-strong);
 }
 
 /* Mode Switcher Tabs */
@@ -509,7 +542,7 @@ dialog form {
   margin: 0 0 1rem;
   border: 1px dashed var(--accent);
   padding: 0.75rem 1rem;
-  background: rgba(27, 217, 106, 0.08);
+  background: rgba(var(--accent-rgb), 0.08);
   color: var(--accent);
   font-size: 0.86rem;
   line-height: 1.5;
@@ -519,7 +552,7 @@ dialog form {
   background: transparent;
   border: none;
   padding: 0;
-  color: #fff;
+  color: var(--text-strong);
   font-weight: 850;
   text-decoration: underline;
   cursor: pointer;
@@ -610,16 +643,16 @@ dialog form {
 
 .progress-track {
   height: 8px;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
   overflow: hidden;
 }
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #11a957, var(--accent));
+  background: linear-gradient(90deg, var(--accent-dim), var(--accent));
   transition: width 0.2s ease;
-  box-shadow: 0 0 10px rgba(27, 217, 106, 0.5);
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.5);
 }
 
 /* Batch Cards */
@@ -641,11 +674,11 @@ dialog form {
 }
 
 .batch-card:hover {
-  border-color: #3b4957;
+  border-color: var(--line);
 }
 
 .batch-card.state-pending {
-  border-left-color: #536474;
+  border-left-color: var(--line-bright);
 }
 
 .batch-card.state-parsing {
@@ -655,17 +688,17 @@ dialog form {
 
 .batch-card.state-uploading {
   border-left-color: var(--accent);
-  background: rgba(27, 217, 106, 0.06);
-  box-shadow: 0 0 16px rgba(27, 217, 106, 0.15);
+  background: rgba(var(--accent-rgb), 0.06);
+  box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.15);
 }
 
 .batch-card.state-success {
   border-left-color: var(--accent);
-  background: rgba(27, 217, 106, 0.08);
+  background: rgba(var(--accent-rgb), 0.08);
 }
 
 .batch-card.state-error {
-  border-left-color: #ffb4ab;
+  border-left-color: var(--danger);
   background: rgba(255, 60, 60, 0.06);
 }
 
@@ -678,7 +711,7 @@ dialog form {
   width: 3.4rem;
   height: 3.4rem;
   border: 1px solid var(--line);
-  background: #1e2025;
+  background: var(--input-bg);
   object-fit: cover;
   flex-shrink: 0;
   display: block;
@@ -691,7 +724,7 @@ dialog form {
   font-size: 1.3rem;
   font-weight: 900;
   color: var(--accent);
-  background: #24143a;
+  background: var(--accent-soft);
 }
 
 .batch-card__content {
@@ -718,7 +751,7 @@ dialog form {
   color: var(--muted);
   font-family: ui-monospace, monospace;
   font-size: 0.8rem;
-  background: #1e2025;
+  background: var(--input-bg);
   padding: 0.1rem 0.35rem;
 }
 
@@ -733,14 +766,14 @@ dialog form {
 
 .batch-card__files {
   font-size: 0.76rem;
-  color: #8292a0;
+  color: var(--muted);
   font-family: ui-monospace, monospace;
   word-break: break-all;
 }
 
 .batch-card__error-msg {
   font-size: 0.78rem;
-  color: #ffb4ab;
+  color: var(--danger);
   font-family: ui-monospace, monospace;
   margin-top: 0.2rem;
 }
@@ -763,7 +796,7 @@ dialog form {
 }
 
 .batch-badge--pending {
-  background: #3a3e45;
+  background: var(--line);
   color: var(--muted);
 }
 
@@ -773,18 +806,18 @@ dialog form {
 }
 
 .batch-badge--uploading {
-  background: #2e1d4c;
+  background: var(--accent-soft);
   color: var(--accent);
 }
 
 .batch-badge--success {
-  background: #1c3326;
+  background: var(--accent-soft);
   color: var(--accent-hover);
 }
 
 .batch-badge--error {
   background: #4a1d1d;
-  color: #ffb4ab;
+  color: var(--danger);
 }
 
 .batch-badge--exists {
@@ -804,8 +837,8 @@ dialog form {
 }
 
 .btn-remove-item:hover {
-  border-color: #ffb4ab;
-  color: #ffb4ab;
+  border-color: var(--danger);
+  color: var(--danger);
   background: rgba(255, 60, 60, 0.1);
 }
 
@@ -827,17 +860,17 @@ dialog form {
 
 .filter-chip--warn {
   border-color: rgba(234, 179, 8, 0.35);
-  color: #fbbf24;
+  color: var(--warn);
 }
 
 .filter-chip--warn:hover {
-  border-color: #fbbf24;
+  border-color: var(--warn);
 }
 
 .filter-chip--warn.active {
   background: rgba(234, 179, 8, 0.15);
-  border-color: #fbbf24;
-  color: #facc15;
+  border-color: var(--warn);
+  color: var(--warn);
 }
 
 .manage-projects-grid {
@@ -850,20 +883,20 @@ dialog form {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--line);
-  border-top: 3px solid #3a3e45;
+  border-top: 3px solid var(--line);
   background: var(--surface-2);
   padding: 1.15rem;
   transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 
 .manage-project-card:hover {
-  border-color: #4a4f58;
+  border-color: var(--line-bright);
   transform: translateY(-2px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .manage-project-card.is-incomplete {
-  border-top-color: #eab308;
+  border-top-color: var(--warn);
 }
 
 .manage-project-card.is-complete {
@@ -881,7 +914,7 @@ dialog form {
   width: 3.25rem;
   height: 3.25rem;
   object-fit: contain;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
   flex-shrink: 0;
 }
@@ -938,17 +971,17 @@ dialog form {
 .manage-badge--missing {
   background: rgba(234, 179, 8, 0.12);
   border: 1px solid rgba(234, 179, 8, 0.4);
-  color: #facc15;
+  color: var(--warn);
 }
 
 .manage-badge--complete {
-  background: rgba(27, 217, 106, 0.12);
-  border: 1px solid rgba(27, 217, 106, 0.4);
+  background: rgba(var(--accent-rgb), 0.12);
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
   color: var(--accent);
 }
 
 .manage-badge--releases {
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
   color: var(--muted);
 }
@@ -956,7 +989,7 @@ dialog form {
 .manage-project-card__banner-box {
   width: 100%;
   height: 80px;
-  background: #08060e;
+  background: var(--input-bg);
   border: 1px solid var(--line);
   overflow: hidden;
   margin-bottom: 0.75rem;
@@ -974,7 +1007,7 @@ dialog form {
 }
 
 .manage-project-card__banner-missing {
-  color: #eab308;
+  color: var(--warn);
   font-size: 0.76rem;
   font-family: ui-monospace, monospace;
   display: flex;
@@ -989,7 +1022,7 @@ dialog form {
 .manage-project-card__desc {
   font-size: 0.8rem;
   line-height: 1.45;
-  color: #c8f5da;
+  color: var(--accent-text);
   margin-bottom: 0.85rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -999,11 +1032,11 @@ dialog form {
 }
 
 .manage-project-card__desc--missing {
-  color: #facc15;
+  color: var(--warn);
   font-style: italic;
   background: rgba(234, 179, 8, 0.08);
   padding: 0.35rem 0.5rem;
-  border-left: 2px solid #eab308;
+  border-left: 2px solid var(--warn);
   display: block;
   font-family: ui-monospace, monospace;
   font-size: 0.74rem;
@@ -1033,23 +1066,23 @@ dialog form {
 }
 
 .btn-manage-edit:hover {
-  border-color: #4a4f58;
-  color: #fff;
+  border-color: var(--line-bright);
+  color: var(--text-strong);
 }
 
 .btn-manage-edit--warn {
   border-color: rgba(234, 179, 8, 0.4);
-  color: #facc15;
+  color: var(--warn);
 }
 
 .btn-manage-edit--warn:hover {
-  border-color: #facc15;
+  border-color: var(--warn);
   background: rgba(234, 179, 8, 0.1);
-  color: #fff;
+  color: var(--text-strong);
 }
 
 .btn-manage-releases {
-  background: #1e2025;
+  background: var(--input-bg);
   color: var(--accent);
   border: 1px solid var(--accent);
   padding: 0.4rem 0.85rem;
@@ -1061,8 +1094,8 @@ dialog form {
 }
 
 .btn-manage-releases:hover {
-  background: #1c3326;
-  color: #fff;
+  background: var(--accent-soft);
+  color: var(--text-strong);
 }
 
 /* Detail View Header */
@@ -1089,7 +1122,7 @@ dialog form {
   width: 2.75rem;
   height: 2.75rem;
   object-fit: contain;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
 }
 
@@ -1115,7 +1148,7 @@ dialog form {
 
 /* Legacy select kept invisible */
 .manage-select {
-  background: #1e2025;
+  background: var(--input-bg);
   color: var(--text);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -1136,7 +1169,7 @@ dialog form {
 
 .release-manage-card {
   border: 1px solid var(--line);
-  border-top: 3px solid #3a3e45;
+  border-top: 3px solid var(--line);
   background: var(--surface-2);
   padding: 1.15rem;
   display: flex;
@@ -1198,8 +1231,8 @@ dialog form {
   gap: 0.85rem;
   align-items: center;
   border: 1px solid var(--line);
-  border-left: 3px solid #4a4f58;
-  background: #1e2025;
+  border-left: 3px solid var(--line-bright);
+  background: var(--input-bg);
   padding: 0.65rem 0.9rem;
 }
 
@@ -1231,7 +1264,7 @@ dialog form {
 
 .btn-delete-danger {
   background: rgba(255, 75, 75, 0.12);
-  color: #ffb4ab;
+  color: var(--danger);
   border: 1px solid rgba(255, 100, 100, 0.3);
   padding: 0.32rem 0.75rem;
   font-size: 0.76rem;
@@ -1243,8 +1276,8 @@ dialog form {
 
 .btn-delete-danger:hover {
   background: rgba(255, 75, 75, 0.3);
-  border-color: #ffb4ab;
-  color: #fff;
+  border-color: var(--danger);
+  color: var(--text-strong);
   transform: translateY(-1px);
 }
 
@@ -1275,9 +1308,9 @@ dialog form {
 }
 
 .btn-add-file {
-  background: #1c3326;
+  background: var(--accent-soft);
   color: var(--accent);
-  border: 1px solid rgba(27, 217, 106, 0.35);
+  border: 1px solid rgba(var(--accent-rgb), 0.35);
   padding: 0.4rem 0.85rem;
   font-size: 0.78rem;
   font-weight: 800;
@@ -1287,9 +1320,9 @@ dialog form {
 }
 
 .btn-add-file:hover {
-  background: #1c3326;
+  background: var(--accent-soft);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--text-strong);
 }
 
 .release-game-edit-box {
@@ -1298,7 +1331,7 @@ dialog form {
   align-items: center;
   flex-wrap: wrap;
   padding: 0.65rem 0.85rem;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
   border-left: 3px solid var(--accent);
 }
@@ -1330,9 +1363,9 @@ dialog form {
 }
 
 .btn-save-game {
-  background: #1c3326;
+  background: var(--accent-soft);
   color: var(--accent);
-  border: 1px solid rgba(27, 217, 106, 0.4);
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
   padding: 0.35rem 0.75rem;
   font-size: 0.76rem;
   font-weight: 800;
@@ -1342,9 +1375,9 @@ dialog form {
 }
 
 .btn-save-game:hover {
-  background: #1c3326;
+  background: var(--accent-soft);
   border-color: var(--accent-hover);
-  color: #fff;
+  color: var(--text-strong);
 }
 
 /* Modrinth Integration Tab */
@@ -1406,18 +1439,18 @@ dialog form {
 .modrinth-card:hover {
   border-color: var(--accent);
   border-left-color: var(--accent);
-  background: #181226;
+  background: var(--accent-soft);
 }
 
 .modrinth-card.is-selected {
   border-color: var(--accent);
   border-left-color: var(--accent-hover);
-  background: #1e1531;
-  box-shadow: 0 0 16px rgba(27, 217, 106, 0.12);
+  background: var(--accent-soft);
+  box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.12);
 }
 
 .modrinth-card.is-existing {
-  border-left-color: #4a4f58;
+  border-left-color: var(--line-bright);
 }
 
 .modrinth-card__top {
@@ -1438,7 +1471,7 @@ dialog form {
   width: 3.25rem;
   height: 3.25rem;
   object-fit: contain;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
   flex-shrink: 0;
 }
@@ -1476,7 +1509,7 @@ dialog form {
 
 .modrinth-card__desc {
   font-size: 0.82rem;
-  color: #b0bac5;
+  color: var(--muted);
   line-height: 1.45;
   margin: 0.75rem 0;
   display: -webkit-box;
@@ -1512,9 +1545,9 @@ dialog form {
 }
 
 .btn-sync-single {
-  background: #1c3326;
+  background: var(--accent-soft);
   color: var(--accent);
-  border: 1px solid rgba(27, 217, 106, 0.4);
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
   padding: 0.35rem 0.8rem;
   font-size: 0.76rem;
   font-weight: 800;
@@ -1524,9 +1557,9 @@ dialog form {
 }
 
 .btn-sync-single:hover {
-  background: #1c3326;
+  background: var(--accent-soft);
   border-color: var(--accent-hover);
-  color: #fff;
+  color: var(--text-strong);
 }
 
 /* ==========================================================================
@@ -1555,9 +1588,9 @@ dialog form {
 
 .workspace-input {
   flex-grow: 1;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
-  color: #fff;
+  color: var(--text-strong);
   padding: 0.55rem 0.85rem;
   font-family: ui-monospace, monospace;
   font-size: 0.88rem;
@@ -1618,9 +1651,9 @@ dialog form {
 .workspace-search-input {
   min-width: 260px;
   flex-grow: 1;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
-  color: #fff;
+  color: var(--text-strong);
   padding: 0.5rem 0.85rem;
   font-size: 0.85rem;
   font-family: inherit;
@@ -1650,11 +1683,11 @@ dialog form {
 
 .filter-chip:hover {
   color: var(--text);
-  border-color: #4a4f58;
+  border-color: var(--line-bright);
 }
 
 .filter-chip.active {
-  background: #1c3326;
+  background: var(--accent-soft);
   color: var(--accent);
   border-color: var(--accent);
   font-weight: 800;
@@ -1677,7 +1710,7 @@ dialog form {
 }
 
 .workspace-card:hover {
-  border-color: #4a4f58;
+  border-color: var(--line-bright);
 }
 
 .workspace-card.status-built {
@@ -1685,11 +1718,11 @@ dialog form {
 }
 
 .workspace-card.status-unbuilt {
-  border-left-color: #5c4b75;
+  border-left-color: var(--line-bright);
 }
 
 .workspace-card.status-shelved {
-  border-left-color: #3b2a54;
+  border-left-color: var(--accent-soft);
   opacity: 0.85;
 }
 
@@ -1706,7 +1739,7 @@ dialog form {
   color: var(--muted);
   cursor: pointer;
   padding: 0.25rem 0.5rem;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
   transition: all 0.15s;
   user-select: none;
@@ -1716,7 +1749,7 @@ dialog form {
 
 .workspace-card__shelve-label:hover {
   color: var(--accent);
-  border-color: rgba(27, 217, 106, 0.4);
+  border-color: rgba(var(--accent-rgb), 0.4);
 }
 
 .workspace-card__shelve-label input[type="checkbox"] {
@@ -1727,19 +1760,19 @@ dialog form {
 }
 
 .workspace-card__shelve-label.is-shelved {
-  background: rgba(27, 217, 106, 0.12);
+  background: rgba(var(--accent-rgb), 0.12);
   border-color: var(--accent);
   color: var(--accent);
 }
 
 .filter-chip--shelved {
-  border-color: rgba(27, 217, 106, 0.3);
+  border-color: rgba(var(--accent-rgb), 0.3);
 }
 
 .filter-chip--shelved.active {
-  background: #1c3326;
+  background: var(--accent-soft);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--text-strong);
 }
 
 .workspace-card__top {
@@ -1753,7 +1786,7 @@ dialog form {
   width: 3.25rem;
   height: 3.25rem;
   object-fit: contain;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
   flex-shrink: 0;
 }
@@ -1837,7 +1870,7 @@ dialog form {
 .workspace-card__jar-box {
   margin-top: 0.25rem;
   padding: 0.5rem 0.65rem;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
   font-size: 0.74rem;
   font-family: ui-monospace, monospace;
@@ -1853,7 +1886,7 @@ dialog form {
 }
 
 .workspace-card__jar-name {
-  color: #fff;
+  color: var(--text-strong);
   word-break: break-all;
 }
 
@@ -1874,9 +1907,9 @@ dialog form {
 }
 
 .btn-workspace-build {
-  background: #1c3326;
-  color: #c8f5da;
-  border: 1px solid rgba(27, 217, 106, 0.4);
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
   padding: 0.4rem 0.75rem;
   font-size: 0.76rem;
   font-weight: 800;
@@ -1885,9 +1918,9 @@ dialog form {
 }
 
 .btn-workspace-build:hover {
-  background: #3c2465;
+  background: var(--accent-soft);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--text-strong);
 }
 
 .btn-workspace-load {
@@ -1901,12 +1934,12 @@ dialog form {
 }
 
 .btn-workspace-load:hover {
-  border-color: #4a4f58;
-  color: #fff;
+  border-color: var(--line-bright);
+  color: var(--text-strong);
 }
 
 .btn-workspace-publish {
-  background: #1e2025;
+  background: var(--input-bg);
   color: var(--accent);
   border: 1px solid var(--accent);
   padding: 0.4rem 0.75rem;
@@ -1919,13 +1952,13 @@ dialog form {
 
 .btn-workspace-publish:hover {
   background: var(--accent);
-  color: #1e2025;
+  color: var(--input-bg);
 }
 
 .btn-workspace-publish:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-  background: #15121e;
+  background: var(--input-bg);
   border-color: var(--line);
   color: var(--muted);
 }
@@ -1934,7 +1967,7 @@ dialog form {
 .workspace-build-dialog {
   max-width: 52rem;
   width: 90vw;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
   border-top: 3px solid var(--accent);
   padding: 1.5rem;
@@ -1966,7 +1999,7 @@ dialog form {
   background: #040306;
   border: 1px solid var(--line);
   padding: 1rem;
-  color: #c8f5da;
+  color: var(--accent-text);
   font-family: ui-monospace, monospace, "Cascadia Code";
   font-size: 0.82rem;
   line-height: 1.5;
@@ -2061,7 +2094,7 @@ dialog form {
   max-height: 320px;
   overflow-y: auto;
   padding: 0.5rem;
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
 }
 
@@ -2069,7 +2102,7 @@ dialog form {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  background: #1a122e;
+  background: var(--accent-soft);
   border: 1px solid var(--line);
   border-left: 2px solid var(--accent);
   padding: 0.3rem 0.6rem;
@@ -2078,12 +2111,12 @@ dialog form {
 }
 
 .glossary-chip:hover {
-  background: #271a44;
+  background: var(--accent-soft);
   border-color: var(--accent-hover);
 }
 
 .glossary-chip__term {
-  color: #fff;
+  color: var(--text-strong);
   font-family: ui-monospace, monospace;
   font-weight: 700;
 }
@@ -2094,7 +2127,7 @@ dialog form {
 }
 
 .glossary-chip__trans {
-  color: #c8f5da;
+  color: var(--accent-text);
   font-weight: 600;
 }
 
@@ -2110,7 +2143,7 @@ dialog form {
 }
 
 .glossary-chip__del:hover {
-  color: #ff8e9e;
+  color: var(--danger);
 }
 
 /* Mod Overrides List */
@@ -2128,9 +2161,9 @@ dialog form {
 }
 
 .trans-mod-card {
-  background: #0e0a1b;
+  background: var(--input-bg);
   border: 1px solid var(--line);
-  border-left: 3px solid #1c3326;
+  border-left: 3px solid var(--accent-soft);
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -2140,7 +2173,7 @@ dialog form {
 
 .trans-mod-card.has-manual {
   border-left-color: var(--accent);
-  background: #120c24;
+  background: var(--accent-soft);
 }
 
 .trans-mod-card__header {
@@ -2161,7 +2194,7 @@ dialog form {
   width: 2.2rem;
   height: 2.2rem;
   object-fit: contain;
-  background: #000;
+  background: var(--on-accent);
   border: 1px solid var(--line);
 }
 
@@ -2172,7 +2205,7 @@ dialog form {
   font-weight: 800;
   font-family: ui-monospace, monospace;
   color: var(--accent);
-  background: #1d1433;
+  background: var(--accent-soft);
 }
 
 .trans-mod-card__name {
@@ -2189,13 +2222,13 @@ dialog form {
 }
 
 .trans-mod-card__orig-snippet {
-  background: #1e2025;
+  background: var(--input-bg);
   border: 1px solid var(--line);
   padding: 0.65rem 0.85rem;
   font-size: 0.78rem;
   color: var(--muted);
   line-height: 1.45;
-  border-left: 2px solid #5a3d8a;
+  border-left: 2px solid var(--line-bright);
 }
 
 .trans-mod-card__orig-label {
@@ -2262,7 +2295,7 @@ dialog form {
   }
 }
 
-/* Modrinth-style dashboard layout */
+/* Dashboard layout */
 body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
@@ -2282,7 +2315,7 @@ body {
   height: 100vh;
   padding: 1.25rem 0.9rem;
   border-right: 1px solid var(--line);
-  background: #1d1f23;
+  background: var(--sidebar-bg);
   overflow-y: auto;
 }
 
@@ -2309,7 +2342,7 @@ body {
   place-items: center;
   border-radius: 0.6rem;
   background: var(--accent);
-  color: #000;
+  color: var(--on-accent);
   font-weight: 900;
 }
 
@@ -2360,7 +2393,7 @@ body {
 
 .app-shell .mode-tab.active {
   border: 0;
-  background: rgba(27, 217, 106, 0.15);
+  background: rgba(var(--accent-rgb), 0.15);
   color: var(--accent);
 }
 
@@ -2429,12 +2462,12 @@ body {
 .app-shell input, .app-shell textarea, .app-shell select {
   border: 1px solid transparent;
   border-radius: var(--radius);
-  background: #1e2025;
+  background: var(--input-bg);
 }
 
 .app-shell input:focus, .app-shell textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 0.2rem rgba(27, 217, 106, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(var(--accent-rgb), 0.25);
 }
 
 .app-shell button {
@@ -2501,7 +2534,7 @@ body {
 
 .app-shell .loader-chip.active {
   border-color: var(--accent);
-  background: rgba(27, 217, 106, 0.15);
+  background: rgba(var(--accent-rgb), 0.15);
   color: var(--accent);
 }
 
@@ -2566,4 +2599,27 @@ body {
     padding-left: 1rem;
     padding-right: 1rem;
   }
+}
+
+:root[data-theme="light"] .batch-badge--parsing {
+  background: #e3efff;
+  color: #1f5fa8;
+}
+
+:root[data-theme="light"] .batch-badge--error {
+  background: #fde4e1;
+  color: #b3261e;
+}
+
+:root[data-theme="light"] .batch-badge--exists {
+  background: #fdf0d5;
+  color: #8a5a00;
+}
+
+:root[data-theme="light"] .panel {
+  box-shadow: 0 1px 3px rgba(60, 30, 120, 0.08);
+}
+
+.theme-toggle {
+  width: 100%;
 }

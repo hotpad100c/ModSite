@@ -25,6 +25,23 @@ const bannerHint = document.querySelector("#banner-hint");
 
 const projectInput = document.querySelector("#project-input");
 const versionInput = document.querySelector("#version-input");
+const themeToggle = document.querySelector("#theme-toggle");
+
+function applyTheme(theme) {
+  if (theme === "light") document.documentElement.dataset.theme = "light";
+  else delete document.documentElement.dataset.theme;
+  themeToggle.textContent = theme === "light" ? "切换暗色" : "切换亮色";
+}
+
+applyTheme(document.documentElement.dataset.theme === "light" ? "light" : "dark");
+themeToggle.addEventListener("click", () => {
+  const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+  applyTheme(next);
+  try {
+    localStorage.setItem("admin-theme", next);
+  } catch {}
+});
+
 const loaderInput = document.querySelector("#loader-input");
 const loaderChips = [...document.querySelectorAll(".loader-chip")];
 
