@@ -9,35 +9,55 @@
     <script src="/admin.js" type="module"></script>
   </head>
   <body>
+    <div class="app-shell">
+    <nav class="sidebar">
+      <div class="sidebar-brand">
+        <span class="sidebar-logo">M</span>
+        <div><strong>ModSite</strong><small>本地发布控制台</small></div>
+      </div>
+      <div class="mode-tabs-container">
+        <div class="mode-tabs">
+          <p class="sidebar-group">发布</p>
+          <button type="button" id="tab-single" class="mode-tab active">发布新版本</button>
+          <button type="button" id="tab-batch" class="mode-tab">批量上传</button>
+          <p class="sidebar-group">项目</p>
+          <button type="button" id="tab-manage" class="mode-tab">项目与版本</button>
+          <button type="button" id="tab-modrinth" class="mode-tab">Modrinth 同步</button>
+          <button type="button" id="tab-translations" class="mode-tab">翻译与术语</button>
+          <p class="sidebar-group">本地工程</p>
+          <button type="button" id="tab-workspace" class="mode-tab">工程探测</button>
+          <button type="button" id="tab-shelved" class="mode-tab">已放置 <span class="tab-count" id="tab-shelved-count">0</span></button>
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <a id="btn-preview-site" class="btn-subaction" href="/site/" target="_blank" rel="noopener">预览本地前台</a>
+        <button id="deploy" class="secondary" type="button">部署公开网站</button>
+      </div>
+    </nav>
+
+    <div class="app-page">
     <header>
       <p class="eyebrow">LOCAL PUBLISHER</p>
       <h1>模组发布管理</h1>
       <p>此页面只在你的电脑上运行。文件会通过本地 Wrangler 上传到 Cloudflare R2。</p>
     </header>
 
-    <div class="mode-tabs-container">
-      <div class="mode-tabs">
-        <button type="button" id="tab-single" class="mode-tab active">单模组发布 / 资料编辑</button>
-        <button type="button" id="tab-batch" class="mode-tab">⚡ 批量极速解析上传</button>
-        <button type="button" id="tab-manage" class="mode-tab">📦 版本维护与文件管理</button>
-        <button type="button" id="tab-modrinth" class="mode-tab">🌐 Modrinth 同步</button>
-        <button type="button" id="tab-workspace" class="mode-tab">💻 本地工程探测</button>
-        <button type="button" id="tab-shelved" class="mode-tab">⏸️ 放置工程 (<span id="tab-shelved-count">0</span>)</button>
-        <button type="button" id="tab-translations" class="mode-tab">🌐 翻译与术语纠偏</button>
-      </div>
-    </div>
-
     <main>
       <div class="main-content">
-        <form id="publish-form">
+        <form id="publish-form" class="version-form">
+          <div class="version-main">
           <section class="panel">
-            <div class="panel-heading"><span class="step">1</span><div><h2>项目信息</h2><p>选择已有项目，或输入新的项目标识。</p></div></div>
+            <div class="panel-heading"><div><h2>项目</h2><p>选择已有项目，或输入新的项目标识。</p></div></div>
             <div class="fields">
               <label>项目标识 <small>小写字母、数字、连字符</small>
                 <input name="project" id="project-input" list="projects-list" pattern="[a-z0-9][a-z0-9-]*" required placeholder="example-mod">
                 <datalist id="projects-list"></datalist>
               </label>
               <label>项目名称 (英文)<small>新项目必填</small><input name="name" id="name-input" placeholder="示例: CarpetGUI"></label>
+            </div>
+            <details class="project-details">
+              <summary>项目资料、介绍与图片</summary>
+            <div class="fields">
               <label>模组中文名称 <small>可选，中文模式优先展示</small><input name="name_zh" id="name-zh-input" placeholder="示例: Carpet 拓展界面"></label>
               <label class="wide">英文简介<textarea name="description" id="description-input" rows="2" placeholder="这个模组做什么？（英文）"></textarea></label>
               <label class="wide">中文一句话简介 <small>可选，留空则自动机翻</small><textarea name="description_zh" id="description-zh-input" rows="2" placeholder="精准中文简介..."></textarea></label>
@@ -83,34 +103,50 @@
                 <span class="subaction-hint">（无需提供版本号或 jar 文件，直接上传新选图片并更新基本信息）</span>
               </div>
             </div>
+            </details>
           </section>
 
           <section class="panel">
-            <div class="panel-heading"><span class="step">2</span><div><h2>版本信息</h2><p>同一项目不能重复发布相同版本。</p></div></div>
+            <div class="panel-heading"><div><h2>版本</h2><p>同一项目不能重复发布相同版本。</p></div></div>
             <div class="fields">
-              <label>版本号<input name="version" id="version-input" pattern="[A-Za-z0-9][A-Za-z0-9._+\-]*" placeholder="1.0.0"></label>
-              <label>游戏版本 <small>逗号分隔</small><input name="game" placeholder="1.20.1,1.20.2"></label>
-              <label>加载器 <small>逗号分隔</small><input name="loader" placeholder="Fabric,Forge"></label>
-              <label class="wide">版本说明<textarea name="notes" rows="3" placeholder="修复内容、新功能或注意事项"></textarea></label>
+              <label class="wide">版本号<input name="version" id="version-input" pattern="[A-Za-z0-9][A-Za-z0-9._+\-]*" placeholder="1.0.0"></label>
+              <label class="wide">更新日志 <small>支持 Markdown</small><textarea name="notes" rows="8" placeholder="修复内容、新功能或注意事项"></textarea></label>
             </div>
           </section>
 
           <section class="panel">
-            <div class="panel-heading"><span class="step">3</span><div><h2>选择发布文件</h2><p>可一次选择多个版本文件（如 .jar），每个文件最大 10MB。</p></div></div>
+            <div class="panel-heading"><div><h2>文件</h2><p>可一次选择多个版本文件（如 .jar），每个文件最大 10MB。</p></div></div>
             <div id="jar-parsed-badge" class="jar-parsed-badge" style="display:none;"></div>
             <p id="multi-jar-tip" class="multi-jar-tip" style="display:none;">
-              ✨ 已选择多个模组文件！<button type="button" id="switch-to-batch-btn" class="tip-link-btn">切换至【批量极速上传队列】进行并发解析与一键上传 ↗</button>
+              已选择多个模组文件。<button type="button" id="switch-to-batch-btn" class="tip-link-btn">切换到批量上传 ↗</button>
             </p>
             <label class="drop-zone">
               <input id="files" name="files" type="file" multiple>
-              <strong>点击选择文件</strong><span>或将文件拖放到这里（自动解析 Fabric 模组信息）</span>
+              <strong>上传文件</strong><span>点击选择或拖放到这里（自动解析 Fabric 模组信息）</span>
             </label>
             <ul id="file-list" class="file-list"></ul>
           </section>
+          </div>
 
-          <div class="actions">
-            <label class="check"><input name="dryRun" type="checkbox" value="true"> 仅验证，不上传</label>
-            <button id="publish" type="submit">发布版本</button>
+          <div class="version-side">
+          <section class="panel metadata-panel">
+            <div class="panel-heading"><div><h2>元数据</h2></div></div>
+            <div class="metadata-group">
+              <span class="metadata-label">加载器</span>
+              <div class="loader-chips" id="loader-chips">
+                <button type="button" class="loader-chip" data-loader="Fabric">Fabric</button>
+                <button type="button" class="loader-chip" data-loader="NeoForge">NeoForge</button>
+                <button type="button" class="loader-chip" data-loader="Forge">Forge</button>
+                <button type="button" class="loader-chip" data-loader="Quilt">Quilt</button>
+              </div>
+              <input name="loader" id="loader-input" placeholder="Fabric,Forge">
+            </div>
+            <label>游戏版本 <small>逗号分隔</small><input name="game" placeholder="1.20.1,1.20.2"></label>
+            <div class="actions">
+              <label class="check"><input name="dryRun" type="checkbox" value="true"> 仅验证，不上传</label>
+              <button id="publish" type="submit">发布版本</button>
+            </div>
+          </section>
           </div>
         </form>
 
@@ -385,13 +421,13 @@
 
       <aside>
         <section class="panel sticky">
-          <div class="panel-heading"><span class="step muted">✓</span><div><h2>已有项目</h2><p id="project-count">正在读取…</p></div></div>
+          <div class="panel-heading"><div><h2>已有项目</h2><p id="project-count">正在读取…</p></div></div>
           <div id="existing-projects"></div>
-          <a id="btn-preview-site" class="btn-subaction" href="/site/" target="_blank" rel="noopener" style="text-align: center; text-decoration: none; margin-top: 1rem; display: block;">🌐 预览本地前台网站</a>
-          <button id="deploy" class="secondary" type="button" style="margin-top: 0.5rem;">部署公开网站 (Cloudflare)</button>
         </section>
       </aside>
     </main>
+    </div>
+    </div>
 
     <dialog id="result-dialog">
       <h2 id="result-title">操作结果</h2>

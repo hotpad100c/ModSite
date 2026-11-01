@@ -25,6 +25,25 @@ const bannerHint = document.querySelector("#banner-hint");
 
 const projectInput = document.querySelector("#project-input");
 const versionInput = document.querySelector("#version-input");
+const loaderInput = document.querySelector("#loader-input");
+const loaderChips = [...document.querySelectorAll(".loader-chip")];
+
+const loaderValues = () => loaderInput.value.split(",").map((value) => value.trim()).filter(Boolean);
+
+function syncLoaderChips() {
+  const selected = new Set(loaderValues().map((value) => value.toLowerCase()));
+  loaderChips.forEach((chip) => chip.classList.toggle("active", selected.has(chip.dataset.loader.toLowerCase())));
+}
+
+loaderChips.forEach((chip) => chip.addEventListener("click", () => {
+  const values = loaderValues();
+  const index = values.findIndex((value) => value.toLowerCase() === chip.dataset.loader.toLowerCase());
+  if (index >= 0) values.splice(index, 1);
+  else values.push(chip.dataset.loader);
+  loaderInput.value = values.join(",");
+  syncLoaderChips();
+}));
+loaderInput.addEventListener("input", syncLoaderChips);
 
 // Batch Upload Components
 const tabSingle = document.querySelector("#tab-single");
@@ -264,6 +283,7 @@ async function inspectJarFile(file) {
     }
     if (data.loader) {
       form.elements.loader.value = data.loader;
+      syncLoaderChips();
     }
     if (data.version && !form.elements.version.value.trim()) {
       form.elements.version.value = data.version;
