@@ -34,7 +34,7 @@ test("只允许给已有项目追加新版本", () => {
   assert.throws(() => validateRequest({ ...ok, overwrite: true }, catalog()), /不支持参数 --overwrite/);
   assert.throws(() => validateRequest({ ...ok, name: "x" }, catalog()), /不支持参数 --name/);
   assert.throws(() => validateRequest({ ...ok, files: ["a.zip"] }, catalog()), /不是 \.jar/);
-  assert.throws(() => validateRequest({ ...ok, files: ["1.jar", "2.jar", "3.jar", "4.jar", "5.jar"] }, catalog()), /最多/);
+  assert.throws(() => validateRequest({ ...ok, files: Array.from({ length: 17 }, (_, i) => `${i}.jar`) }, catalog()), /最多/);
 });
 
 test("读取 Fabric 与 NeoForge jar 的 mod id 并与项目比对", async () => {

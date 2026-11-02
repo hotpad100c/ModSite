@@ -13,8 +13,8 @@ const CATALOG_PATH = resolve(ROOT, "site/catalog.json");
 const AGENT_DIR = process.env.MODSITE_AGENT_DIR || resolve(homedir(), ".modsite");
 const ENV_PATH = resolve(AGENT_DIR, "agent.env");
 const LOG_PATH = resolve(AGENT_DIR, "agent-publish.log");
-const MAX_FILES = 4;
-const DEFAULT_DAILY_LIMIT = 20;
+const MAX_FILES = 16;
+const DEFAULT_DAILY_LIMIT = 40;
 const ALLOWED_OPTIONS = new Set(["project", "version", "game", "loader", "notes", "dry-run", "help", "files"]);
 
 export function readJarModId(filePath) {
