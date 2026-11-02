@@ -1029,6 +1029,222 @@
       ]
     },
     {
+      "slug": "emergency-exit",
+      "name": "EXIT",
+      "name_zh": "应急出口",
+      "description": "A library that lets custom world rendering bypass shader packs (Iris). Drawings go to a separate render target and are merged by depth after the shader pack has finished the frame.",
+      "description_zh": "一个允许自定义世界渲染绕过着色器包（Iris）的库。渲染内容会绘制到一个独立的渲染目标中，并在着色器包完成整个帧的渲染后，根据深度进行合并。",
+      "longDescription": "",
+      "longDescription_zh": "",
+      "icon": "https://dl.ryan100c.party/images/emergency-exit-icon.png",
+      "banner": "",
+      "source": "",
+      "authors": [
+        "Ryan100C"
+      ],
+      "releases": [
+        {
+          "version": "1.0.5",
+          "publishedAt": "2026-10-24T13:52:18.683Z",
+          "gameVersions": [
+            "1.16.5",
+            "1.17.1",
+            "1.18.2",
+            "1.19.3",
+            "1.20.1",
+            "1.20.2",
+            "1.20.4",
+            "1.20.6",
+            "1.21.1",
+            "1.21.4",
+            "1.21.81.21.11",
+            "26.3"
+          ],
+          "loaders": [
+            "Fabric",
+            "NeoForge"
+          ],
+          "notes": "前置：FabricAPI",
+          "files": [
+            {
+              "name": "emergency_exit-neoforge-0.1.5+26.2.jar",
+              "size": 186902,
+              "sha256": "ced6aeea963ca78230283cea18e43b018c51f622b5e8ed47c37d931c7a059d98",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/ced6aeea963c-emergency_exit-neoforge-0.1.5%2B26.2.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.21.3.jar",
+              "size": 180568,
+              "sha256": "392cb969a1424c53bb66c25aae6bc7495a132635af4f0239686f805e361cc69e",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/392cb969a142-emergency_exit-fabric-0.1.5%2B1.21.3.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.21.4.jar",
+              "size": 180540,
+              "sha256": "ac7e8cdf8a6436214210d1091e5e4aa044fea87d264bcf94fd51eaadc881ac0e",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/ac7e8cdf8a64-emergency_exit-fabric-0.1.5%2B1.21.4.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.21.5.jar",
+              "size": 188937,
+              "sha256": "2af574ca90c0fd8aa9a84d18bab6447b28807b4daba5937e156b9a2e3ded7bc2",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/2af574ca90c0-emergency_exit-fabric-0.1.5%2B1.21.5.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.21.8.jar",
+              "size": 188726,
+              "sha256": "371a95fe09e068d42488f6457c31aa607040e77f10f3f8fe08792299baceb01f",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/371a95fe09e0-emergency_exit-fabric-0.1.5%2B1.21.8.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+26.1.2.jar",
+              "size": 187033,
+              "sha256": "c07eabf26cafbf592c495d3795f0817ff23ae642ad0bf8327c201efb2963d9cc",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/c07eabf26caf-emergency_exit-fabric-0.1.5%2B26.1.2.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+26.2.jar",
+              "size": 187941,
+              "sha256": "2fd287d690f55025c5ac1681444893e0d7b359833c6d0a99b39fbc29a848ad6d",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/2fd287d690f5-emergency_exit-fabric-0.1.5%2B26.2.jar"
+            },
+            {
+              "name": "emergency_exit-neoforge-0.1.5+1.21.3.jar",
+              "size": 179491,
+              "sha256": "4cc93113fa53d00bb5f89bcd2af93802dfa0fc5f1e18f446324e7010b9cbbbc6",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/4cc93113fa53-emergency_exit-neoforge-0.1.5%2B1.21.3.jar"
+            },
+            {
+              "name": "emergency_exit-neoforge-0.1.5+1.21.4.jar",
+              "size": 179463,
+              "sha256": "18063a969bab2d6e0daee6bb1338b9d3dd9f5e6908a7c7374458c433ca70ed8f",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/18063a969bab-emergency_exit-neoforge-0.1.5%2B1.21.4.jar"
+            },
+            {
+              "name": "emergency_exit-neoforge-0.1.5+1.21.5.jar",
+              "size": 187542,
+              "sha256": "3aca79416d0207877faeacb7b40d8a03b3eb6572e13a48342fee67d6cbadb969",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/3aca79416d02-emergency_exit-neoforge-0.1.5%2B1.21.5.jar"
+            },
+            {
+              "name": "emergency_exit-neoforge-0.1.5+1.21.8.jar",
+              "size": 187179,
+              "sha256": "3abf9e1eccc4e3bdbf37260bce17f85db49beffd4202f08d7ebf02d3df3b8c99",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/3abf9e1eccc4-emergency_exit-neoforge-0.1.5%2B1.21.8.jar"
+            },
+            {
+              "name": "emergency_exit-neoforge-0.1.5+26.1.2.jar",
+              "size": 185957,
+              "sha256": "d66cf6e01fbe23af59d91ef3d7031a41e5015bd95739bbdfdabe144e449b9d18",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/d66cf6e01fbe-emergency_exit-neoforge-0.1.5%2B26.1.2.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.20.2.jar",
+              "size": 178891,
+              "sha256": "ee626482fac5f56a11cdc97651532959f776d2e3aa5945fb7ca29fedd26ef9cd",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/ee626482fac5-emergency_exit-fabric-0.1.5%2B1.20.2.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.20.4.jar",
+              "size": 178880,
+              "sha256": "9594eaa2e4cefa320aadcdac89c8248f610ac13c2284d791843d4c30115ce1c3",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/9594eaa2e4ce-emergency_exit-fabric-0.1.5%2B1.20.4.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.20.6.jar",
+              "size": 177872,
+              "sha256": "c3584028b9ea8957f74e38a6afd0ad4ae13e000231fcc12b407880aef2cbf99c",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/c3584028b9ea-emergency_exit-fabric-0.1.5%2B1.20.6.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.21.1.jar",
+              "size": 181234,
+              "sha256": "f092618ecf0d1fbcd1dc68fc428967bfddd827b5b672491a4348b2be3f3e7aa8",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/f092618ecf0d-emergency_exit-fabric-0.1.5%2B1.21.1.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.21.10.jar",
+              "size": 187545,
+              "sha256": "f8e5df327f6cbe829a4afed1b385ff3ffbf54e98d6c4dc675b4cb7b3640f1cab",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/f8e5df327f6c-emergency_exit-fabric-0.1.5%2B1.21.10.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.21.11.jar",
+              "size": 190058,
+              "sha256": "643f72ff42152039af08c9603483b0142eeb92cfdeb4da31b886a18c28eaa237",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/643f72ff4215-emergency_exit-fabric-0.1.5%2B1.21.11.jar"
+            },
+            {
+              "name": "emergency_exit-neoforge-0.1.5+1.21.1.jar",
+              "size": 180061,
+              "sha256": "505353437944fc33e494927953f4509a9c5976d48aa17b290ed7a301fef11ed3",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/505353437944-emergency_exit-neoforge-0.1.5%2B1.21.1.jar"
+            },
+            {
+              "name": "emergency_exit-neoforge-0.1.5+1.21.10.jar",
+              "size": 186106,
+              "sha256": "41ed26491170fc8d18faa001c2db6345b7c293e58bbb147c2f60a5b1e1472f98",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/41ed26491170-emergency_exit-neoforge-0.1.5%2B1.21.10.jar"
+            },
+            {
+              "name": "emergency_exit-neoforge-0.1.5+1.21.11.jar",
+              "size": 188622,
+              "sha256": "8fabd6ff17c0e2689c262d28a0f2e33e456274d8629697f2379b48795fff2dc2",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/8fabd6ff17c0-emergency_exit-neoforge-0.1.5%2B1.21.11.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.16.5.jar",
+              "size": 179208,
+              "sha256": "73e3327ccb981e2998cfde47036336da4687b6a4b235c4568be7d4da2ac29ca4",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/73e3327ccb98-emergency_exit-fabric-0.1.5%2B1.16.5.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.17.1.jar",
+              "size": 181642,
+              "sha256": "d592a5963f2ab33a50496f335638bf2fefb86d3fd55d967d09e8e7fb70a88ea3",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/d592a5963f2a-emergency_exit-fabric-0.1.5%2B1.17.1.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.18.2.jar",
+              "size": 178482,
+              "sha256": "0c34437bd47fcc1504962511863132d342eb77b9d59a44f7fea9d61cdf999d1d",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/0c34437bd47f-emergency_exit-fabric-0.1.5%2B1.18.2.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.19.4.jar",
+              "size": 179908,
+              "sha256": "beb1438033ee5e9311ebf4fe6e9dfef04f46da549e97f83153cb495e515f1835",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/beb1438033ee-emergency_exit-fabric-0.1.5%2B1.19.4.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.20.1.jar",
+              "size": 178866,
+              "sha256": "d42369b0664ff3a82d1a6df9a7d24382a57eca6ee15b589ec27ec147d86a3f81",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/d42369b0664f-emergency_exit-fabric-0.1.5%2B1.20.1.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+1.20.jar",
+              "size": 180041,
+              "sha256": "144197fb10757274f59c97cec9ff0d3c66988652e5fba72428c98de1011ee21b",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/144197fb1075-emergency_exit-fabric-0.1.5%2B1.20.jar"
+            },
+            {
+              "name": "emergency_exit-fabric-0.1.5+26.3.jar",
+              "size": 193284,
+              "sha256": "8ade0e4cf4767a98e4541fa9ee6e3197d3f9e8cd2b84b2911ee7f3b2308dddfd",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/8ade0e4cf476-emergency_exit-fabric-0.1.5%2B26.3.jar"
+            },
+            {
+              "name": "emergency_exit-neoforge-0.1.5+26.3.jar",
+              "size": 192230,
+              "sha256": "1c7be01991384bae9230c1ea15f0173d1bb8c4222ddcb6b07ea98ed4739083e5",
+              "url": "https://dl.ryan100c.party/releases/emergency-exit/1.0.5/1c7be0199138-emergency_exit-neoforge-0.1.5%2B26.3.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "explosionvisualizer",
       "name": "ExplosionVisualizer",
       "description": "Use real-time 3D rendering to display various information about the explosion",
@@ -1529,6 +1745,249 @@
               "sha256": "",
               "sha512": "880da4fdd1c57578fa74ce9eeb9cd5fe22b2467178410d347e1520ab5c3371fcf008df835e31b20b06294a4cd4535d33ea569039adeb0a26f21cb78bf605cca3",
               "url": "https://cdn.modrinth.com/data/axukUHes/versions/yGxiPmxx/keepmyscroll-1.0.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "litematicafastmove",
+      "name": "Litefastica",
+      "name_zh": "移形换影",
+      "description": "Make moving schematics in litematica REALLY REALLY FAST!",
+      "description_zh": "让移动投影丝滑又快！",
+      "longDescription": "# Litefastica (LitematicaFastMove)\r\n\r\nMake Litematica fly.\r\n\r\nFeatures:\r\n\r\n- **Independent meshes**: Each placement gets its own GPU meshes (blocks, fluids, overlays). Moving a placement only changes its draw position instead of rebuilding the mesh.\r\n- **Smooth movement**: The displayed position interpolates toward the actual position, so dragging a placement no longer makes it jump one block at a time.\r\n- **Deferred commits**: When a large placement is moved continuously, the placement world is not rewritten at every step. It is committed only after you stop moving.\r\n- **Background building**: Meshes are built in batches of sections across multiple threads, with sections closer to the camera built first. GPU uploads are subject to a per-frame budget to prevent frame stalls.\r\n- **Precise rebuilding**: Only sections near blocks that actually changed in the real world are rebuilt. If the real world is air both before and after a section moves, it is skipped entirely.\r\n- **Multithreaded verification**: The Schematic Verifier in `Configure Schematic Placement` uses multithreaded scanning while continuing to display its results in Litematica's own verification UI.\r\n- **Shader support**: Placements can now theoretically be rendered correctly with any shader pack.\r\n\r\nRequires Litematica, malilib, and the bundled [EXIT](https://github.com/hotpad100c/emergency-exit), which allows placement rendering to bypass shader packs.\r\n\r\nSupported versions: 26.3 (main branch), 1.21.11, 1.21.8, 1.21.4, 1.21.1, 1.20.6, 1.20.4, 1.20.2, 1.20.1, 1.19.3, 1.18.2, 1.17.1, 1.16.5 (respective `port/<mc>` branches).\r\n\r\n## Configuration\r\n\r\nAll options are injected into Litematica's configuration screen under the Generic tab, in the `--- Litematica Fast Move ---` section.\r\n\r\n### Basic\r\n\r\n| Option | Default | Description |\r\n|---|---|---|\r\n| `fastMoveEnabled` Enable | On | Master switch. When disabled, behavior fully reverts to Litematica's original behavior. |\r\n| `fastMoveTakeoverAllPlacements` Take over all placements | On | When enabled, all placements use independent meshes for rendering. When disabled, only placements whose volume is at least `Large Placement Volume` are taken over; smaller ones continue to be rendered by Litematica. |\r\n| `fastMoveLargePlacementVolume` Large placement volume | 32768 (32³) | Placements whose volume (length × width × height) reaches this value defer rewriting the placement world while being moved continuously, and commit the new position after movement stops. When `Take Over All Placements` is disabled, this also determines which placements are taken over. |\r\n| `fastMoveAsyncVerifier` Multithreaded verifier | On | Clicking Schematic Verifier performs a multithreaded scan directly against the placement data without going through the placement world. Results are displayed in Litematica's normal verification UI. |\r\n\r\n### Movement\r\n\r\n| Option | Default | Description |\r\n|---|---|---|\r\n| `fastMoveCommitDelay` Commit delay (ms) | 1500 | How long a large placement must remain stationary before its new position is written to the placement world. Until then, features that depend on the placement world, such as Easy Place and block information, still see the old position. Lower values make these features catch up faster, but cause more commits during continuous movement. |\r\n| `fastMoveRenderDelay` Render delay (ms) | 0 | After a placement starts moving, keep it at its original position for this long before rendering it at the new position. Moving again during the wait resets the timer, so intermediate positions during dragging are never rendered, and the corresponding rebuilds are skipped as well. Useful for dragging extremely large placements. |\r\n| `fastMoveSmoothing` Movement smoothing (ms) | 60 | Time constant for movement interpolation. Higher values produce smoother movement but make the placement feel more \"laggy\"; set to 0 to disable interpolation and jump directly to the new position. |\r\n| `fastMoveSnapDistance` Snap distance (blocks) | 128 | When a single movement exceeds this distance, interpolation is skipped and the placement immediately snaps to the new position, preventing it from sliding all the way across the world. |\r\n\r\n### Performance Budgets\r\n\r\n| Option | Default | Description |\r\n|---|---|---|\r\n| `fastMoveUploadKbPerFrame` Upload budget (KB/frame) | 8192 | Maximum amount of mesh data uploaded to the GPU per frame. Excess data is deferred to later frames. Lower values reduce stutter spikes but make the placement appear more slowly. |\r\n| `fastMoveUploadMsPerFrame` Upload budget (ms/frame) | 3.0 | Maximum time spent creating GPU buffers per frame. This takes effect alongside the data-size budget above; uploading stops as soon as either limit is reached. |\r\n| `fastMoveBuildBatchSections` Build batch size (sections) | 32 | Number of 16×16×16 sections built in each mesh-building batch. Batches closer to the camera are built first, with batches distributed across all builder threads for parallel processing. Smaller batches make results appear sooner; partial rebuilds are applied batch by batch. |\r\n| `fastMoveResortsPerFrame` Transparent resorts per frame | 32 | Maximum number of sections containing transparent blocks (glass, water, etc.) that are resorted per frame. Set to 0 to disable sorting; transparent blocks may appear incorrectly ordered from some angles. |\r\n| `fastMoveResortDistance` Transparent resort distance (blocks) | 1.0 | A transparent section is resorted only after the camera has moved more than this distance relative to the section. |\r\n| `fastMoveVerifierMergeMsPerTick` Verifier merge budget (ms/tick) | 50 | Results calculated by verifier threads are merged into Litematica's verifier on the main thread. This is the maximum amount of time spent merging per tick, measured from the start of each tick. Lower values keep the game smoother during verification, but make the results fill in more slowly. |\r\n\r\n### Threads\r\n\r\n| Option | Default | Description |\r\n|---|---|---|\r\n| `fastMoveMeshBuilderThreads` Mesh builder threads | 0 (auto) | Number of threads used to build placement meshes. `0` means CPU cores ÷ 4, with a minimum of 1. Takes effect immediately after changing the setting. |\r\n| `fastMoveVerifierThreads` Verifier threads | 0 (auto) | Number of threads used for verification scans. `0` means CPU cores − 1, with a minimum of 1. Takes effect immediately after changing the setting. |\r\n\r\n### Debugging\r\n\r\n| Option | Default | Description |\r\n|---|---|---|\r\n| `fastMoveDebugGizmos` Debug gizmos | Off | Draws gradually fading boxes around mesh sections currently being processed. Amber: rebuild submitted; green: rebuild result applied; gray: both the previous and new positions are air in the real world and were skipped; blue: full placement rebuild. |\r\n| `fastMoveDebugGizmoDuration` Debug gizmo duration (ms) | 800 | How long each debug box remains visible before fading out. |\r\n\r\n## Building\r\n\r\n- Single version: run `./gradlew build` in the corresponding branch or worktree.\r\n- All versions: run `scripts/build-all.sh`. Generated JARs are collected in `dist/`.\r\n\r\nSee [PORTING.md](PORTING.md) for details on porting each version.\r\n\r\n## Contributors\r\n\r\n- Ryan100C (author)\r\n- [wwwzzzxxx](https://github.com/wwwzzzxxx): ports for 1.16.5 – 1.21.11, render delay, and benchmarks",
+      "longDescription_zh": "# Litefastica（LitematicaFastMove）\r\n\r\n让 Litematica 快到飞起。\r\n\r\n特性：\r\n- **独立网格**：每个投影有自己的 GPU 网格（方块、流体、叠加层），移动时只改变绘制位置，而非重建。\r\n- **平滑移动**：显示位置以插值追上实际位置，拖动投影时不再一格一格地跳。\r\n- **推迟提交**：大型投影连续移动时，不会每一步都重写投影世界，停手后才一次性提交。\r\n- **后台构建**：网格在多个线程上按区段分批构建，离相机近的先出现；上传到 GPU 时有每帧预算，不会卡住画面。\r\n- **精确重建**：只有真实世界方块变化处附近的区段会重建；如果一个区段移动前后所在的真实世界都是空气，就直接跳过。\r\n- **多线程校验**：Configure Schematic Placement　里的 Schematic Verifier 改为多线程扫描，结果仍然显示在 Litematica 自己的校验界面里。\r\n- **光影支持**：现在理论上能在任何光影包下正确渲染。\r\n\r\n依赖 Litematica、malilib，以及已内嵌的 [EXIT](https://github.com/hotpad100c/emergency-exit)（让投影渲染绕过光影包）。\r\n\r\n支持版本：26.3（主分支）、1.21.11、1.21.8、1.21.4、1.21.1、1.20.6、1.20.4、1.20.2、1.20.1、1.19.3、1.18.2、1.17.1、1.16.5（各 `port/<mc>` 分支）。\r\n\r\n## 配置项\r\n\r\n所有选项都注入到 Litematica 的配置界面（Generic 页，「--- Litematica Fast Move ---」分组下）。\r\n\r\n### 基本\r\n\r\n| 选项 | 默认 | 作用 |\r\n|---|---|---|\r\n| `fastMoveEnabled` 启用 | 开 | 总开关。关闭后完全回到 Litematica 原本的行为。 |\r\n| `fastMoveTakeoverAllPlacements` 接管所有投影 | 开 | 开启时，所有投影都使用独立网格渲染；关闭时，只接管体积不小于「大型投影体积」的投影，其余仍由 Litematica 渲染。 |\r\n| `fastMoveLargePlacementVolume` 大型投影体积 | 32768（32³） | 体积（长×宽×高）达到这个值的投影，连续移动时推迟重写投影世界，停手后再提交。关闭「接管所有投影」时，它也是决定是否接管的阈值。 |\r\n| `fastMoveAsyncVerifier` 多线程校验 | 开 | 点击 Schematic Verifier 后用多线程扫描，直接读取投影数据，不经过投影世界。结果照常显示在 Litematica 的校验界面里。 |\r\n\r\n### 移动手感\r\n\r\n| 选项 | 默认 | 作用 |\r\n|---|--|---|\r\n| `fastMoveCommitDelay` 提交延迟（毫秒） | 1500 | 大型投影停止移动多久之后，才把新位置写入投影世界。在这之前，Easy Place、方块信息等依赖投影世界的功能看到的还是旧位置。调小后这些功能更快跟上，但连续移动时提交次数会更多。 |\r\n| `fastMoveRenderDelay` 渲染延迟（毫秒） | 0| 投影移动后，先在原处停留这么久，再画到新位置。等待期间再次移动会重新计时，所以拖动途中的位置一次也不会被画出来，对应的重建也被省掉。适合拖动特别大的投影。 |\r\n| `fastMoveSmoothing` 移动平滑（毫秒） | 60 | 移动插值的时间常数。越大越平滑，但跟随越「拖」；设为 0 关闭插值，直接跳到新位置。 |\r\n| `fastMoveSnapDistance` 瞬移距离（格） | 128 | 一次移动超过这个距离时不做插值，直接瞬移，避免投影从远处一路滑过来。 |\r\n\r\n### 性能预算\r\n\r\n| 选项 | 默认 | 作用 |\r\n|---|---|---|\r\n| `fastMoveUploadKbPerFrame` 上传预算（KB/帧） | 8192 | 每帧最多上传到 GPU 的网格数据量，超出的留到后续帧。调小能减少卡顿尖峰，但投影出现得更慢。 |\r\n| `fastMoveUploadMsPerFrame` 上传预算（毫秒/帧） | 3.0 | 每帧创建 GPU buffer 最多花费的时间，和上面的数据量预算同时生效，先用完哪个就先停。 |\r\n| `fastMoveBuildBatchSections` 构建批次大小（区段） | 32 | 网格以多少个 16×16×16 区段为一批构建。离相机近的批次先构建，各批分散到所有构建线程并行处理。批次越小，结果出现得越早；局部重建会一批一批地生效。 |\r\n| `fastMoveResortsPerFrame` 每帧半透明重排序数 | 32 | 每帧最多重新排序多少个含半透明方块（玻璃、水等）的区段。设为 0 不排序，半透明方块从某些角度看可能叠错。 |\r\n| `fastMoveResortDistance` 半透明重排序距离（格） | 1.0 | 相机相对某个半透明区段移动超过这个距离后，才重新排序该区段。 |\r\n| `fastMoveVerifierMergeMsPerTick` 校验合并预算（毫秒/tick） | 50 | 校验线程算出的结果在主线程上合并进 Litematica 校验器，这是每个 tick 合并耗时的上限，从 tick 开始时计算。调小后校验期间更流畅，但结果填满得更慢。 |\r\n\r\n### 线程\r\n\r\n| 选项 | 默认 | 作用 |\r\n|---|---|---|\r\n| `fastMoveMeshBuilderThreads` 网格构建线程数 | 0（自动） | 构建投影网格的线程数，0 表示 CPU 核数 ÷ 4（至少 1）。修改后立即生效。 |\r\n| `fastMoveVerifierThreads` 校验线程数 | 0（自动） | 校验扫描的线程数，0 表示 CPU 核数 − 1（至少 1）。修改后立即生效。 |\r\n\r\n### 调试\r\n\r\n| 选项 | 默认 | 作用 |\r\n|---|---|---|\r\n| `fastMoveDebugGizmos` 调试框 | 关 | 在正在处理的网格区段上画会逐渐淡出的框。琥珀色：已提交重建；绿色：重建结果已生效；灰色：前后所在的真实世界都是空气，跳过；蓝色：整个投影完整重建。 |\r\n| `fastMoveDebugGizmoDuration` 调试框时长（毫秒） | 800 | 每个调试框从出现到淡出的时长。 |\r\n\r\n## 构建\r\n\r\n- 单个版本：在对应分支或 worktree 里运行 `./gradlew build`。\r\n- 全部版本：运行 `scripts/build-all.sh`，生成的 jar 收集在 `dist/` 里。\r\n\r\n各版本移植的细节见 [PORTING.md](PORTING.md)。\r\n\r\n## 贡献者\r\n\r\n- Ryan100C（作者）\r\n- [wwwzzzxxx](https://github.com/wwwzzzxxx)：1.16.5 – 1.21.11 各版本移植、渲染延迟、基准测试",
+      "icon": "https://dl.ryan100c.party/images/litematicafastmove-icon.png",
+      "banner": "https://dl.ryan100c.party/images/litematicafastmove-banner.png",
+      "source": "https://github.com/hotpad100c/litematicafastmove",
+      "authors": [
+        "Ryan100C"
+      ],
+      "releases": [
+        {
+          "version": "1.0.2",
+          "publishedAt": "2026-11-02T12:32:03.208Z",
+          "gameVersions": [
+            "1.16.5",
+            "1.17.1",
+            "1.18.2",
+            "1.19.4",
+            "1.20.1",
+            "1.20.2",
+            "1.20.4",
+            "1.20.6",
+            "1.21.1",
+            "1.21.11",
+            "1.21.4",
+            "1.21.8",
+            "26.1.2",
+            "26.2",
+            "26.3"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "litematicafastmove-1.0.2+1.16.5.jar",
+              "size": 357269,
+              "sha256": "48ae96536c5e21c5bd39e6a64826e48899f96b3f0c4e92b092219d161661baf1",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/48ae96536c5e-litematicafastmove-1.0.2%2B1.16.5.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+1.17.1.jar",
+              "size": 359108,
+              "sha256": "8c64743d1bd668c4cbf4fe98902c2487fbf9be4079c8106b1f5ffe174529311b",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/8c64743d1bd6-litematicafastmove-1.0.2%2B1.17.1.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+1.18.2.jar",
+              "size": 356059,
+              "sha256": "a5b78fb4fe783346871e16d3db582e14de78a40ccd5a13852cf599a387987266",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/a5b78fb4fe78-litematicafastmove-1.0.2%2B1.18.2.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+1.19.4.jar",
+              "size": 357095,
+              "sha256": "814743614c49401eacb642b5b7c13384d3b53f8b9a2d6c8a28edd1bab8890649",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/814743614c49-litematicafastmove-1.0.2%2B1.19.4.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+1.20.1.jar",
+              "size": 356150,
+              "sha256": "98260115b3ad8dcb110feab7c5199bd83bcd45e77e944324dae9327c38ad88a0",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/98260115b3ad-litematicafastmove-1.0.2%2B1.20.1.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+1.20.2.jar",
+              "size": 356296,
+              "sha256": "2e4c80c8851b755e00b0807ae4bffed48b73fc6b5296a7d5e5e8e52e6651bf3e",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/2e4c80c8851b-litematicafastmove-1.0.2%2B1.20.2.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+1.20.4.jar",
+              "size": 355343,
+              "sha256": "5ca8f0f1a8da24f0f782e003e3fb3c9a9180af458dfddf880495ed4dce3560a5",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/5ca8f0f1a8da-litematicafastmove-1.0.2%2B1.20.4.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+1.20.6.jar",
+              "size": 353609,
+              "sha256": "d7ecece8fe92135edce200e3745ef775ac61cc121946e285beeb5bd67c5df78b",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/d7ecece8fe92-litematicafastmove-1.0.2%2B1.20.6.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+1.21.1.jar",
+              "size": 361030,
+              "sha256": "5a2324db0be0e10135447617ec9b56add3af4b3bba9874464dc299348e43f815",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/5a2324db0be0-litematicafastmove-1.0.2%2B1.21.1.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+1.21.11.jar",
+              "size": 376033,
+              "sha256": "707f00a8d4b87973e787cfea5112f694ed95db1ec4c6a4d83922f55af275f4dd",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/707f00a8d4b8-litematicafastmove-1.0.2%2B1.21.11.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+1.21.4.jar",
+              "size": 360548,
+              "sha256": "a65d649ade9620b46ec11e9328d9dc0bb4c30d194143ed3fa05faa09e023b5ca",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/a65d649ade96-litematicafastmove-1.0.2%2B1.21.4.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+1.21.8.jar",
+              "size": 372410,
+              "sha256": "0714b14a96f38ca6e1ecd5ad041358b4da013903f79ab4a6014e7798053d0f01",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/0714b14a96f3-litematicafastmove-1.0.2%2B1.21.8.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+26.1.2.jar",
+              "size": 373938,
+              "sha256": "6c06b9cde84c5aecbb816418d04eb7a72ea29fb16f1eb6aa6500b5dbf4252ae6",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/6c06b9cde84c-litematicafastmove-1.0.2%2B26.1.2.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+26.2.jar",
+              "size": 374529,
+              "sha256": "f13ec08a6298258402174cd1e0e61b62ad3ee9888553b06f048154370dcf073b",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/f13ec08a6298-litematicafastmove-1.0.2%2B26.2.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.2+26.3.jar",
+              "size": 378909,
+              "sha256": "dadfd99eb1a451fe818b922e9b28914c41925f4380086c7023383439976284ec",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.2/dadfd99eb1a4-litematicafastmove-1.0.2%2B26.3.jar"
+            }
+          ],
+          "publishedBy": "agent"
+        },
+        {
+          "version": "1.0.0",
+          "publishedAt": "2026-10-24T13:30:10.745Z",
+          "gameVersions": [
+            "1.16.5",
+            "1.17.1",
+            "1.18.2",
+            "1.19.3",
+            "1.20.1",
+            "1.20.2",
+            "1.20.4",
+            "1.20.6",
+            "1.21.1",
+            "1.21.4",
+            "1.21.81.21.11",
+            "26.3"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "前置：EmergencyExit，Litematica，FabricAPI",
+          "files": [
+            {
+              "name": "litematicafastmove-1.0.0+1.20.6.jar",
+              "size": 353539,
+              "sha256": "abe9daa8c1dc7ceae55baa3e073d643fa731e413d26fa6d8ed9aaf52c8b70301",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/abe9daa8c1dc-litematicafastmove-1.0.0%2B1.20.6.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+26.3.jar",
+              "size": 378834,
+              "sha256": "28636df9c09291eea810a85845c508c0a9eda7f9625346285c34ad7daa664c9b",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/28636df9c092-litematicafastmove-1.0.0%2B26.3.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+1.21.1.jar",
+              "size": 360961,
+              "sha256": "8204e5cd7183d4dba343fa888572520f81d4546e1b048e290e798af77e22d264",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/8204e5cd7183-litematicafastmove-1.0.0%2B1.21.1.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+1.21.4.jar",
+              "size": 360479,
+              "sha256": "62d5466c9410ee126141253e2ec381539aa2d84e440efc023ff59225e07c6637",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/62d5466c9410-litematicafastmove-1.0.0%2B1.21.4.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+1.21.8.jar",
+              "size": 372343,
+              "sha256": "8e0ce534521dad22979efdc1393990486a7b75ada3a0c69e2352981ca62c3f8c",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/8e0ce534521d-litematicafastmove-1.0.0%2B1.21.8.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+1.21.11.jar",
+              "size": 375966,
+              "sha256": "61fc6ee13579b31287426bbb2008544bf78b72daa1368d790f4563ee29b7a7bb",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/61fc6ee13579-litematicafastmove-1.0.0%2B1.21.11.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+26.2.jar",
+              "size": 374454,
+              "sha256": "03622d7eac3e80bc9145a00f1fd99dbe9ca4acb5d8f88e67d6113e691e89a4f8",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/03622d7eac3e-litematicafastmove-1.0.0%2B26.2.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+1.16.5.jar",
+              "size": 357197,
+              "sha256": "1bfd34e9cded01367fd0fe2123f0f9d512b49e5b0442834b9ca3b9d0a47e2426",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/1bfd34e9cded-litematicafastmove-1.0.0%2B1.16.5.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+1.17.1.jar",
+              "size": 358669,
+              "sha256": "7b23fc192395d83f07fdb0ab7941593068febe55f274f7b926a57fdb659007c7",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/7b23fc192395-litematicafastmove-1.0.0%2B1.17.1.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+1.18.2.jar",
+              "size": 355628,
+              "sha256": "5338292b9171dd05a6e6b9458db4ffd7e6bf4238a87ed9eb6d7124ab5ca24391",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/5338292b9171-litematicafastmove-1.0.0%2B1.18.2.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+1.19.4.jar",
+              "size": 356010,
+              "sha256": "fa6501fb2e6f058b16f04408b0f8b24a7598675c14b107fbfe1878817c219b3e",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/fa6501fb2e6f-litematicafastmove-1.0.0%2B1.19.4.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+1.20.1.jar",
+              "size": 355068,
+              "sha256": "8a224c497141acda120085234845b4ebd0a0f8985f4c98ee3d5019cef2bb8ae3",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/8a224c497141-litematicafastmove-1.0.0%2B1.20.1.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.0+1.20.2.jar",
+              "size": 355215,
+              "sha256": "64a887468cf373a018b412e46a4aeb85292aab30660c7bd674eed214046c3d32",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/64a887468cf3-litematicafastmove-1.0.0%2B1.20.2.jar"
+            },
+            {
+              "name": "litematicafastmove-1.0.1+1.20.4.jar",
+              "size": 355070,
+              "sha256": "76b01a8c3537bd7b8ca164113f9e70a930bd5a889907a60af50aaea68fc9ec64",
+              "url": "https://dl.ryan100c.party/releases/litematicafastmove/1.0.0/76b01a8c3537-litematicafastmove-1.0.1%2B1.20.4.jar"
             }
           ]
         }
@@ -2728,6 +3187,99 @@
               "sha256": "",
               "sha512": "ce653d9c626d34038121a44a0b09b812dc25c241eccbb05f0351780cc25b25cd42a97eb843c7dcccc99b7fb0d831e033465e5484007b8cfac543dc2b6b9e9157",
               "url": "https://cdn.modrinth.com/data/F1C8EHRy/versions/3ApwPmX6/trajectory-1.1.0.jar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "vector3",
+      "name": "Vector3",
+      "name_zh": "第三维度",
+      "description": "Advanced editor interface and features for Flashback mod",
+      "description_zh": "将强大的剪辑功能带入Flashback",
+      "longDescription": "# Vector3 Feature Overview\r\n\r\nVector3 is an extension of [Flashback](https://modrinth.com/mod/flashback). It lets you animate shapes, text, media and world clips with keyframes on the replay timeline, and adds a set of camera, post-processing and timeline-editing tools.\r\n\r\n> Requires: Minecraft 26.3, Fabric Loader, Fabric API, Flashback, RyansRenderingKit\r\n>\r\n> Compatible with: Sodium, Iris\r\n\r\n# Features \r\n\r\nhttps://github.com/hotpad100c/vector3/blob/master/features.en.md",
+      "longDescription_zh": "# Vector3 功能一览\r\n\r\nVector3 是 [Flashback](https://modrinth.com/mod/flashback) 的扩展：在回放时间轴上用关键帧制作图形、文字、媒体和世界片段的动画，并补充一批相机、后期特效与时间轴编辑工具。\r\n\r\n> 前置：Minecraft 26.3， Fabric Loader， Fabric API， Flashback，RyansRenderingKit\r\n>\r\n> 兼容：Sodium，Iris\r\n\r\n#功能\r\n\r\nhttps://github.com/hotpad100c/vector3/blob/master/features.md",
+      "icon": "https://dl.ryan100c.party/images/vector3-icon.png",
+      "banner": "https://dl.ryan100c.party/images/vector3-banner.png",
+      "source": "https://github.com/hotpad100c/vector3",
+      "authors": [
+        "Ryan100C"
+      ],
+      "releases": [
+        {
+          "version": "1.4.0-26.3",
+          "publishedAt": "2026-09-30T10:46:05.822Z",
+          "gameVersions": [
+            "26.3"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "vector3-1.4.0-26.3.jar",
+              "size": 1653127,
+              "sha256": "d9fd2cad87bfc333160760f418c62bae58dca0de6ab40ca6778d9f7b83d9c051",
+              "url": "https://dl.ryan100c.party/releases/vector3/1.4.0-26.3/d9fd2cad87bf-vector3-1.4.0-26.3.jar"
+            }
+          ]
+        },
+        {
+          "version": "1.3.0-beta-26.3",
+          "publishedAt": "2026-09-29T04:07:30.752Z",
+          "gameVersions": [
+            "26.3"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "vector3-1.3.0-beta-26.3.jar",
+              "size": 1452439,
+              "sha256": "e15fa1140e8ff5b1bf3860a8c625cc5f83d7e8577d25f4472350cfdf861b7b85",
+              "url": "https://dl.ryan100c.party/releases/vector3/1.3.0-beta-26.3/e15fa1140e8f-vector3-1.3.0-beta-26.3.jar"
+            }
+          ]
+        },
+        {
+          "version": "1.2.0-beta-26.3",
+          "publishedAt": "2026-09-26T02:59:02.563Z",
+          "gameVersions": [
+            "26.3"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "vector3-1.2.0-beta-26.3.jar",
+              "size": 554440,
+              "sha256": "93bdb318dbb4d2ae0e083d2fcce3a62c725c9117311ac47177bcf0b08236c502",
+              "url": "https://dl.ryan100c.party/releases/vector3/1.2.0-beta-26.3/93bdb318dbb4-vector3-1.2.0-beta-26.3.jar"
+            }
+          ]
+        },
+        {
+          "version": "1.1.0",
+          "publishedAt": "2026-09-25T06:18:18.202Z",
+          "gameVersions": [
+            "26.3"
+          ],
+          "loaders": [
+            "Fabric"
+          ],
+          "notes": "",
+          "files": [
+            {
+              "name": "vector3-1.1.0.jar",
+              "size": 464713,
+              "sha256": "5d10f30b130d00b5d9e344c464b2861452fc5eef867172ada921cb6607831391",
+              "url": "https://dl.ryan100c.party/releases/vector3/1.1.0/5d10f30b130d-vector3-1.1.0.jar"
             }
           ]
         }
